@@ -10,9 +10,6 @@
 @endphp
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-    @import 'tailwindcss/base';
-    @import 'tailwindcss/components';
-    @import 'tailwindcss/utilities';
 
     /* Estilos personalizados */
     .custom-scrollbar {
@@ -40,49 +37,12 @@
             /* Elimina el padding lateral */
     }
 
-    /* Sobrescribir estilos de Tailwind para mantener la estructura deseada */
-    #outer-form .form-section {
-        @apply bg-gray-50 p-4 rounded-lg mb-4 w-full md:w-[48%];
-    }
-
-    #outer-form .input-group {
-        @apply space-y-4;
-    }
-
-    #outer-form .buttons_div {
-        @apply flex flex-row flex-wrap justify-center mt-6 w-full whitespace-nowrap !important;
-
-    }
-
     .buttons_div {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         gap: 1rem;
-    }
-
-    /* Estilos para los botones */
-    #outer-form .btn,
-    #outer-form .btn-dark,
-    #outer-form .btn-success {
-        @apply px-4 py-2 rounded text-white transition-colors duration-200 ease-in-out text-center whitespace-nowrap min-w-[150px];
-    }
-
-    #outer-form .btn-dark {
-        @apply bg-gray-800 hover:bg-gray-700;
-    }
-
-    #outer-form .btn-success {
-        @apply bg-green-600 hover:bg-green-700;
-    }
-
-    /* Para dispositivos móviles, ajustar el ancho de los botones para que se envuelvan cada 2 */
-    @media (max-width: 640px) {
-        #outer-form .buttons_div button {
-            @apply w-[calc(50%-1rem)];
-            /* Cada botón ocupa la mitad del espacio con un pequeño margen */
-        }
     }
 
     /* Estilos para Select2 (si se usa) */
@@ -102,38 +62,6 @@
     /* Media queries para responsividad */
     @media (max-width: 768px) {
 
-        /* Cambiar de filas a columnas en pantallas pequeñas */
-        #outer-form .grid {
-            @apply grid-cols-1 !important;
-        }
-
-        /* Cambiar flex-row a flex-col en dispositivos móviles */
-        #outer-form .flex {
-            @apply flex-col;
-        }
-
-        #outer-form .form-section {
-            @apply w-full;
-        }
-
-        #outer-form .buttons_div {
-            @apply flex-col items-stretch;
-        }
-
-        #outer-form .btn,
-        #outer-form .btn-dark,
-        #outer-form .btn-success {
-            @apply w-full;
-        }
-
-        #outer-form p {
-            @apply text-sm;
-        }
-
-        #outer-form h2 {
-            @apply text-lg;
-        }
-
         .buttons_div button {
             width: calc(50% - 0.5rem);
             /* Cada botón ocupa la mitad del espacio con un pequeño margen */
@@ -145,11 +73,6 @@
             padding: 0;
             /* Elimina el padding lateral */
         }
-    }
-
-    /* Ocultar elemento personalizado */
-    #personalizadoMeses {
-        @apply hidden;
     }
 </style>
 
@@ -414,6 +337,7 @@
         const alertDate = new Date(
             '{{ $alert->fecha_objetivo }}'); // Asegúrate de que esto tenga el formato correcto
         const currentDate = new Date();
+        
 
         // Comprobar si la fecha ha pasado
         const hasPassed = alertDate < currentDate;
@@ -501,9 +425,6 @@
             <span class="estado inline-block px-2 py-1 text-xs font-medium rounded-full mr-2 mb-2 ${estadoClass(estadoId)}" data-id="${estadoId}">
                 ${estadoText}
             </span>`;
-
-
-
                         estadosDiv.appendChild(estadoDiv);
 
                         // Añadir el nuevo estado al Set para evitar duplicados
@@ -553,8 +474,6 @@
         }
 
         $('#submit_form').on('click', completed);
-
-
 
     });
 </script>

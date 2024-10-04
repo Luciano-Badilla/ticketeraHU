@@ -2,61 +2,56 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GestAlertsController;
-use App\Http\Controllers\AlertController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 ///////////////////////////
 
-Route::get('', [GestAlertsController::class, 'index'])
+Route::get('/tickets', [GestAlertsController::class, 'index'])
     ->middleware(['auth', 'verified'])
-    ->name('alerts');
-
-Route::get('/alerts', [GestAlertsController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('alerts');
+    ->name('tickets');
 
 // routes/web.php
-Route::post('/get-personal-data', [AlertController::class, 'getPersonalDataByDNI'])->name('get_data');
+Route::post('/get-personal-data', [TicketController::class, 'getPersonalDataByDNI'])->name('get_data');
 
-Route::post('/get-personal-data-local', [AlertController::class, 'getPersonalDataLocalByDNI'])->name('get_data_local');
+Route::post('/get-personal-data-local', [TicketController::class, 'getPersonalDataLocalByDNI'])->name('get_data_local');
 
-Route::post('/get-personal-data-local-empty-inputs', [AlertController::class, 'getPersonalDataLocalEmptyInputsByDNI'])->name('get_data_local_empty_inputs');
+Route::post('/get-personal-data-local-empty-inputs', [TicketController::class, 'getPersonalDataLocalEmptyInputsByDNI'])->name('get_data_local_empty_inputs');
 
 Route::get('', function () {
     return view('auth/login');
 })->name('profile_view');
 
-Route::get('/alerts/create_alert', [AlertController::class, 'index'])
+Route::get('/', [TicketController::class, 'index'])
+    ->name('ticket.create');
+
+Route::post('/tickets/create_alert', [TicketController::class, 'store'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.create');
+    ->name('ticket.store');
 
-Route::post('/alerts/create_alert', [AlertController::class, 'store'])
+Route::post('/tickets/create_alert2', [TicketController::class, 'store2'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.store');
+    ->name('ticket.store2');
 
-Route::post('/alerts/create_alert2', [AlertController::class, 'store2'])
+Route::get('/tickets/edit_alert/{id}', [TicketController::class, 'edit_index'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.store2');
+    ->name('ticket.edit');
 
-Route::get('/alerts/edit_alert/{id}', [AlertController::class, 'edit_index'])
+Route::post('/tickets/edit_store_alert', [TicketController::class, 'edit'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.edit');
+    ->name('ticket.edit_store');
 
-Route::post('/alerts/edit_store_alert', [AlertController::class, 'edit'])
+Route::get('/tickets/gest_alert/{id}', [TicketController::class, 'gest_index'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.edit_store');
+    ->name('ticket.gest');
 
-Route::get('/alerts/gest_alert/{id}', [AlertController::class, 'gest_index'])
+Route::post('/tickets/gest_alert', [TicketController::class, 'completed'])
     ->middleware(['auth', 'verified'])
-    ->name('alert.gest');
-
-Route::post('/alerts/gest_alert', [AlertController::class, 'completed'])
-    ->middleware(['auth', 'verified'])
-    ->name('alert.completed');
+    ->name('ticket.completed');
 
 
-Route::post('/estado/agregar', [AlertController::class, 'agregarEstado'])->name('estado.agregar');
-Route::post('/estado/eliminar', [AlertController::class, 'eliminarEstado'])->name('estado.eliminar');
+Route::post('/estado/agregar', [TicketController::class, 'agregarEstado'])->name('estado.agregar');
+Route::post('/estado/eliminar', [TicketController::class, 'eliminarEstado'])->name('estado.eliminar');
 
 
 Route::middleware('auth')->group(function () {

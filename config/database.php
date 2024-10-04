@@ -47,7 +47,7 @@ return [
             'url' => env('DB_URL'),
             'host' => 'localhost',
             'port' => '3306',
-            'database' => 'alerta-temprana',
+            'database' => 'ticketera_hu',
             'username' => 'root',
             'password' => '',
             'unix_socket' => env('DB_SOCKET', ''),
@@ -61,22 +61,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
-        'db2' => [
-            'driver' => 'mysql',
-            'host' => env('DB2_HOST', '172.22.112.13'),
-            'port' => env('DB2_PORT', '3306'),
-            'database' => env('DB2_DATABASE', 'salutte2'),
-            'username' => env('DB2_USERNAME', 'root'),
-            'password' => env('DB2_PASSWORD', 'sisnuevo.13'),
-            'unix_socket' => env('DB2_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
-
+        
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

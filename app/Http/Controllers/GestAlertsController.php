@@ -13,14 +13,7 @@ class GestAlertsController extends Controller
 
     public function index()
     {
-        $alerts = AlertModel::all();
-        $estados = EstadoModel::all();
-        $especialidades = EspecialidadModel::all();
 
-        return view('alerts', [
-            'alerts' => $alerts,
-            'especialidades' => $especialidades,
-            'estados' => $estados
-        ]);
+        return view('alerts', []);
     }
 }

@@ -23,6 +23,7 @@ class AuthenticatedSessionController extends Controller
             'status' => session('status'),
         ]);
     }
+
     /**
      * Handle an incoming authentication request.
      */
@@ -32,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('inicio', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
@@ -46,7 +47,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return view('inicio')
-
+        return redirect('/');
     }
 }
