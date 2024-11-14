@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 
-class EspecialidadModel extends Model
+class ClienteModel extends Model
 {
-    protected $table = 'especialidad';
+    protected $table = 'cliente';
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'nombre'
+        'email'
     ];
 }

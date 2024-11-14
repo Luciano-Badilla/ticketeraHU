@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class EstadoModel extends Model
 {
-    protected $table = 'estados';
+    protected $table = 'estado';
 
     public $timestamps = true;
 

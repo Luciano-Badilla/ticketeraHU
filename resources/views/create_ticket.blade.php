@@ -1,136 +1,301 @@
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
     a {
         text-decoration: none !important;
     }
-</style>
-<script src="https://cdn.tailwindcss.com"></script>
-<x-app-layout>
 
+    .custom-scrollbar {
+        max-height: 300px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        /* Ancho de la barra de desplazamiento */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        /* Color del pulgar de la barra de desplazamiento */
+        border-radius: 10px;
+        /* Radio de esquina del pulgar */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+        /* Color de la pista de la barra de desplazamiento */
+    }
+
+    .container {
+        padding: 1%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        /* Para que los elementos se ajusten en pantallas pequeñas */
+    }
+
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 10px;
+        flex: 1;
+        /* Para que ambos divs ocupen el mismo espacio */
+        max-width: 48%;
+        /* Ajusta el ancho de cada sección */
+        box-sizing: border-box;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .input-wrapper button {
+        width: auto;
+        padding: 10px;
+    }
+
+    .error-message {
+        display: none;
+        color: red;
+        margin: 2px;
+    }
+
+    /* Ajusta la altura y el tamaño del contenedor de Select2 */
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        /* Ajusta según tus necesidades */
+        line-height: 36px !important;
+    }
+
+    .select2-container .select2-selection--multiple {
+        min-height: 38px !important;
+        /* Para selects múltiples */
+    }
+
+    .select2-container {
+        font-size: 16px !important;
+    }
+
+
+    /* Media query para pantallas pequeñas */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            /* Cambia la dirección a columna en pantallas pequeñas */
+        }
+
+        .form-section {
+            max-width: 100%;
+            /* Haz que los divs ocupen el 100% del ancho en móviles */
+        }
+
+        .radio-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            /* Espacio entre los elementos */
+        }
+
+        .radio-item {
+            width: 100%;
+        }
+
+        personalizadoMeses {
+            max-width: 100%;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .radio-container {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            /* Espacio entre los elementos */
+        }
+
+        .radio-item {
+            flex: 1;
+        }
+
+        personalizadoMeses {
+            max-width: 50%;
+        }
+    }
+
+    personalizadoMeses {
+        display: none;
+    }
+
+    /* Redondear bordes del editor */
+    #editor {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid #ccc;
+        /* Asegúrate de que el borde sea consistente */
+        overflow: hidden;
+        /* Para evitar que el contenido sobresalga */
+        position: relative;
+        /* Para posicionar el controlador de tamaño */
+    }
+
+    /* Redondear bordes de la barra de herramientas */
+    .ql-toolbar {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border: 1px solid #ccc;
+        /* Asegúrate de que el borde sea consistente */
+    }
+
+    /* Controlador de tamaño en la esquina inferior derecha */
+    .resize-handle {
+        width: 10px;
+        height: 10px;
+        background: #ccc;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: se-resize;
+    }
+</style>
+
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-lg text-gray-800 leading-tight">
+            {{ 'Ticketera ' . $data['titulo'] }}
+        </h2>
+    </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="sm:rounded-xl bg-white shadow-sm w-auto p-3">
-                <div class="mx-auto">
-                    <div class="space-y-4">
-                        <div class="mx-auto">
-                            <div class="space-y-4"> <!-- Added horizontal padding for mobile -->
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-blue flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <!-- Adjusted width for mobile -->
-                                        <i class="fa-solid fa-mask-face text-3xl md:text-4xl text-white"></i>
-                                        <!-- Adjusted icon size for mobile -->
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">Seguridad e
-                                                Higiene</h3> <!-- Adjusted font size for mobile -->
-                                            <p class="text-xs md:text-sm text-gray-600">Gestiona tickets relacionados
-                                                con la seguridad y la higiene en el lugar de trabajo.</p>
-                                            <!-- Adjusted font size for mobile -->
-                                        </div>
-                                    </div>
-                                </a>
 
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-green flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <i class="fas fa-tools text-3xl md:text-4xl text-white"></i>
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">
-                                                Mantenimiento</h3>
-                                            <p class="text-xs md:text-sm text-gray-600">Solicita reparaciones o
-                                                mantenimiento para equipos e instalaciones.</p>
-                                        </div>
-                                    </div>
-                                </a>
+            <div class="overflow-hidden" style="background-color: white">
+                @if ($errors->any())
+                    <x-error-alert :error="$errors"></x-error-alert>
+                @endif
 
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-red flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <i class="fa-solid fa-file-circle-xmark text-3xl md:text-4xl text-white"></i>
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">Historias
-                                                Clínicas</h3>
-                                            <p class="text-xs md:text-sm text-gray-600">Reporta duplicados o errores en
-                                                historias clínicas para su corrección.</p>
-                                        </div>
-                                    </div>
-                                </a>
+                <form action="{{ route('ticket.store') }}" class="p-8" method="post" id="ticket_form"
+                    enctype="multipart/form-data">
+                    <x-ticket-message :message="$data['detalle']"></x-ticket-message>
+                    @csrf
+                    <input type="hidden" name="ticketera_id" value="{{ $data['id'] }}">
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="departamento">
+                                <i class="fas fa-building mr-2"></i>Departamento
+                            </label>
 
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-purple flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <i class="fa-solid fa-computer text-3xl md:text-4xl text-white"></i>
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">Tecnología y
-                                                Comunicaciones</h3>
-                                            <p class="text-xs md:text-sm text-gray-600">Solicita soporte para problemas
-                                                de tecnología, informática y comunicaciones.</p>
-                                        </div>
-                                    </div>
-                                </a>
+                            <x-dropdown-search placeholder="Seleccione un departamento" name="departamento_id"
+                                id="departamento-id" :data="$departamentos" :uniqueId="uniqid()" />
 
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-yellow flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <i class="fa-solid fa-dna text-3xl md:text-4xl text-white"></i>
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">
-                                                Biotecnología</h3>
-                                            <p class="text-xs md:text-sm text-gray-600">Gestiona tickets relacionados
-                                                con equipos y procesos biotecnológicos.</p>
-                                        </div>
-                                    </div>
-                                </a>
+                        </div>
 
-                                <a href="#"
-                                    class="btn-dark rounded-xl shadow-lg flex items-stretch transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
-                                    <div
-                                        class="bg-pastel-indigo flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl m-2 w-16 md:w-24 lg:w-40">
-                                        <i class="fa-solid fa-headset text-3xl md:text-4xl text-white"></i>
-                                        
-                                    </div>
-                                    <div class="flex-grow flex items-center">
-                                        <div class="p-4 bg-white rounded-xl m-2 w-full">
-                                            <h3 class="font-semibold text-md md:text-lg text-gray-800 mb-2">Centro de
-                                                Llamadas</h3>
-                                            <p class="text-xs md:text-sm text-gray-600">Reporta problemas o solicita
-                                                asistencia relacionada con el centro de llamadas.</p>
-                                        </div>
-                                    </div>
-                                </a>
+
+                        <div class="w-full md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="email">
+                                <i class="fas fa-envelope mr-2"></i>Email
+                            </label>
+                            <input
+                                class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                                id="email" type="email" name="email"
+                                placeholder="nombre.apellido@hospital.uncu.edu.ar" required>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="asunto">
+                                <i class="fas fa-heading mr-2"></i>Asunto
+                            </label>
+                            <input name="asunto"
+                                class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                                id="asunto" type="text" placeholder="Asunto del ticket" required>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="problema">
+                                <i class="fas fa-exclamation-circle mr-2"></i>Tipo de Problema
+                            </label>
+                            <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'"
+                                :data="$tiposProblema" />
+                        </div>
+
+                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="departamento">
+                                <i class="fas fa-flag mr-2"></i>Prioridad
+                            </label>
+                            <x-dropdown-simple :placeholder="'Seleccione una prioridad'" :name="'prioridad'" :id="'prioridad-id'"
+                                :data="$prioridades" />
+                        </div>
+
+                    </div>
+                    <x-texteditor></x-texteditor> <!-- id="editor" id-input="detalle" -->
+
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="archivos">
+                                <i class="fas fa-paperclip mr-2"></i>Archivos adjuntos
+                            </label>
+                            <div class="flex items-center w-full">
+                                <label class="block w-full">
+                                    <span class="sr-only">Choose files</span>
+                                    <input type="file" name="files[]"
+                                        class="block w-full border rounded-xl text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-gray-800 file:text-white hover:file:bg-gray-700"
+                                        multiple>
+                                </label>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            class="btn-dark text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+                            type="submit">Crear Ticket
+                        </button>
+                    </div>
+                </form>
+
+
             </div>
         </div>
-
 </x-app-layout>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Incluye el CSS de Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+<!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<!-- Incluye el JavaScript de Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    function custom_alert(message) {
+        const error_alert = document.getElementById('error_alert');
+        error_alert.classList.remove('hidden');
+        const error_message = document.getElementById('error_message');
+        error_message.textContent = message;
+    }
+
+    document.getElementById('ticket_form').onsubmit = function(e) {
+        var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
+        document.getElementById('detalle').value = content;
+
+        if (!content || content === "<p><br></p>") { // Verifica si está vacío
+            document.getElementById('detalle').value = null;
+        }
+    };
+</script>

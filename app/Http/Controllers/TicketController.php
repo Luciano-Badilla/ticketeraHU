@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PersonaAlephooModel;
-use App\Models\PersonaLocalModel;
-use App\Models\AlertModel;
-use App\Models\DatoPersonaModel;
-use App\Models\EspecialidadModel;
-use App\Models\EstadoAlertaModel;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ClienteModel;
+use App\Models\DashboardTicketModel;
+use App\Models\DepartamentoModel;
+use App\Models\PrioridadModel;
+use App\Models\TipoProblemaModel;
+use App\Models\TicketModel;
+use App\Models\AdjuntoModel;
+use App\Models\AdjuntoTicketModel;
+use App\Models\TicketeraTicketModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -19,408 +21,90 @@ class TicketController extends Controller
 
     public function index()
     {
-        log::info("asdasd");
-        return view('create_ticket', []);
+        $dashboard_tickets = DashboardTicketModel::all();
+        return view('dashboard_ticket', ['dashboard_tickets' => $dashboard_tickets]);
     }
 
+    public function load_create_view(Request $request)
+    {
+        $data = $request->all();
+        $departamentos = DepartamentoModel::all();
+        $prioridades = PrioridadModel::all();
+        $tiposProblema = TipoProblemaModel::all();
+        return view('create_ticket', ['data' => $data, 'departamentos' => $departamentos, 'prioridades' => $prioridades, 'tiposProblema' => $tiposProblema]);
+    }
     public function store(Request $request)
     {
+        Log::info($request);
+        $request->validate([
+            'detalle' => 'required|string',
+            'departamento_id' => 'required|exists:departamento,id',
+            'prioridad' => 'required|exists:prioridad,id',
+            'tipo_de_problema' => 'required|exists:tipo_problemas,id',
+        ], [
+            'detalle.required' => 'Debe proporcionar un detalle del ticket.',
+            'departamento_id.required' => 'Debe seleccionar un departamento.',
+            'departamento_id.exists' => 'El departamento seleccionado no es válido.',
+            'prioridad.required' => 'Debe seleccionar una prioridad.',
+            'prioridad.exists' => 'La prioridad seleccionada no es válida.',
+            'tipo_de_problema.required' => 'Debe seleccionar un tipo de problema.',
+            'tipo_de_problema.exists' => 'El tipo de problema seleccionado no es válido.',
+        ]);
+        Log::info('Paso la validacion');
+        $email = $request->input('email');
+        $cliente = ClienteModel::where('email', $email)->first();
 
-        $is_in_alephoo = $request->input('is_in_alephoo');
-
-        if ($is_in_alephoo) {
-            $persona = PersonaAlephooModel::find($request->input('addId'));
-        } else {
-            $persona = PersonaLocalModel::getPersonalDataByDNIObject($request->input('addDNI'));
-
-            if ($persona) {
-                $persona->nombres = $request->input('addNombre');
-                $persona->apellidos = $request->input('addApellido');
-                $persona->fecha_nacimiento = $request->input('addFechaNac');
-                $persona->celular = $request->input('addCelular');
-                $persona->email = $request->input('addEmail');
-                $persona->documento = $request->input('addDNI');
-                $persona->update();
-            } else {
-                $persona = new PersonaLocalModel();
-                $persona->nombres = $request->input('addNombre');
-                $persona->apellidos = $request->input('addApellido');
-                $persona->fecha_nacimiento = $request->input('addFechaNac');
-                $persona->celular = $request->input('addCelular');
-                $persona->email = $request->input('addEmail');
-                $persona->documento = $request->input('addDNI');
-                $persona->save();
-            }
+        if (!$cliente) {
+            $cliente = ClienteModel::create([
+                'email' => $email
+            ]);
         }
 
-        $alert = new AlertModel();
-        $alert->persona_id = $persona->id;
-        $alert->especialidad_id = $request->input('addEspecialidad');
-        $alert->detalle = $request->input('addDetalle');
-        switch ($request->input('fecha_alert')) {
-            case '6meses':
-                $alert->fecha_objetivo = Carbon::now()->addMonths(6);
-                $alert->tipo_frecuencia = "meses";
-                $alert->frecuencia = intval(6);
-                break;
-
-            case '1anio':
-                $alert->fecha_objetivo = Carbon::now()->addYear();
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(1);
-                break;
-
-            case '2anios':
-                $alert->fecha_objetivo = Carbon::now()->addYears(2);
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(2);
-                break;
-
-            case '5anios':
-                $alert->fecha_objetivo = Carbon::now()->addYears(5);
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(5);
-                break;
-
-            case 'personalizado':
-                // Asumimos que 'numPersonalizado' y 'unidadPersonalizado' están correctamente establecidos
-                $numero = intval($request->input('numPersonalizado'));
-                $unidad = $request->input('unidadPersonalizado');
-
-                if ($unidad === 'meses') {
-                    $alert->fecha_objetivo = Carbon::now()->addMonths($numero);
-                } elseif ($unidad === 'anios') {
-                    $alert->fecha_objetivo = Carbon::now()->addYears($numero);
-                }
-                $alert->frecuencia = intval($request->input('numPersonalizado'));
-                $alert->tipo_frecuencia = $unidad;
-                break;
-
-            default:
-                // Manejar otros casos si es necesario
-                break;
-        }
-        $alert->tipo_id = $request->input('tipo_alerta');
-        $alert->is_in_alephoo = $is_in_alephoo;
-        $alert->created_by = Auth::user()->name;
-        $alert->save();
-
-        $estado = new EstadoAlertaModel();
-        $estado->alerta_id = $alert->id;
-        $estado->estado_id = 1;
-        $estado->save();
-
-        return redirect()->route('alerts')->with('success', 'Alerta creada correctamente.');
-    }
-
-    public function store2(Request $request)
-    {
-        // Obtener los datos de la solicitud
-        $personalInfo = $request->input('personalInfo');
-        $is_in_alephoo = $personalInfo['is_in_alephoo'];
-        // Verificar que los datos existan
-        if ($personalInfo && $is_in_alephoo) {
-
-            // Verificar y guardar el email si está presente y no existe en la base de datos
-            if (isset($personalInfo['addEmail']) && !empty($personalInfo['addEmail'])) {
-                if (!DatoPersonaModel::where('tipo_dato', 'email')->where('persona_id', $personalInfo['addId'])->exists()) {
-                    $dato = new DatoPersonaModel();
-                    $dato->dato = $personalInfo['addEmail'];
-                    $dato->tipo_dato = 'email';
-                    $dato->persona_id = $personalInfo['addId'];
-                    $dato->save();
-                } else {
-                    $dato = DatoPersonaModel::where('tipo_dato', 'email')->where('persona_id', $personalInfo['addId'])->first();
-                    $dato->dato = $personalInfo['addEmail'];
-                    $dato->tipo_dato = 'email';
-                    $dato->persona_id = $personalInfo['addId'];
-                    $dato->update();
-                }
-            }
-
-            // Verificar y guardar el celular si está presente y no existe en la base de datos
-            if (isset($personalInfo['addCelular']) && !empty($personalInfo['addCelular'])) {
-                if (!DatoPersonaModel::where('tipo_dato', 'celular')->where('persona_id', $personalInfo['addId'])->exists()) {
-                    $dato = new DatoPersonaModel();
-                    $dato->dato = $personalInfo['addCelular'];
-                    $dato->tipo_dato = 'celular';
-                    $dato->persona_id = $personalInfo['addId'];
-                    $dato->save();
-                } else {
-                    $dato = DatoPersonaModel::where('tipo_dato', 'celular')->where('persona_id', $personalInfo['addId'])->first();
-                    $dato->dato = $personalInfo['addCelular'];
-                    $dato->tipo_dato = 'celular';
-                    $dato->persona_id = $personalInfo['addId'];
-                    $dato->update();
-                }
-            }
-
-            // Verificar y guardar el email si está presente y no existe en la base de datos
-            if (isset($personalInfo['editEmail']) && !empty($personalInfo['editEmail'])) {
-                if (!DatoPersonaModel::where('tipo_dato', 'email')->where('persona_id', $personalInfo['editId'])->exists()) {
-                    $dato = new DatoPersonaModel();
-                    $dato->dato = $personalInfo['editEmail'];
-                    $dato->tipo_dato = 'email';
-                    $dato->persona_id = $personalInfo['editId'];
-                    $dato->save();
-                } else {
-                    $dato = DatoPersonaModel::where('tipo_dato', 'email')->where('persona_id', $personalInfo['editId'])->first();
-                    $dato->dato = $personalInfo['editEmail'];
-                    $dato->tipo_dato = 'email';
-                    $dato->persona_id = $personalInfo['editId'];
-                    $dato->update();
-                }
-            }
-
-            // Verificar y guardar el celular si está presente y no existe en la base de datos
-            if (isset($personalInfo['editCelular']) && !empty($personalInfo['editCelular'])) {
-                if (!DatoPersonaModel::where('tipo_dato', 'celular')->where('persona_id', $personalInfo['editId'])->exists()) {
-                    $dato = new DatoPersonaModel();
-                    $dato->dato = $personalInfo['editCelular'];
-                    $dato->tipo_dato = 'celular';
-                    $dato->persona_id = $personalInfo['editId'];
-                    $dato->save();
-                } else {
-                    $dato = DatoPersonaModel::where('tipo_dato', 'celular')->where('persona_id', $personalInfo['editId'])->first();
-                    $dato->dato = $personalInfo['editCelular'];
-                    $dato->tipo_dato = 'celular';
-                    $dato->persona_id = $personalInfo['editId'];
-                    $dato->update();
-                }
-            }
-        }
-    }
-
-    public function edit_index($id)
-    {
-        $alert = AlertModel::find($id);
-        $estados = EstadoAlertaModel::getEstadosById($id);
-        if ($alert->is_in_alephoo) {
-            $personaAlephoo = new PersonaAlephooModel();
-            $persona = $personaAlephoo->getPersonalDataByIdArray($alert->persona_id);
-        } else {
-            $persona = PersonaLocalModel::find($alert->persona_id);
-        }
-
-        $especialidades = EspecialidadModel::all();
-        return view('edit_alert', ['alert' => $alert, 'especialidades' => $especialidades, 'persona' => $persona, 'estados' => $estados]);
-    }
-
-    public function edit(Request $request)
-    {
-        $alert = AlertModel::find($request->input("editAlertId"));
-
-        $is_in_alephoo = $request->input('is_in_alephoo');
-
-        if ($is_in_alephoo) {
-            $persona = PersonaAlephooModel::find($request->input('editId'));
-        } else {
-            $persona = PersonaLocalModel::getPersonalDataByDNIObject($request->input('editDNI'));
-
-            if ($persona) {
-                $persona->nombres = $request->input('editNombre');
-                $persona->apellidos = $request->input('editApellido');
-                $persona->fecha_nacimiento = $request->input('editFechaNac');
-                $persona->celular = $request->input('editCelular');
-                $persona->email = $request->input('editEmail');
-                $persona->documento = $request->input('editDNI');
-                $persona->update();
-            } else {
-                $persona = new PersonaLocalModel();
-                $persona->nombres = $request->input('editNombre');
-                $persona->apellidos = $request->input('editApellido');
-                $persona->fecha_nacimiento = $request->input('editFechaNac');
-                $persona->celular = $request->input('editCelular');
-                $persona->email = $request->input('editEmail');
-                $persona->documento = $request->input('editDNI');
-                $persona->save();
-            }
-        }
-
-        $alert->persona_id = $persona->id;
-        $alert->especialidad_id = $request->input('editEspecialidad');
-        $alert->detalle = $request->input('editDetalle');
-        switch ($request->input('fecha_alert')) {
-            case '6meses':
-                $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addMonths(6);
-                $alert->tipo_frecuencia = "meses";
-                $alert->frecuencia = intval(6);
-                break;
-
-            case '1anio':
-                $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addYear();
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(1);
-                break;
-
-            case '2anios':
-                $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addYears(2);
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(2);
-                break;
-
-            case '5anios':
-                $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addYears(5);
-                $alert->tipo_frecuencia = "anios";
-                $alert->frecuencia = intval(5);
-                break;
-
-            case 'personalizado':
-                // Asumimos que 'numPersonalizado' y 'unidadPersonalizado' están correctamente establecidos
-                $numero = intval($request->input('numPersonalizado'));
-                $unidad = $request->input('unidadPersonalizado');
-
-                if ($unidad === 'meses') {
-                    $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addMonths($numero);
-                } elseif ($unidad === 'anios') {
-                    $alert->fecha_objetivo = Carbon::parse($alert->created_at)->addYears($numero);
-                }
-                $alert->frecuencia = intval($request->input('numPersonalizado'));
-                $alert->tipo_frecuencia = $unidad;
-                break;
-
-            default:
-                // Manejar otros casos si es necesario
-                break;
-        }
-        $alert->tipo_id = $request->input('tipo_alerta');
-        $alert->is_in_alephoo = $is_in_alephoo;
-        $alert->updated_by = Auth::user()->name;
-
-        $alert->save();
-
-        return redirect()->route('alerts')->with('success', 'Alerta editada correctamente.');
-    }
-
-    public function gest_index($id)
-    {
-        $alert = AlertModel::find($id);
-        if ($alert->is_in_alephoo) {
-            $personaAlephoo = new PersonaAlephooModel();
-            $persona = $personaAlephoo->getPersonalDataByIdArray($alert->persona_id);
-        } else {
-            $persona = PersonaLocalModel::find($alert->persona_id);
-        }
-
-        $especialidades = EspecialidadModel::all();
-        return view('gestion_alert', ['alert' => $alert, 'especialidades' => $especialidades, 'persona' => $persona]);
-    }
-
-    // TuControlador.php
-    public function getPersonalDataByDNI(Request $request)
-    {
-        $documento = $request->input('documento');
-        $persona = new PersonaAlephooModel();
-
-        $data = $persona->getPersonalDataByDNI($documento);
-
-        if ($data) {
-            return response()->json($data);
-        }
-
-        return response()->json(['error' => 'No se encontró a la persona']);
-    }
-
-    public function getPersonalDataLocalByDNI(Request $request)
-    {
-        $documento = $request->input('documento');
-        $persona = new PersonaLocalModel();
-
-        $data = $persona->getPersonalDataByDNI($documento);
-
-        if ($data) {
-            return response()->json($data);
-        }
-
-        return response()->json(['error' => 'No se encontró a la persona']);
-    }
-
-    public function getPersonalDataLocalEmptyInputsByDNI(Request $request)
-    {
-
-        $id = $request->input('id');
-        $dato = new DatoPersonaModel();
-
-        $data = $dato->getPersonalDataById($id);
-
-        if ($data) {
-            return response()->json($data);
-        }
-
-        return response()->json(['error' => 'No se encontró a la persona']);
-    }
-
-    public function agregarEstado(Request $request)
-    {
-        $alertId = $request->input('alertId');
-        $estadoId = $request->input('estadoId');
-
-        // Lógica para agregar el estado a la base de datos
-        EstadoAlertaModel::create([
-            'alerta_id' => $alertId,
-            'estado_id' => $estadoId
+        $ticket = TicketModel::create([
+            'asunto' => $request->input('asunto'),
+            'cliente_id' => $cliente->id,
+            'departamento_id' => $request->input('departamento_id'),
+            'tipo_problema_id' => $request->input('tipo_de_problema'),
+            'prioridad_id' => $request->input('prioridad'),
+            'cuerpo' => $request->input('detalle'),
+            'estado_id' => 5 // en_progreso
         ]);
 
-        return response()->json(['success' => true]);
-    }
+        // Manejo de archivos subidos desde el campo "files"
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('tickets_files', $filename, 'public'); // Guarda el archivo
 
-    public function eliminarEstado(Request $request)
-    {
-        $alertId = $request->input('alertId');
-        $estadoId = $request->input('estadoId');
+                // Guarda el archivo en la tabla 'adjunto'
+                $adjunto = AdjuntoModel::create([
+                    'nombre' => $filename,
+                    'path' => $path
+                ]);
 
-        // Lógica para eliminar el estado de la base de datos
-        EstadoAlertaModel::where('alerta_id', $alertId)
-            ->where('estado_id', $estadoId)
-            ->delete();
-
-        return response()->json(['success' => true]);
-    }
-
-    public function completed(Request $request)
-    {
-        $id = $request->input('editAlertId');
-        $alert = AlertModel::find($id);
-
-        $estadoAnterior = EstadoAlertaModel::getEstadosById($id)->where('estado_id', '=', 1)->first();
-        if ($estadoAnterior) {
-            $estadoAnterior->delete();
-        }
-
-        $estadoAnterior = EstadoAlertaModel::getEstadosById($id)->where('estado_id', '=', 2)->first();
-        if ($estadoAnterior) {
-            $estadoAnterior->delete();
-        }
-
-        $nuevoEstado = new EstadoAlertaModel();
-        $nuevoEstado->estado_id = 4;
-        $nuevoEstado->alerta_id = $id;
-        $nuevoEstado->save();
-
-        if ($alert->tipo_id == 2) {
-            $nuevaAlerta = new AlertModel();
-            $nuevaAlerta->persona_id = $alert->persona_id;
-            $nuevaAlerta->especialidad_id = $alert->especialidad_id;
-            $nuevaAlerta->detalle = $alert->detalle;
-            $nuevaAlerta->is_in_alephoo = $alert->is_in_alephoo;
-            $nuevaAlerta->tipo_id = $alert->tipo_id;
-            $nuevaAlerta->frecuencia = $alert->frecuencia;
-            $nuevaAlerta->tipo_frecuencia = $alert->tipo_frecuencia;
-            if ($nuevaAlerta->tipo_frecuencia == 'meses') {
-                $nuevaAlerta->fecha_objetivo = Carbon::now()->addMonths($nuevaAlerta->frecuencia);
-            } else if ($nuevaAlerta->tipo_frecuencia == 'anios') {
-                $nuevaAlerta->fecha_objetivo = Carbon::now()->addYears($nuevaAlerta->frecuencia);
+                // Vincula el adjunto al ticket
+                AdjuntoTicketModel::create([
+                    'adjunto_id' => $adjunto->id,
+                    'ticket_id' => $ticket->id
+                ]);
             }
-            $nuevaAlerta->created_by = Auth::user()->name;
-            $nuevaAlerta->save();
-
-            $nuevoEstado = new EstadoAlertaModel();
-            $nuevoEstado->estado_id = 1;
-            $nuevoEstado->alerta_id = $nuevaAlerta->id;
-            $nuevoEstado->save();
         }
 
+        TicketeraTicketModel::create([
+            'ticketera_id' => $request->input('ticketera_id'),
+            'ticket_id' => $ticket->id,
+            'type' => "ticket"
+        ]);
 
-        return redirect()->route('alerts')->with('success', 'Alerta completada correctamente.');
+        return redirect()->route('ticket.dashboard')->with('success', 'Ticket enviado correctamente.');
     }
+
+
+    public function show_own_tickets(Request $request)
+    {
+        return view('');
+    }
+    public function edit_index($id) {}
+
+    public function edit(Request $request) {}
 }
