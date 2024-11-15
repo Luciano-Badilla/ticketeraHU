@@ -10,7 +10,9 @@ use App\Models\TipoProblemaModel;
 use App\Models\TicketModel;
 use App\Models\AdjuntoModel;
 use App\Models\AdjuntoTicketModel;
+use App\Models\EstadoModel;
 use App\Models\TicketeraTicketModel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -102,7 +104,17 @@ class TicketController extends Controller
 
     public function show_own_tickets(Request $request)
     {
-        return view('');
+        Log::info($request);
+        $email = "";
+        $tickets = collect();
+        if ($request->has('email')) {
+            $email = $request->input('email');
+            $cliente_id = ClienteModel::where('email', $email)->first()->id;
+            $tickets = TicketModel::where('cliente_id', $cliente_id)->get();
+        }
+        $ticketeras = DashboardTicketModel::all();
+        $estados = EstadoModel::all();
+        return view('show_own_tickets', ['tickets' => $tickets, 'ticketeras' => $ticketeras, 'estados' => $estados]);
     }
     public function edit_index($id) {}
 
