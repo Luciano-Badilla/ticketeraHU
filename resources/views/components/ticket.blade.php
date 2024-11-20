@@ -9,8 +9,13 @@
     use App\Models\ClienteModel;
 @endphp
 
-<div href="index.html"
-    class="bg-white shadow-md rounded-xl w-full p-4 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_120px_1fr_100px] lg:gap-2 lg:items-center transition-all duration-300 ease-in-out"
+<style>
+    .ticket:hover {
+        background-color: #e9e9e9 !important;
+    }
+</style>
+
+<div class="ticket bg-white shadow-md rounded-xl w-full p-4 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_120px_1fr_100px] lg:gap-2 lg:items-center transition-all duration-300 ease-in-out"
     style="text-decoration: none !important">
 
     <!-- Ícono del ticket -->
@@ -19,7 +24,7 @@
     </div>
 
     <!-- Información principal del ticket -->
-    <a href="index" class="flex flex-col rounded-lg">
+    <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}" class="ticket-link flex flex-col rounded-lg">
         <span><strong>Ticket #{{ $ticket->id }}</strong></span>
         <span class="text-xs text-gray-500">{{ $ticket->created_at->format('d/m/y h:i') }}</span>
     </a>
@@ -53,7 +58,10 @@
     </div>
 
     <!-- Botón para cerrar -->
-    <div class="flex justify-end lg:justify-center">
-        <button class="btn btn-danger px-3 py-2 text-sm lg:px-2 lg:py-1 lg:text-xs">Cerrar</button>
-    </div>
+    @auth
+        <div class="flex justify-end lg:justify-center">
+            <button class="btn btn-danger px-3 py-2 text-sm lg:px-2 lg:py-1 lg:text-xs">Cerrar</button>
+        </div>
+    @endauth
+
 </div>

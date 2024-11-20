@@ -40,7 +40,6 @@
 
     <!-- Custom Styles -->
     <style>
-        /* Estilo para el campo de búsqueda */
 
         .search_input {
             margin-left: 5% !important;

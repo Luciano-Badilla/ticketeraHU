@@ -1,15 +1,7 @@
-<div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full px-3">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="detalle">
-            <i class="fas fa-align-left mr-2"></i>Detalle
-        </label>
-        <!-- Cambiar textarea por un div para Quill -->
-        <div id="editor"
-            class="appearance-none block w-full border border-gray-300 text-gray-700 py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-            style="height: 200px;" placeholder="Describe el problema en detalle" required></div>
-        <input type="hidden" name="detalle" id="detalle">
-    </div>
-</div>
+<div id="editor"
+    class="appearance-none block w-full border border-gray-300 text-gray-700 py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+    style="height: 200px;" required></div>
+<input type="hidden" name="detalle" id="detalle">
 
 <!--Quill -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -113,5 +105,12 @@
                 }
             }
         }
+    });
+
+    // Adjust the height of the editor dynamically based on content
+    quill.on('text-change', function(delta, oldDelta, source) {
+        const editor = document.querySelector('#editor');
+        editor.style.height = 'auto'; // Reset height to auto first
+        editor.style.height = `${editor.scrollHeight}px`; // Set height to content height
     });
 </script>

@@ -338,14 +338,16 @@
                         <p style="padding: 0.3%; text-align: center">{{ session('success') }}</p>
                     </div>
                 @endif
-                <div class="d-flex justify-content-center p-3 bg-light rounded shadow-sm w-full" >
+                <div class="d-flex justify-content-center p-3 bg-light rounded shadow-sm w-full">
                     <div class="flex flex-col" style="width: 95%">
                         <div class="justify-between search_and_filters_div mb-2">
                             <form action="{{ route('ticket.show') }}" method="GET">
                                 @csrf
-                                <div class="flex items-center space-x-1">
-                                    <input type="email" class="form-control p-2 border rounded-xl h-full w-full lg:min-w-full" name="email" id="search_input"
-                                        placeholder="Ingrese su email" value="{{ request('email') }}" required>
+                                <div class="flex items-center space-x-1 mt-4">
+                                    <input type="email"
+                                        class="form-control p-2 border rounded-xl h-full w-full lg:min-w-full"
+                                        name="email" id="search_input" placeholder="Ingrese su email"
+                                        value="{{ request('email') }}" required>
                                     <button type="submit" class="btn btn-dark flex items-center h-9"
                                         id="searchByEmail">
                                         <i id="search_icon" class="fa-solid fa-magnifying-glass"></i>
@@ -378,8 +380,6 @@
                                 <x-ticket :ticket="$ticket" />
                             @endforeach
                         </div>
-
-
                     </div>
                 </div>
             </div>
