@@ -14,8 +14,10 @@ class DashboardTicketModel extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'title',
-        'description',
-        'icon'
+        'titulo',
+        'descripcion',
+        'icono',
+        'detalle',
+        ''
     ];
 }

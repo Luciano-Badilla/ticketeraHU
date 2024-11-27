@@ -345,7 +345,7 @@
                                 @csrf
                                 <div class="flex items-center space-x-1 mt-4">
                                     <input type="email"
-                                        class="form-control p-2 border rounded-xl h-full w-full lg:min-w-full"
+                                        class="form-control p-2 border rounded-lg h-full w-full lg:min-w-full"
                                         name="email" id="search_input" placeholder="Ingrese su email"
                                         value="{{ request('email') }}" required>
                                     <button type="submit" class="btn btn-dark flex items-center h-9"

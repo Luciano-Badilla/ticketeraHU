@@ -26,7 +26,7 @@
     <!-- Información principal del ticket -->
     <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}" class="ticket-link flex flex-col rounded-lg">
         <span><strong>Ticket #{{ $ticket->id }}</strong></span>
-        <span class="text-xs text-gray-500">{{ $ticket->created_at->format('d/m/y h:i') }}</span>
+        <span class="text-xs text-gray-500">{{ $ticket->created_at->format('d/m/y H:i') }}</span>
     </a>
 
     <!-- Detalles adicionales -->
@@ -58,10 +58,23 @@
     </div>
 
     <!-- Botón para cerrar -->
-    @auth
-        <div class="flex justify-end lg:justify-center">
-            <button class="btn btn-danger px-3 py-2 text-sm lg:px-2 lg:py-1 lg:text-xs">Cerrar</button>
-        </div>
-    @endauth
+    @if ($ticket->estado_id != 2)
+        @auth
+            <div class="flex justify-center">
+                <!-- Formulario -->
+                <form id="close-ticket-form-{{ $ticket->id }}"
+                    action="{{ route('ticket.close', ['id' => $ticket->id]) }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+
+                <!-- Botón -->
+                <button type="button" onclick="document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
+                    class="btn btn-danger px-3 py-2 text-sm lg:px-2 lg:py-1 lg:text-xs">
+                    Cerrar
+                </button>
+            </div>
+
+        @endauth
+    @endif
 
 </div>

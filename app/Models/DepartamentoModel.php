@@ -11,7 +11,7 @@ class DepartamentoModel extends Model
 {
     protected $table = 'departamento';
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'id',

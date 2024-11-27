@@ -135,26 +135,6 @@
         display: none;
     }
 
-    /* Redondear bordes del editor */
-    #editor {
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-        border: 1px solid #ccc;
-        /* Asegúrate de que el borde sea consistente */
-        overflow: hidden;
-        /* Para evitar que el contenido sobresalga */
-        position: relative;
-        /* Para posicionar el controlador de tamaño */
-    }
-
-    /* Redondear bordes de la barra de herramientas */
-    .ql-toolbar {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        border: 1px solid #ccc;
-        /* Asegúrate de que el borde sea consistente */
-    }
-
     /* Controlador de tamaño en la esquina inferior derecha */
     .resize-handle {
         width: 10px;
@@ -218,7 +198,8 @@
                             </label>
                             <input name="asunto" maxlength="25"
                                 class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-                                id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)" required>
+                                id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)"
+                                required>
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 mb-6">
@@ -248,7 +229,8 @@
                                 <i class="fas fa-align-left mr-2"></i>Detalle
                             </label>
                             <!-- Cambiar textarea por un div para Quill -->
-                            <x-texteditor></x-texteditor> <!-- id="editor" id-input="detalle" -->
+                            <x-texteditor :pretext="$data['pretext'] ?? ''"></x-texteditor>
+
 
                         </div>
                     </div>
@@ -270,19 +252,20 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between">
+                    <div class="flex justify-end">
                         <button
                             class="btn-dark text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-                            type="submit">Crear Ticket
+                            type="submit">
+                            Crear Ticket
                         </button>
                     </div>
+
                 </form>
 
 
             </div>
         </div>
 </x-app-layout>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <!-- Incluye el CSS de Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 

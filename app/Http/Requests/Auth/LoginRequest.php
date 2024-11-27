@@ -49,6 +49,18 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Verificar si el campo 'validated' es 1
+        if (! $user->validated) {
+            // Cerrar sesión para prevenir que el usuario se mantenga logueado
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => __('Tu cuenta aun no a sido validada, por favor envia un ticket a TICS para solicitar la validacion con los siguientes datos: (Apellido y Nombre, Email).'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -80,6 +92,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

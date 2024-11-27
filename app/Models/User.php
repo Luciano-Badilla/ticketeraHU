@@ -20,9 +20,12 @@ class User extends Authenticatable
     protected $fillable = [
         'name_and_surname',
         'email',
+        'matricula',
         'password',
-        'especialidad_id',
-        'pass_changed'
+        'ticketera_id',
+        'pass_changed',
+        'validated',
+        'rol_id'
     ];
 
     /**
@@ -46,10 +49,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function especialidad()
-    {
-        return $this->belongsTo(EspecialidadModel::class, 'especialidad_id');
     }
 }

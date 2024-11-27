@@ -1,3 +1,38 @@
+@props(['pretext'])
+<style>
+    .ql-toolbar {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border: 1px solid #ccc;
+        /* Asegúrate de que el borde sea consistente */
+    }
+
+    /* Redondear bordes del editor */
+    #editor {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid #ccc;
+        /* Asegúrate de que el borde sea consistente */
+        overflow: hidden;
+        /* Para evitar que el contenido sobresalga */
+        position: relative;
+        /* Para posicionar el controlador de tamaño */
+    }
+
+    .ql-toolbar .ql-video {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none;
+        padding: 0;
+    }
+
+    .ql-toolbar button:hover,
+    .ql-toolbar button:focus {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+</style>
+
 <div id="editor"
     class="appearance-none block w-full border border-gray-300 text-gray-700 py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
     style="height: 200px;" required></div>
@@ -13,25 +48,56 @@
         modules: {
             toolbar: {
                 container: [
-                    ['bold', 'italic', 'underline'],
-                    [{
-                        'header': [1, 2, false]
-                    }],
+                    ['bold', 'italic', 'underline', 'strike'], // Formatos de texto
+                    ['blockquote', 'code-block'], // Citas y bloques de código
                     [{
                         'list': 'ordered'
                     }, {
                         'list': 'bullet'
-                    }],
-                    ['image'], // Button to upload images
+                    }], // Listas numeradas y con viñetas
+                    [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }], // Disminuir/Incrementar sangría
+                    [{
+                        'direction': 'rtl'
+                    }], // Dirección de texto (derecha a izquierda)
+                    [{
+                        'header': '1'
+                    }, {
+                        'header': '2'
+                    }, {
+                        'font': []
+                    }], // Encabezados y fuentes
+                    [{
+                        'size': ['small', 'normal', 'large', 'huge']
+                    }], // Tamaños de texto
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }], // Colores de texto y fondo
+                    [{
+                        'align': []
+                    }], // Alineación de texto
+                    ['link', 'image', 'video'], // Insertar enlaces, imágenes y videos
+                    ['clean'], // Limpiar formato
                 ],
                 handlers: {
-                    image: imageHandler, // Assign the imageHandler function to the image button
+                    image: imageHandler,
+                    video: videoHandler,
                 },
             },
         },
     });
 
-    // Custom handler for image upload
+   var contenidoHtml = {!! json_encode($pretext ?? '') !!};
+
+    // Inserta el contenido HTML en el editor justo después de inicializarlo
+    quill.clipboard.dangerouslyPasteHTML(contenidoHtml);
+
+    // Función personalizada para cargar imágenes
     function imageHandler() {
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -56,9 +122,9 @@
 
                 if (data.success) {
                     const range = quill.getSelection();
-                    quill.insertEmbed(range.index, 'image', data.url); // Insert the image in the editor
+                    quill.insertEmbed(range.index, 'image', data.url);
                 } else {
-                    console.error('Error uploading the image');
+                    console.error('Error al cargar la imagen');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -66,51 +132,47 @@
         };
     }
 
-    // Handle pasting images with Ctrl+V
-    quill.root.addEventListener('paste', async (event) => {
-        const clipboardData = event.clipboardData || window.clipboardData;
-        if (clipboardData && clipboardData.items) {
-            for (let i = 0; i < clipboardData.items.length; i++) {
-                const item = clipboardData.items[i];
-                if (item.type.indexOf('image') !== -1) {
-                    event.preventDefault(); // Prevent Quill's default paste behavior for images
+    // Función personalizada para cargar videos
+    function videoHandler() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'video/*');
+        input.click();
 
-                    const file = item.getAsFile();
-                    if (file) {
-                        const formData = new FormData();
-                        formData.append('image', file);
+        input.onchange = async () => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('video', file);
 
-                        try {
-                            const response = await fetch("{{ route('imgUpload') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector(
-                                        'meta[name="csrf-token"]').getAttribute('content')
-                                },
-                                body: formData,
-                            });
-                            const data = await response.json();
+            try {
+                const response = await fetch(
+                    "{{ route('videoUpload') }}", { // Cambia `{{ route('videoUpload') }}` a tu ruta real para cargar videos
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                        body: formData,
+                    });
+                const data = await response.json();
 
-                            if (data.success) {
-                                const range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', data
-                                    .url); // Insert the image in the editor
-                            } else {
-                                console.error('Error uploading the image');
-                            }
-                        } catch (error) {
-                            console.error('Error:', error);
-                        }
-                    }
+                if (data.success) {
+                    const range = quill.getSelection();
+                    const videoUrl = data.url;
+                    quill.insertEmbed(range.index, 'video', videoUrl);
+                } else {
+                    console.error('Error al cargar el video');
                 }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        }
-    });
+        };
+    }
 
-    // Adjust the height of the editor dynamically based on content
+    // Ajustar la altura del editor dinámicamente según el contenido
     quill.on('text-change', function(delta, oldDelta, source) {
         const editor = document.querySelector('#editor');
-        editor.style.height = 'auto'; // Reset height to auto first
-        editor.style.height = `${editor.scrollHeight}px`; // Set height to content height
+        editor.style.height = 'auto';
+        editor.style.height = `${editor.scrollHeight}px`;
     });
 </script>
