@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('ticketera.dashboard'));
+        return redirect()->intended(route('ticket_sorting.dashboard'));
     }
 
     /**

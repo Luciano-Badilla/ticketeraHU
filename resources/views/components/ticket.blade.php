@@ -48,17 +48,13 @@
             <span class="text-sm lg:text-xs">{{ DepartamentoModel::find($ticket->departamento_id)->nombre }}</span>
         </div>
         <div class="flex items-center gap-2 lg:gap-1">
-            <i class="fa-solid fa-flag text-gray-500"></i>
-            <span class="text-sm lg:text-xs">{{ PrioridadModel::find($ticket->prioridad_id)->nombre }}</span>
-        </div>
-        <div class="flex items-center gap-2 lg:gap-1">
             <i class="fa-solid fa-hourglass-end text-gray-500"></i>
             <span class="text-sm lg:text-xs">{{ EstadoModel::find($ticket->estado_id)->nombre }}</span>
         </div>
     </div>
 
     <!-- Botón para cerrar -->
-    @if ($ticket->estado_id != 2)
+    @if ($ticket->estado_id != 4)
         @auth
             <div class="flex justify-center">
                 <!-- Formulario -->
@@ -69,8 +65,7 @@
 
                 <!-- Botón -->
                 <button type="button" onclick="document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
-                    class="btn btn-danger px-3 py-2 text-sm lg:px-2 lg:py-1 lg:text-xs">
-                    Cerrar
+                    class="btn btn-danger rounded-xl"><i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
                 </button>
             </div>
 

@@ -99,7 +99,7 @@
 
             <div class="overflow-hidden bg-white rounded-lg shadow-sm">
                 <x-status-alert :status="'success'"></x-status-alert>
-                @if ($ticket->estado_id == 2)
+                @if ($ticket->estado_id == 4)
                     <div class="alert-danger rounded-t-lg">
                         <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado y no está disponible para
                             más acciones.</p>
@@ -203,7 +203,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        @if ($ticket->estado_id != 2)
+                        @if ($ticket->estado_id != 4)
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full px-3">
                                     <h2 class="text-2xl font-bold mb-2 mt-4">Responder</h2>

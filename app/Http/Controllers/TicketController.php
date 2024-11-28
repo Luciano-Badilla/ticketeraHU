@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ticketResponsed;
+use App\Mail\ticketCreated;
 use App\Models\AreaModel;
 use App\Models\ClienteModel;
 use App\Models\DashboardTicketModel;
@@ -21,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
@@ -46,14 +49,11 @@ class TicketController extends Controller
         $request->validate([
             'detalle' => 'required|string',
             'departamento_id' => 'required|exists:departamento,id',
-            'prioridad' => 'required|exists:prioridad,id',
             'tipo_de_problema' => 'required|exists:tipo_problemas,id',
         ], [
             'detalle.required' => 'Debe proporcionar un detalle del ticket.',
             'departamento_id.required' => 'Debe seleccionar un departamento.',
             'departamento_id.exists' => 'El departamento seleccionado no es válido.',
-            'prioridad.required' => 'Debe seleccionar una prioridad.',
-            'prioridad.exists' => 'La prioridad seleccionada no es válida.',
             'tipo_de_problema.required' => 'Debe seleccionar un tipo de problema.',
             'tipo_de_problema.exists' => 'El tipo de problema seleccionado no es válido.',
         ]);
@@ -72,8 +72,8 @@ class TicketController extends Controller
             'cliente_id' => $cliente->id,
             'departamento_id' => $request->input('departamento_id'),
             'tipo_problema_id' => $request->input('tipo_de_problema'),
-            'prioridad_id' => $request->input('prioridad'),
-            'cuerpo' => $request->input('detalle')
+            'cuerpo' => $request->input('detalle'),
+            'estado_id' => 1
         ]);
 
         // Manejo de archivos subidos desde el campo "files"
@@ -101,6 +101,9 @@ class TicketController extends Controller
             'ticket_id' => $ticket->id,
             'type' => "ticket"
         ]);
+
+        
+        Mail::to($email)->send(new ticketCreated($ticket));
 
         return redirect()->route('ticketera.dashboard')->with('success', 'Ticket enviado correctamente.');
     }
@@ -137,15 +140,18 @@ class TicketController extends Controller
     public function ticket_response_store(Request $request)
     {
         $ticket = TicketModel::where('id', $request->input('ticket_id'))->first();
+        $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
+        $email = ClienteModel::find($cliente_id)->email;
         if (Auth::id() == null) {
             $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
             $personal_id = ClienteModel::find($cliente_id)->email;
-            $ticket->estado_id = 4; //Pendiente
+            $ticket->estado_id = 2; //Respondido
             $ticket->save();
         } else {
             $personal_id = Auth::id();
-            $ticket->estado_id = 1; //Respondido
+            $ticket->estado_id = 3; //Pendiente
             $ticket->save();
+            Mail::to($email)->send(new ticketResponsed($ticket));
         }
         $ticket_response = TicketRespuestaModel::create([
             'ticket_id' => $request->input('ticket_id'),
@@ -281,7 +287,7 @@ class TicketController extends Controller
         }
 
         $ticket = TicketModel::find($id);
-        $ticket->estado_id = 2; //Cerrado
+        $ticket->estado_id = 4; //Cerrado
         $ticket->save();
 
         return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');

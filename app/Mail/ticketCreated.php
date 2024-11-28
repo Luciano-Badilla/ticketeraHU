@@ -5,22 +5,22 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\AlertModel;
+use App\Models\TicketModel;
 
-class ReportReminderMail extends Mailable
+class ticketCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $alert;
+    public $ticket;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(AlertModel $alert)
+    public function __construct(TicketModel $ticket)
     {
-        $this->alert = $alert;
+        $this->ticket = $ticket;
     }
 
     /**
@@ -30,7 +30,7 @@ class ReportReminderMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.report_reminder')
-                    ->subject('Recordatorio de Reporte Vencido');
+        return $this->view('emails.ticketCreated')
+                    ->subject('Su Ticket fue enviado');
     }
 }

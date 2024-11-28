@@ -42,7 +42,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware([CheckUserRole::class . ':1,2'])->group(function () {
         Route::get('admin/tickets/{typeSort?}/{id?}', [TicketController::class, 'tickets_dashboard'])
             ->name('ticket.dashboard');
-
         Route::post('admin/ticket/close/{id?}', [TicketController::class, 'close_ticket'])->name('ticket.close');
         Route::post('admin/ticket/reassing', [TicketController::class, 'reassign'])->name('ticket.reassign');
         Route::get('admin/tickets_area_estado', [TicketController::class, 'area_estados_dashboard'])->name('ticket_sorting.dashboard');

@@ -190,38 +190,28 @@
                                 placeholder="nombre.apellido@hospital.uncu.edu.ar" required>
                         </div>
                     </div>
-                    <div class="flex flex-wrap -mx-3 mb-6">
-                        <div class="w-full px-3">
+                    <!-- Asunto del ticket -->
+                    <div class="flex flex-col lg:flex-row -mx-3 mb-6">
+                        <div class="w-full lg:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 for="asunto">
                                 <i class="fas fa-heading mr-2"></i>Asunto
                             </label>
                             <input name="asunto" maxlength="25"
-                                class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                                class="appearance-none block border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full"
                                 id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)"
                                 required>
                         </div>
-                    </div>
-                    <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 for="problema">
                                 <i class="fas fa-exclamation-circle mr-2"></i>Tipo de Problema
                             </label>
-                            <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'"
+                            <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'" class="w-full"
                                 :data="$tiposProblema" />
                         </div>
-
-                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                for="departamento">
-                                <i class="fas fa-flag mr-2"></i>Prioridad
-                            </label>
-                            <x-dropdown-simple :placeholder="'Seleccione una prioridad'" :name="'prioridad'" :id="'prioridad-id'"
-                                :data="$prioridades" />
-                        </div>
-
                     </div>
+
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
