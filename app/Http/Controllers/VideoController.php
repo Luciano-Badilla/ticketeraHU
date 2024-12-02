@@ -13,7 +13,6 @@ class VideoController extends Controller
         if ($request->hasFile('video')) {
             $file = $request->file('video');
             $path = $file->store('ticket_videos', 'public'); // Almacena en el disco público
-            Log::info(Storage::url($path));
             $url = asset('storage/' . $path);
             return response()->json(['success' => true, 'url' => $url]);
         }

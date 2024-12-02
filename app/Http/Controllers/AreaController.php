@@ -31,4 +31,13 @@ class AreaController extends Controller
 
         return redirect()->back()->with('success', 'Area agregada correctamente');
     }
+
+    public function edit(Request $request){
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
+        $area = AreaModel::find($id);
+        $area->nombre = $nombre;
+        $area->update();
+        return redirect()->back()->with('success', 'Area editado correctamente');
+    }
 }

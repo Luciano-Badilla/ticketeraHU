@@ -45,7 +45,6 @@ class TicketController extends Controller
     }
     public function store(Request $request)
     {
-        Log::info($request);
         $request->validate([
             'detalle' => 'required|string',
             'departamento_id' => 'required|exists:departamento,id',
@@ -57,7 +56,6 @@ class TicketController extends Controller
             'tipo_de_problema.required' => 'Debe seleccionar un tipo de problema.',
             'tipo_de_problema.exists' => 'El tipo de problema seleccionado no es válido.',
         ]);
-        Log::info('Paso la validacion');
         $email = $request->input('email');
         $cliente = ClienteModel::where('email', $email)->first();
 
@@ -110,7 +108,6 @@ class TicketController extends Controller
 
     public function show_own_tickets(Request $request)
     {
-        Log::info($request);
         $email = "";
         $tickets = collect();
         if ($request->has('email')) {
@@ -210,10 +207,8 @@ class TicketController extends Controller
 
             // Comparar si la fecha del último mensaje es posterior a la fecha recibida
             if ($lastMessageTime->format('Y-m-d H:i:s') === $lastChecked->format('Y-m-d H:i:s')) {
-                Log::info("No hay nuevos mensajes");
                 $newMessages = false;
             } else {
-                Log::info("Si hay nuevos mensajes");
                 $newMessages = true;
             }
 
@@ -269,7 +264,7 @@ class TicketController extends Controller
 
     public function area_estados_dashboard()
     {
-        $areas = AreaModel::all();
+        $areas = AreaModel::where('ticketera_id',Auth::user()->ticketera_id)->get();
         $estados = EstadoModel::all();
         $tickets = TicketModel::all();
 

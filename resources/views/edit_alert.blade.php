@@ -710,7 +710,6 @@
 
                     // Iteramos sobre cada elemento del array "datas"
                     datas.forEach(function(data) {
-                        console.log(data.tipo_dato);
                         if (data.dato || data.tipo_dato || data.persona_id) {
                             $('#alert_paciente').css('display', 'none')
                             $('#alert2_paciente').css('display', 'none')

@@ -151,6 +151,7 @@
                                     @foreach ($adjuntos as $adjunto)
                                         @if ($adjunto->ticket_id == $ticket->id)
                                             <a href="{{ asset(AdjuntoModel::find($adjunto->adjunto_id)->path) }}"
+                                                target="_blank"
                                                 class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
                                                 style="max-width: auto; margin-right: auto;">
                                                 <span class="whitespace-nowrap">
@@ -191,6 +192,7 @@
                                         @foreach ($adjuntosResponse as $adjunto)
                                             @if ($adjunto->ticket_id == $response->id)
                                                 <a href="{{ asset(AdjuntoModel::find($adjunto->adjunto_id)->path) }}"
+                                                    target="_blank"
                                                     class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
                                                     style="max-width: auto; margin-right: auto;">
                                                     <span class="whitespace-nowrap">
@@ -228,35 +230,39 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-row justify-between">
-                                <div class="flex flex-row gap-2 justify-end">
+                            <div class="flex flex-col md:flex-row justify-between">
+                                <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
+                                    <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                        <button type="submit"
+                                            class="btn btn-dark rounded-xl text-nowrap w-full md:w-auto py-2">
+                                            <i class="fa-solid fa-paper-plane mr-2"></i>Enviar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
                                     @auth
-
-                                        <div class="flex justify-end space-x-4">
-                                            <button type="button" class="btn btn-primary rounded-xl" data-bs-toggle="modal"
-                                                data-bs-target="#reassignModal">
+                                        <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                            <button type="button"
+                                                class="btn btn-primary rounded-xl text-nowrap w-full md:w-auto"
+                                                data-bs-toggle="modal" data-bs-target="#reassignModal">
                                                 <i class="fa-solid fa-right-left mr-2"></i>Reasignar ticketera
                                             </button>
                                         </div>
-                                        <div class="flex justify-end space-x-4">
-                                            <button type="button" class="btn btn-primary rounded-xl" data-bs-toggle="modal"
-                                                data-bs-target="#assignModal">
+                                        <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                            <button type="button"
+                                                class="btn btn-primary rounded-xl text-nowrap w-full md:w-auto"
+                                                data-bs-toggle="modal" data-bs-target="#assignModal">
                                                 <i class="fa-solid fa-arrow-right mr-2"></i>Asignar sub-area
                                             </button>
                                         </div>
-                                        <div class="flex justify-end space-x-4">
-                                            <button type="button" class="btn btn-danger rounded-xl" data-bs-toggle="modal"
-                                                data-bs-target="#closeModal">
+                                        <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                            <button type="button"
+                                                class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto"
+                                                data-bs-toggle="modal" data-bs-target="#closeModal">
                                                 <i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
                                             </button>
                                         </div>
                                     @endauth
-                                </div>
-                                <div class="flex flex-row gap-2 justify-end">
-                                    <div class="flex justify-end space-x-4">
-                                        <button type="submit" class="btn btn-dark rounded-xl"><i
-                                                class="fa-solid fa-paper-plane mr-2"></i>Enviar</button>
-                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -412,18 +418,13 @@
                 url += `?lastChecked=${lastChecked}`;
             }
 
-            console.log("Verificando si hay nuevos mensajes con la fecha:", lastChecked);
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Datos recibidos del backend:", data);
 
                     if (data.newMessages) {
-                        console.log('Nuevos mensajes detectados, recargando...');
                         location.reload();
-                    } else {
-                        console.log('No hay nuevos mensajes.');
                     }
                 })
                 .catch(error => {

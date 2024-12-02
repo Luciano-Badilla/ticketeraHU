@@ -1,8 +1,3 @@
-@php
-    use App\Models\EspecialidadModel;
-    $especialidades = EspecialidadModel::all();
-    $especialidadPrincipal = Auth::user()->especialidad_id;
-@endphp
 
 <style>
     /* Ajusta la altura y el tamaño del contenedor de Select2 */
@@ -48,7 +43,7 @@
 
         <div>
             <x-input-label for="name" :value="__('Nombre y Apellido')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name_and_surname)"
                 required autofocus autocomplete="name" readonly />
             <p class="mt-1 text-sm text-gray-600">
                 {{ __('Para cambiar el Nombre y Apellido comuniquese con un administrador con el motivo.') }}
@@ -81,15 +76,6 @@
                 </div>
             @endif
         </div>
-        <div>
-            <x-input-label for="especialidad" :value="__('Especialidad')" />
-            <select type="text" class="form-select" id="editEspecialidad" name="editEspecialidad" required>
-                @foreach ($especialidades as $especialidad)
-                    <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Guardar') }}</x-primary-button>
@@ -106,12 +92,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $('#editEspecialidad').val("{{ $especialidadPrincipal }}");
-        $('#editEspecialidad').select2({
-            placeholder: 'Seleccione una especialidad',
-            allowClear: true
-        });
-    });
-</script>

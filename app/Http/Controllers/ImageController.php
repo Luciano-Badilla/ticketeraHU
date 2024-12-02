@@ -13,7 +13,6 @@ class ImageController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $path = $file->store('ticket_images', 'public'); // Almacena en el disco público
-            Log::info(Storage::url($path));
             $url = asset('storage/' . $path);
             return response()->json(['success' => true, 'url' => $url]);
         }

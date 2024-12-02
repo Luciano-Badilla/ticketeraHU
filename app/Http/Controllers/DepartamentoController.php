@@ -29,4 +29,13 @@ class DepartamentoController extends Controller
 
         return redirect()->back()->with('success', 'Departamento agregado correctamente');
     }
+
+    public function edit(Request $request){
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
+        $departamento = DepartamentoModel::find($id);
+        $departamento->nombre = $nombre;
+        $departamento->update();
+        return redirect()->back()->with('success', 'Departamento editado correctamente');
+    }
 }

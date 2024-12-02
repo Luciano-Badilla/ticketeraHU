@@ -9,6 +9,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckUserRole;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Rutas públicas
 Route::get('admin', function () {
@@ -20,7 +21,7 @@ Route::get('/', [TicketController::class, 'index'])->name('ticketera.dashboard')
 Route::get('/new_ticket/id', [TicketController::class, 'load_create_view'])->name('ticket.create');
 Route::post('/tickets/create_ticket', [TicketController::class, 'store'])->name('ticket.store');
 Route::get('/mis_tickets', [TicketController::class, 'show_own_tickets'])->name('ticket.show');
-Route::get('/view/{id}', [TicketController::class, 'gest_ticket'])->name('ticket.gest');
+Route::get('/view/{id?}', [TicketController::class, 'gest_ticket'])->name('ticket.gest');
 
 Route::post('/estado/agregar', [TicketController::class, 'agregarEstado'])->name('estado.agregar');
 Route::post('/estado/eliminar', [TicketController::class, 'eliminarEstado'])->name('estado.eliminar');
@@ -33,6 +34,12 @@ Route::get('/ticket/{ticketId}/new-messages', [TicketController::class, 'checkNe
 Route::get('/mis_tickets', [TicketController::class, 'show_own_tickets'])->name('ticket.show');
 
 Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPassword'])->name('usuarios.requestPassword');
+
+
+
+Route::post('/login-check', [AuthenticatedSessionController::class, 'checkLogin'])->name('login.check');
+Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'selectTicketera'])->name('select.ticketera');
+
 
 
 // Rutas protegidas con 'auth' y 'verified'
@@ -51,8 +58,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware([CheckUserRole::class . ':2'])->group(function () {
         Route::get('admin/departamentos', [DepartamentoController::class, 'index'])->name('departamento.dashboard');
         Route::post('admin/departamentos/store', [DepartamentoController::class, 'store'])->name('departamento.store');
+        Route::post('admin/departamentos/edit', [DepartamentoController::class, 'edit'])->name('departamento.edit');
         Route::get('admin/areas', [AreaController::class, 'index'])->name('area.dashboard');
         Route::post('admin/areas/store', [AreaController::class, 'store'])->name('area.store');
+        Route::post('admin/area/edit', [AreaController::class, 'edit'])->name('area.edit');
+
         Route::get('admin/usuarios', [UsuarioController::class, 'index'])->name('usuario.dashboard');
         Route::post('admin/usuarios/update/{id}', [UsuarioController::class, 'updateUser'])->name('usuario.update');
         Route::post('admin/usuarios/validate/{id}', [UsuarioController::class, 'validateUser'])->name('usuario.validate');

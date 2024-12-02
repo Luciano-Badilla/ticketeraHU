@@ -1,3 +1,8 @@
+@php
+    use App\Models\RolModel;
+    use App\Models\DashboardTicketModel;
+@endphp
+
 <style>
     /* Ajuste para el contenedor del navbar */
     nav {
@@ -115,6 +120,39 @@
                     </div>
                 </div>
             @endguest
+            @auth
+                <!-- Settings Dropdown -->
+                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <div class="dropdown" style="position: relative;">
+                        <button
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div>
+                                {{ (DashboardTicketModel::find(Auth::user()->ticketera_id)->titulo ?? '') .
+                                    ' (' .
+                                    (RolModel::find(Auth::user()->rol_id)->nombre ?? '') .
+                                    ') - ' .
+                                    (Auth::user()->name_and_surname ?? '') }}
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <x-dropdown-link :href="route('profile.edit')"
+                                class="no-underline block px-4 py-1 text-sm text-gray-700 hover:bg-gray-100">
+                                {{ Auth::user()->name_and_surname }}
+                            </x-dropdown-link>
+                            <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                    class="no-underline block px-4 py-1 text-sm text-gray-700 hover:bg-gray-100">
+                                    {{ __('Cerrar Sesión') }}
+                                </x-dropdown-link>
+                            </form>
+                        </ul>
+                    </div>
+                </div>
+
+            @endauth
         </div>
     </div>
 
@@ -162,3 +200,6 @@
         </div>
     </div>
 </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>

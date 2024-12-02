@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\DashboardTicketModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -17,19 +21,40 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $ticketeras = DashboardTicketModel::all();
+
+        return view('auth.login', ['ticketeras' => $ticketeras]);
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $credentials = $request->only('email', 'password');
+        $ticketeraId = $request->input('ticket_id');
 
-        $request->session()->regenerate();
+        $users = User::where('email', $credentials['email'])->get();
+        $validUsers = $users->filter(function ($user) use ($credentials) {
+            return Hash::check($credentials['password'], $user->password);
+        });
 
-        return redirect()->intended(route('ticket_sorting.dashboard'));
+        if ($validUsers->count() > 1 && $ticketeraId) {
+            $selectedUser = $validUsers->firstWhere('ticketera_id', $ticketeraId);
+            if ($selectedUser) {
+                Auth::login($selectedUser);
+                $request->session()->regenerate();
+
+                return redirect()->intended(route('ticket_sorting.dashboard'));
+            }
+        } elseif ($validUsers->count() === 1) {
+            Auth::login($validUsers->first());
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('ticket_sorting.dashboard'));
+        }
+
+        // Si no se encuentra ningún usuario válido, lanza un error de validación
+        return back()->withErrors([
+            'email' => 'Email o contraseña incorrectos.',
+        ]);
     }
 
     /**
@@ -44,5 +69,33 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function checkLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        $users = User::where('email', $credentials['email'])
+            ->get();
+
+        // Verifica la contraseña para cada usuario
+        $validUsers = $users->filter(function ($user) use ($credentials) {
+            return Hash::check($credentials['password'], $user->password);
+        });
+
+        if ($validUsers->count() === 1) {
+
+            // Si solo hay un usuario válido, lo autentica
+            Auth::login($validUsers->first());
+            $request->session()->regenerate();
+            return response()->json(['logged' => true]);
+        } elseif ($validUsers->count() > 1) {
+            // Si hay más de un usuario válido, devuelve los datos para el modal
+            $ticketeras = $validUsers->pluck('ticketera_id'); // Obtiene los ticketera_id de ambos usuarios
+            return response()->json([
+                'duplicated' => true,
+                'ticketeras' => $ticketeras
+            ]);
+        }
     }
 }
