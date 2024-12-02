@@ -9,6 +9,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckUserRole;
+use App\Http\Middleware\CheckUserAccess;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Rutas públicas
@@ -43,7 +44,7 @@ Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'select
 
 
 // Rutas protegidas con 'auth' y 'verified'
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified',CheckUserAccess::class])->group(function () {
 
     // Rutas para Agente
     Route::middleware([CheckUserRole::class . ':1,2'])->group(function () {
