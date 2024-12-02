@@ -39,16 +39,27 @@ class AuthenticatedSessionController extends Controller
         if ($validUsers->count() > 1 && $ticketeraId) {
             $selectedUser = $validUsers->firstWhere('ticketera_id', $ticketeraId);
             if ($selectedUser) {
-                Auth::login($selectedUser);
+                $user = $selectedUser;
+                if ($user->validated) {
+                    Auth::login($selectedUser);
+                    $request->session()->regenerate();
+
+                    return redirect()->intended(route('ticket_sorting.dashboard'));
+                } else {
+                    return redirect()->back()->with('error', 'Tu usuario no a sido validado por favor envia un ticket a '.DashboardTicketModel::find($selectedUser->ticketera_id)->titulo .' con tus datos para poder avanzar con el proceso de validación');
+                }
+            }
+        } elseif ($validUsers->count() === 1) {
+            $user = $validUsers->first();
+            if ($user->validated) {
+                Auth::login($user);
                 $request->session()->regenerate();
 
                 return redirect()->intended(route('ticket_sorting.dashboard'));
-            }
-        } elseif ($validUsers->count() === 1) {
-            Auth::login($validUsers->first());
-            $request->session()->regenerate();
+            } else {
+                return redirect()->back()->with('error', 'Tu usuario no a sido validado por favor envia un ticket a '.DashboardTicketModel::find($user->ticketera_id)->titulo .' con tus datos para poder avanzar con el proceso de validación');
 
-            return redirect()->intended(route('ticket_sorting.dashboard'));
+            }
         }
 
         // Si no se encuentra ningún usuario válido, lanza un error de validación

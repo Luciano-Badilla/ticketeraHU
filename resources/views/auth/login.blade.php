@@ -16,11 +16,12 @@
 <body>
     <x-guest-layout>
         <!-- Session Status -->
-        @if (session('success'))
-            <div class="alert-success">
-                <p style="padding: 0.3%; text-align: center">{{ session('success') }}</p>
+        @if (session('error'))
+            <div class="alert-danger bg-transparent">
+                <p style="padding: 0.3%; text-align: center">{{ session('error') }}</p>
             </div>
         @endif
+
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <form method="POST" id="loginForm" action="{{ route('login') }}">
@@ -163,7 +164,8 @@
                 $('#loginForm').on('submit', function(e) {
                     if ($('#ticket_id').val() == '') {
                         e.preventDefault(); // Evita el envío automático del formulario
-                        var ticketId = $('#ticket_id').val(); // Obtenemos el ticketId del campo oculto
+                        var ticketId = $('#ticket_id')
+                            .val(); // Obtenemos el ticketId del campo oculto
                         $.ajax({
                             url: '{{ route('login.check') }}', // Verifica la existencia de usuarios duplicados
                             method: 'POST',
