@@ -163,9 +163,7 @@
                 $('#loginForm').on('submit', function(e) {
                     if ($('#ticket_id').val() == '') {
                         e.preventDefault(); // Evita el envío automático del formulario
-                        var ticketId = $('#ticket_id')
-                            .val(); // Obtenemos el ticketId del campo oculto
-
+                        var ticketId = $('#ticket_id').val(); // Obtenemos el ticketId del campo oculto
                         $.ajax({
                             url: '{{ route('login.check') }}', // Verifica la existencia de usuarios duplicados
                             method: 'POST',
@@ -237,7 +235,7 @@
                                 } else if (response.logged) {
                                     location.reload();
                                 }
-                            }
+                            },
                             error: function(xhr) {
                                 // Muestra el mensaje de error devuelto por el servidor
                                 if (xhr.responseJSON && xhr.responseJSON.errors) {

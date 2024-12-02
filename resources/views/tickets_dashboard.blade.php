@@ -43,6 +43,7 @@
                                 </div>
                             @endif
                         </div>
+                        @if ($tickets->isNotEmpty())
                         <div class="flex flex-col gap-2">
 
                             <div class="overflow-x-auto">
@@ -116,6 +117,7 @@
                                 </table>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
