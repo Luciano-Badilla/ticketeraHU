@@ -20,6 +20,8 @@ class TicketModel extends Model
         'departamento_id',
         'cliente_id',
         'prioridad_id',
-        'tipo_problema_id'
+        'tipo_problema_id',
+        'area_id',
+        'cerrado_por'
     ];
 }

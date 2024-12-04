@@ -283,6 +283,7 @@ class TicketController extends Controller
 
         $ticket = TicketModel::find($id);
         $ticket->estado_id = 4; //Cerrado
+        $ticket->cerrado_por = Auth::user()->id;
         $ticket->save();
 
         return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');

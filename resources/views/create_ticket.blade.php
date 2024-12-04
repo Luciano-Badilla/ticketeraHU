@@ -160,6 +160,9 @@
                 @if ($errors->any())
                     <x-error-alert :error="$errors"></x-error-alert>
                 @endif
+                <div class="alert-danger hidden rounded-t-xl" id="error_alert">
+                    <p style="padding: 0.3%; text-align: center" id="error_message"></p>
+                </div>
 
                 <form action="{{ route('ticket.store') }}" class="p-8" method="post" id="ticket_form"
                     enctype="multipart/form-data">
@@ -182,13 +185,21 @@
                         <div class="w-full md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 for="email">
-                                <i class="fas fa-envelope mr-2"></i>Email
+                                <i class="fas fa-envelope mr-2"></i>Email institucional
                             </label>
                             <input
                                 class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-                                id="email" type="email" name="email"
-                                placeholder="nombre.apellido@hospital.uncu.edu.ar" required>
+                                id="email" type="text" name="email" placeholder="nombre.apellido" required>
+                            <p class="text-gray-500 text-sm mt-1">Luego de su apellido se agregara automaticamente
+                                <strong>@hospital.uncu.edu.ar</strong>
+                            </p>
+                            <span id="error-message" class="text-red-500 text-xs mt-1 hidden">
+                                El email debe tener el formato nombre.apellido.
+                            </span>
+
                         </div>
+
+
                     </div>
                     <!-- Asunto del ticket -->
                     <div class="flex flex-col lg:flex-row -mx-3 mb-6">
@@ -244,15 +255,12 @@
 
                     <div class="flex justify-end">
                         <button
-                            class="btn-dark text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-                            type="submit">
-                            Crear Ticket
+                            class="btn-dark text-white font-bold py-2 px-3 rounded-2xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+                            type="submit"><i class="fa-solid fa-paper-plane mr-2"></i>
+                            Enviar Ticket
                         </button>
                     </div>
-
                 </form>
-
-
             </div>
         </div>
 </x-app-layout>
@@ -271,9 +279,38 @@
         error_alert.classList.remove('hidden');
         const error_message = document.getElementById('error_message');
         error_message.textContent = message;
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Desplazamiento suave
+        });
+
     }
 
+    const emailInput = document.getElementById("email");
+    const errorMessage = document.getElementById("error-message");
+    const domain = "@hospital.uncu.edu.ar";
+
+    emailInput.addEventListener("input", function() {
+        validateEmail();
+    });
+
+    emailInput.addEventListener("blur", function() {
+        const value = emailInput.value.trim();
+
+        // Si el dominio falta, lo agrega al perder el foco
+        if (!value.endsWith(domain)) {
+            const parts = value.split("@")[0];
+            emailInput.value = parts + domain;
+        }
+    });
+
     document.getElementById('ticket_form').onsubmit = function(e) {
+        if (!validateEmail()) {
+            e.preventDefault();
+            custom_alert("El email debe tener el formato nombre.apellido@hospital.uncu.edu.ar");
+            scrollToError();
+            return;
+        }
         var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
         document.getElementById('detalle').value = content;
 
@@ -281,4 +318,39 @@
             document.getElementById('detalle').value = null;
         }
     };
+
+    function validateEmail() {
+        const emailInput = document.getElementById("email");
+        const errorMessage = document.getElementById("error-message");
+        const domain = "@hospital.uncu.edu.ar";
+        let value = emailInput.value;
+
+        // Verificar si el campo ya contiene el dominio
+        const hasDomain = value.includes(domain);
+        const localPart = hasDomain ? value.split(domain)[0] : value;
+        // Validar si el formato antes del dominio es válido
+        const regex =
+            /^[a-zñáéíóúü]+(\.[a-zñáéíóúü]+)?$/i; // Permite "nombre" o "nombre.apellido"
+        if (regex.test(localPart) && localPart.includes('.')) {
+            errorMessage.classList.add("hidden");
+
+            // Agregar el dominio si no está presente
+            if (!hasDomain) {
+                emailInput.value = localPart + domain;
+                // Restaurar la posición del cursor
+                const cursorPosition = localPart.length;
+                emailInput.setSelectionRange(cursorPosition, cursorPosition);
+            }
+            return true;
+        } else {
+            // Mostrar el error si el formato no es válido
+            errorMessage.classList.remove("hidden");
+
+            // Eliminar el dominio si el formato es incorrecto
+            if (hasDomain) {
+                emailInput.value = localPart;
+            }
+            return false;
+        }
+    }
 </script>

@@ -7,6 +7,8 @@
     use App\Models\ClienteModel;
     use App\Models\AdjuntoModel;
     use App\Models\User;
+    use Carbon\Carbon;
+
 @endphp
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -101,7 +103,7 @@
                 <x-status-alert :status="'success'"></x-status-alert>
                 @if ($ticket->estado_id == 4)
                     <div class="alert-danger rounded-t-lg">
-                        <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado y no está disponible para
+                        <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado por {{ User::find($ticket->cerrado_por)->name_and_surname . ' el ' . $ticket->updated_at->format('d/m/y H:i')}} y no está disponible para
                             más acciones.</p>
                     </div>
                 @endif
