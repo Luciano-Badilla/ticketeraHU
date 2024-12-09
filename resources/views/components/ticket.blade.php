@@ -16,7 +16,8 @@
 </style>
 
 <div class="ticket bg-white shadow-md rounded-xl w-full p-4 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_120px_1fr_100px] lg:gap-2 lg:items-center transition-all duration-300 ease-in-out"
-    style="text-decoration: none !important">
+    style="text-decoration: none !important; cursor: pointer;"
+    onclick="window.location.href='{{ route('ticket.gest', ['id' => $ticket->id]) }}';">
 
     <!-- Ícono del ticket -->
     <div class="items-start">
@@ -24,7 +25,8 @@
     </div>
 
     <!-- Información principal del ticket -->
-    <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}" class="ticket-link flex flex-col rounded-lg">
+    <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}" class="ticket-link flex flex-col rounded-lg"
+        onclick="event.stopPropagation();"> <!-- Evitar redirección duplicada -->
         <span><strong>Ticket #{{ $ticket->id }}</strong></span>
         <span class="text-xs text-gray-500">{{ $ticket->created_at->format('d/m/y H:i') }}</span>
     </a>
@@ -64,11 +66,12 @@
                 </form>
 
                 <!-- Botón -->
-                <button type="button" onclick="document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
-                    class="btn btn-danger rounded-xl"><i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
+                <button type="button"
+                    onclick="event.stopPropagation(); document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
+                    class="btn btn-danger rounded-xl">
+                    <i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
                 </button>
             </div>
-
         @endauth
     @endif
 

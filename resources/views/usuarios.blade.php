@@ -44,14 +44,23 @@
                                                 </h3>
                                                 <p class="text-sm text-gray-600">{{ $usuario->email }}</p>
                                             </div>
+                                            <div class="flex flex-col">
 
-                                            <form action="{{ route('usuario.validate', $usuario->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="bg-gray-800 text-white py-1 px-3 rounded-full text-xs hover:bg-gray-800">Invalidar</button>
-                                            </form>
+                                                <form action="{{ route('usuario.validate', $usuario->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="bg-gray-800 text-white py-1 px-3 rounded-full text-xs hover:bg-gray-800">Invalidar</button>
+                                                </form>
+                                                <form action="{{ route('usuario.recibe_emails', $usuario->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700">{{ $usuario->recibe_emails ? 'Recibir emails' : 'No recibir emails' }}</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="space-y-3 flex-grow">
+                                        <div class="flex-grow -mt-10">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700">Rol</label>
                                                 <select id="rol" name="rol" required
@@ -93,12 +102,21 @@
                                                     {{ $usuario->name_and_surname }}</h3>
                                                 <p class="text-sm text-gray-600">{{ $usuario->email }}</p>
                                             </div>
-                                            <form action="{{ route('usuario.validate', $usuario->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 ml-3">Validar</button>
-                                            </form>
+                                            <div class="flex flex-col gap-1">
+                                                <form action="{{ route('usuario.validate', $usuario->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 ml-3">Validar</button>
+                                                </form>
+                                                <form action="{{ route('usuario.recibe_emails', $usuario->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 ml-3">Recibir
+                                                        email</button>
+                                                </form>
+                                            </div>
                                         </div>
                                         <div class="space-y-3 flex-grow">
                                             <div>

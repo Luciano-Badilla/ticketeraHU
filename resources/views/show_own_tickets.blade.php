@@ -260,66 +260,6 @@
 
 
     }
-
-    .text-lg {
-        font-size: 1.125rem;
-    }
-
-    .text-sm {
-        font-size: 0.875rem;
-    }
-
-    .text-m {
-        font-size: 1rem;
-    }
-
-    .font-semibold {
-        font-weight: 600;
-    }
-
-    .font-medium {
-        font-weight: 500;
-    }
-
-    .font-normal {
-        font-weight: 400;
-    }
-
-    .text-gray-900 {
-        color: #111827;
-    }
-
-    .text-gray-600 {
-        color: #4b5563;
-    }
-
-    .text-gray-800 {
-        color: #1f2937;
-    }
-
-    .text-gray-100 {
-        color: #f3f4f6;
-    }
-
-    .text-gray-300 {
-        color: #d1d5db;
-    }
-
-    .text-gray-200 {
-        color: #e5e7eb;
-    }
-
-    .dark .text-blue-400 {
-        color: #93c5fd;
-    }
-
-    .dark .text-gray-800 {
-        color: #d1d5db;
-    }
-
-    .dark .text-gray-100 {
-        color: #f9fafb;
-    }
 </style>
 
 @php

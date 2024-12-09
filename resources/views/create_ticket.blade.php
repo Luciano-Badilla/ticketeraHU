@@ -160,6 +160,11 @@
                 @if ($errors->any())
                     <x-error-alert :error="$errors"></x-error-alert>
                 @endif
+                @if (session('error'))
+                    <div class="alert-danger">
+                        <p style="padding: 0.3%; text-align: center">{{ session('error') }}</p>
+                    </div>
+                @endif
                 <div class="alert-danger hidden rounded-t-xl" id="error_alert">
                     <p style="padding: 0.3%; text-align: center" id="error_message"></p>
                 </div>
@@ -190,7 +195,7 @@
                             <input
                                 class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                                 id="email" type="text" name="email" placeholder="nombre.apellido" required>
-                            <p class="text-gray-500 text-sm mt-1">Luego de su apellido se agregara automaticamente
+                            <p class="text-gray-500 text-sm mt-1">Luego de su apellido se agregará automáticamente
                                 <strong>@hospital.uncu.edu.ar</strong>
                             </p>
                             <span id="error-message" class="text-red-500 text-xs mt-1 hidden">
@@ -255,7 +260,7 @@
 
                     <div class="flex justify-end">
                         <button
-                            class="btn-dark text-white font-bold py-2 px-3 rounded-2xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+                            class="btn-dark text-white font-bold py-2 px-3 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
                             type="submit"><i class="fa-solid fa-paper-plane mr-2"></i>
                             Enviar Ticket
                         </button>

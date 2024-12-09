@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\CheckUserAccess;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ClienteController;
 
 // Rutas públicas
 Route::get('admin', function () {
@@ -63,10 +64,13 @@ Route::middleware(['auth', 'verified',CheckUserAccess::class])->group(function (
         Route::get('admin/areas', [AreaController::class, 'index'])->name('area.dashboard');
         Route::post('admin/areas/store', [AreaController::class, 'store'])->name('area.store');
         Route::post('admin/area/edit', [AreaController::class, 'edit'])->name('area.edit');
+        Route::get('admin/clientes', [ClienteController::class, 'index'])->name('cliente.dashboard');
+        Route::post('admin/clientes/store', [ClienteController::class, 'store'])->name('cliente.store');
 
         Route::get('admin/usuarios', [UsuarioController::class, 'index'])->name('usuario.dashboard');
         Route::post('admin/usuarios/update/{id}', [UsuarioController::class, 'updateUser'])->name('usuario.update');
         Route::post('admin/usuarios/validate/{id}', [UsuarioController::class, 'validateUser'])->name('usuario.validate');
+        Route::post('admin/usuarios/recibe_emails/{id}', [UsuarioController::class, 'recibeEmails'])->name('usuario.recibe_emails');
         Route::post('admin/usuarios/password/{id}', [UsuarioController::class, 'passwordUser'])->name('usuario.password');
     });
 });

@@ -14,6 +14,8 @@ class ClienteModel extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'email'
+        'email',
+        'name',
+        'surname'
     ];
 }

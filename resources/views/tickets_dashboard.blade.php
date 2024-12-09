@@ -43,9 +43,63 @@
                                 </div>
                             @endif
                         </div>
+
+                        <!-- Filtros de búsqueda -->
+                        <form id="filters-form" class="p-4">
+                            <div class="flex flex-wrap gap-4">
+                                <!-- Buscador general -->
+                                <div class="w-full sm:w-1/4">
+                                    <input type="text" id="search" class="border-gray-300 rounded-xl shadow-md w-full" 
+                                        placeholder="Buscar por asunto o ID">
+                                </div>
+
+                                <!-- Email del cliente -->
+                                <div class="w-full sm:w-1/4">
+                                    <input type="email" id="email" class="border-gray-300 rounded-xl shadow-md w-full" 
+                                        placeholder="Buscar por email">
+                                </div>
+
+                                <!-- Selector de fecha -->
+                                <div class="w-full sm:w-1/4">
+                                    <input type="date" id="fecha" class="border-gray-300 rounded-xl shadow-md w-full" >
+                                </div>
+
+                                <!-- Problema (select) -->
+                                <div class="w-full sm:w-1/4">
+                                    <select id="problema" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                        <option value="">Seleccione un problema</option>
+                                        @foreach (TipoProblemaModel::all() as $tipoProblema)
+                                            <option value="{{ $tipoProblema->nombre }}">{{ $tipoProblema->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Departamento (select) -->
+                                <div class="w-full sm:w-1/4">
+                                    <select id="departamento" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                        <option value="">Seleccione un departamento</option>
+                                        @foreach (DepartamentoModel::all() as $departamento)
+                                            <option value="{{ $departamento->nombre }}">{{ $departamento->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Estado (select) -->
+                                <div class="w-full sm:w-1/4">
+                                    <select id="estado" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                        <option value="">Seleccione un estado</option>
+                                        @foreach (EstadoModel::all() as $estado)
+                                            <option value="{{ $estado->nombre }}">{{ $estado->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
                         @if ($tickets->isNotEmpty())
                             <div class="flex flex-col gap-2">
-
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full">
                                         <thead>
@@ -61,7 +115,7 @@
                                                 <th class="py-3 px-6 text-left block sm:table-cell"></th>
                                             </tr>
                                         </thead>
-                                        <tbody id="departmentList" class="text-gray-600 text-sm font-light">
+                                        <tbody id="ticket-list" class="text-gray-600 text-sm font-light">
                                             @foreach ($tickets->sortByDesc('created_at') as $ticket)
                                                 <tr class="border-b border-gray-200 ticket"
                                                     data-id="{{ $ticket->id }}">
@@ -125,22 +179,86 @@
             </div>
         </div>
     </div>
-
-
 </x-app-layout>
+
 <script>
-    // Manejar el click en el contenedor de tickets
-    $(".ticket").on("click", function() {
-        var ticketId = $(this).data("id");
-        if (ticketId == null) {
-            return;
-        } else {
-            window.location.href = "{{ route('ticket.gest', ['id' => '']) }}/" + ticketId;
-        }
+    // Filtrado en el lado del cliente
+    $(document).on('input', '#filters-form input, #filters-form select', function() {
+        var searchText = $('#search').val().toLowerCase();
+        var email = $('#email').val().toLowerCase();
+        var fecha = $('#fecha').val(); // Formato 'yyyy-mm-dd'
+        var problema = $('#problema').val();
+        var departamento = $('#departamento').val();
+        var estado = $('#estado').val();
+
+        $('.ticket').each(function() {
+            var ticket = $(this);
+
+            // Obtener valores de la fila
+            var ticketId = ticket.find('td').eq(0).text().toLowerCase();
+            var ticketAsunto = ticket.find('td').eq(2).text().toLowerCase();
+            var ticketEmail = ticket.find('td').eq(3).text().toLowerCase();
+            var ticketFecha = ticket.find('td').eq(1).text().trim(); // Formato 'dd/mm/yy hh:mm'
+            var ticketProblema = ticket.find('td').eq(4).text().toLowerCase();
+            var ticketDepartamento = ticket.find('td').eq(5).text().toLowerCase();
+            var ticketEstado = ticket.find('td').eq(6).text().toLowerCase();
+
+            var matches = true;
+
+            // Filtro por asunto o ID
+            if (searchText && !(ticketAsunto.includes(searchText) || ticketId.includes(searchText))) {
+                matches = false;
+            }
+
+            // Filtro por email
+            if (email && !ticketEmail.includes(email)) {
+                matches = false;
+            }
+
+            // Filtro por fecha (si se seleccionó una fecha)
+            if (fecha) {
+                // Extraer solo la fecha de la cadena 'dd/mm/yy hh:mm'
+                var ticketDateParts = ticketFecha.split(' ')[0].split('/'); // 'dd/mm/yy'
+                var ticketFormattedDate = '20' + ticketDateParts[2] + '-' + ticketDateParts[1] + '-' + ticketDateParts[0]; // 'yyyy-mm-dd'
+                
+                if (ticketFormattedDate !== fecha) {
+                    matches = false;
+                }
+            }
+
+            // Filtro por tipo de problema
+            if (problema && !ticketProblema.includes(problema.toLowerCase())) {
+                matches = false;
+            }
+
+            // Filtro por departamento
+            if (departamento && !ticketDepartamento.includes(departamento.toLowerCase())) {
+                matches = false;
+            }
+
+            // Filtro por estado
+            if (estado && !ticketEstado.includes(estado.toLowerCase())) {
+                matches = false;
+            }
+
+            // Mostrar u ocultar fila según los filtros
+            if (matches) {
+                ticket.show();
+            } else {
+                ticket.hide();
+            }
+        });
     });
 
-    // Prevenir propagación en el botón "Cerrar"
-    $(".btn-danger").on("click", function(event) {
-        event.stopPropagation();
+    $(document).on('click', '.ticket', function() {
+        var ticketId = $(this).data('id'); // Obtener el ID del ticket
+        
+        // Usar Blade para generar la URL
+        var url = "{{ route('ticket.gest', ['id' => '__ticketId__']) }}";
+        url = url.replace('__ticketId__', ticketId); // Sustituir el marcador con el ID del ticket
+        
+        window.location.href = url; // Redirigir a la página de visualización del ticket
     });
 </script>
+
+

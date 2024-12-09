@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ticketResponsed;
+use App\Mail\ticketCreatedAgent;
 use App\Mail\ticketCreated;
 use App\Models\AreaModel;
 use App\Models\ClienteModel;
@@ -15,6 +16,7 @@ use App\Models\AdjuntoModel;
 use App\Models\AdjuntoTicketModel;
 use App\Models\AdjuntoTicketResponseModel;
 use App\Models\EstadoModel;
+use App\Models\User;
 use App\Models\TicketeraTicketModel;
 use App\Models\TicketRespuestaModel;
 use Illuminate\Database\Eloquent\Collection;
@@ -60,9 +62,7 @@ class TicketController extends Controller
         $cliente = ClienteModel::where('email', $email)->first();
 
         if (!$cliente) {
-            $cliente = ClienteModel::create([
-                'email' => $email
-            ]);
+            return redirect()->back()->with('error', 'El correo institucional no existe');
         }
 
         $ticket = TicketModel::create([
@@ -102,6 +102,11 @@ class TicketController extends Controller
 
         
         Mail::to($email)->send(new ticketCreated($ticket));
+
+        $emailsAgents = User::where('ticketera_id', $request->input('ticketera_id'))->where('recibe_emails',1)->get()->pluck('email')->toArray();
+        foreach ($emailsAgents as $emailAgent){
+            Mail::to($emailAgent)->send(new ticketCreatedAgent($ticket));
+        }
 
         return redirect()->route('ticketera.dashboard')->with('success', 'Ticket enviado correctamente.');
     }

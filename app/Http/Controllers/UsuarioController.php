@@ -50,6 +50,22 @@ class UsuarioController extends Controller
             }
         }
     }
+
+    public function recibeEmails(Request $request, $id)
+    {
+        $usuario = User::find($id);
+        if ($usuario) {
+            if ($usuario->recibe_emails) {
+                $usuario->recibe_emails = 0;
+                $usuario->save();
+                return redirect()->route('usuario.dashboard')->with('success', 'Recibo de email desactivado.');
+            } else {
+                $usuario->recibe_emails = 1;
+                $usuario->save();
+                return redirect()->route('usuario.dashboard')->with('success', 'Recibo de email activado.');
+            }
+        }
+    }
     public function requestPassword(Request $request)
     {
         $email = $request->input('addEmail');
