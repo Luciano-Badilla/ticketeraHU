@@ -27,7 +27,7 @@
                 <div class="d-flex justify-content-center p-3 w-full">
                     <div class="flex flex-col bg-white rounded-xl w-full mx-auto">
                         @if (session('success'))
-                            <div class="alert-success rounded-t-xl p-2 sm:p-3">
+                            <div class="alert-success rounded-t-xl p-1 sm:p-1">
                                 <p class="text-center text-md sm:text-md">{{ session('success') }}</p>
                             </div>
                         @endif
@@ -49,24 +49,27 @@
                             <div class="flex flex-wrap gap-4">
                                 <!-- Buscador general -->
                                 <div class="w-full sm:w-1/4">
-                                    <input type="text" id="search" class="border-gray-300 rounded-xl shadow-md w-full" 
+                                    <input type="text" id="search"
+                                        class="border-gray-300 rounded-xl shadow-md w-full"
                                         placeholder="Buscar por asunto o ID">
                                 </div>
 
                                 <!-- Email del cliente -->
                                 <div class="w-full sm:w-1/4">
-                                    <input type="email" id="email" class="border-gray-300 rounded-xl shadow-md w-full" 
+                                    <input type="email" id="email"
+                                        class="border-gray-300 rounded-xl shadow-md w-full"
                                         placeholder="Buscar por email">
                                 </div>
 
                                 <!-- Selector de fecha -->
                                 <div class="w-full sm:w-1/4">
-                                    <input type="date" id="fecha" class="border-gray-300 rounded-xl shadow-md w-full" >
+                                    <input type="date" id="fecha"
+                                        class="border-gray-300 rounded-xl shadow-md w-full">
                                 </div>
 
                                 <!-- Problema (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="problema" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                    <select id="problema" class="border-gray-300 rounded-xl shadow-md w-full p-2">
                                         <option value="">Seleccione un problema</option>
                                         @foreach (TipoProblemaModel::all() as $tipoProblema)
                                             <option value="{{ $tipoProblema->nombre }}">{{ $tipoProblema->nombre }}
@@ -77,7 +80,7 @@
 
                                 <!-- Departamento (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="departamento" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                    <select id="departamento" class="border-gray-300 rounded-xl shadow-md w-full p-2">
                                         <option value="">Seleccione un departamento</option>
                                         @foreach (DepartamentoModel::all() as $departamento)
                                             <option value="{{ $departamento->nombre }}">{{ $departamento->nombre }}
@@ -88,7 +91,7 @@
 
                                 <!-- Estado (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="estado" class="border-gray-300 rounded-xl shadow-md w-full p-2" >
+                                    <select id="estado" class="border-gray-300 rounded-xl shadow-md w-full p-2">
                                         <option value="">Seleccione un estado</option>
                                         @foreach (EstadoModel::all() as $estado)
                                             <option value="{{ $estado->nombre }}">{{ $estado->nombre }}</option>
@@ -219,8 +222,9 @@
             if (fecha) {
                 // Extraer solo la fecha de la cadena 'dd/mm/yy hh:mm'
                 var ticketDateParts = ticketFecha.split(' ')[0].split('/'); // 'dd/mm/yy'
-                var ticketFormattedDate = '20' + ticketDateParts[2] + '-' + ticketDateParts[1] + '-' + ticketDateParts[0]; // 'yyyy-mm-dd'
-                
+                var ticketFormattedDate = '20' + ticketDateParts[2] + '-' + ticketDateParts[1] + '-' +
+                    ticketDateParts[0]; // 'yyyy-mm-dd'
+
                 if (ticketFormattedDate !== fecha) {
                     matches = false;
                 }
@@ -250,15 +254,18 @@
         });
     });
 
-    $(document).on('click', '.ticket', function() {
-        var ticketId = $(this).data('id'); // Obtener el ID del ticket
-        
-        // Usar Blade para generar la URL
-        var url = "{{ route('ticket.gest', ['id' => '__ticketId__']) }}";
-        url = url.replace('__ticketId__', ticketId); // Sustituir el marcador con el ID del ticket
-        
-        window.location.href = url; // Redirigir a la página de visualización del ticket
+    // Manejar el click en el contenedor de tickets
+    $(".ticket").on("click", function() {
+        var ticketId = $(this).data("id");
+        if (ticketId == null) {
+            return;
+        } else {
+            window.location.href = "{{ route('ticket.gest', ['id' => '']) }}/" + ticketId;
+        }
+    });
+
+    // Prevenir propagación en el botón "Cerrar"
+    $(".btn-danger").on("click", function(event) {
+        event.stopPropagation();
     });
 </script>
-
-
