@@ -18,6 +18,7 @@
     <p><strong>Estado:</strong> {{ EstadoModel::find($ticket->estado_id)->nombre }}</p>
     <p><strong>Cliente:</strong> {{ ClienteModel::find($ticket->cliente_id)->email }}</p>
     <p><strong>Fecha de creación:</strong> {{ Carbon::parse($ticket->created_at)->format('d/m/Y H:i') }}</p>
+    <p><strong>{!! $ticket->cuerpo !!}</strong></p>
     <p>Para ver el detalle del ticket y responder, haga click en el siguiente enlace:</p>
     <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}">{{ route('ticket.gest', ['id' => $ticket->id]) }}</a>
     <p>Saludos cordiales,</p>

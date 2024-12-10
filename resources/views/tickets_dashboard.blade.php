@@ -31,21 +31,10 @@
                                 <p class="text-center text-md sm:text-md">{{ session('success') }}</p>
                             </div>
                         @endif
-                        <div class="text-center max-w-md" id="no_alerts" style="margin: 0 auto;">
-                            @if ($tickets->isEmpty())
-                                <div class="p-6 rounded-lg mt-3">
-                                    <div
-                                        class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <i class="fa-solid fa-ticket text-md sm:text-lg"></i>
-                                    </div>
-                                    <h2 class="text-2xl font-bold text-gray-900 mb-2">No se encontraron tickets</h2>
-                                    <p class="text-gray-600 mb-6">No hay tickets disponibles.</p>
-                                </div>
-                            @endif
-                        </div>
+
 
                         <!-- Filtros de búsqueda -->
-                        <form id="filters-form" class="p-4">
+                        <form id="filters-form" class="p-3">
                             <div class="flex flex-wrap gap-4">
                                 <!-- Buscador general -->
                                 <div class="w-full sm:w-1/4">
@@ -100,6 +89,18 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="text-center max-w-md" id="no_alerts" style="margin: 0 auto;">
+                            @if ($tickets->isEmpty())
+                                <div class="p-6 rounded-lg mt-3">
+                                    <div
+                                        class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fa-solid fa-ticket text-md sm:text-lg"></i>
+                                    </div>
+                                    <h2 class="text-2xl font-bold text-gray-900 mb-2">No se encontraron tickets</h2>
+                                    <p class="text-gray-600 mb-6">No hay tickets disponibles.</p>
+                                </div>
+                            @endif
+                        </div>
 
                         @if ($tickets->isNotEmpty())
                             <div class="flex flex-col gap-2">

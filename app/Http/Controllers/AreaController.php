@@ -26,7 +26,8 @@ class AreaController extends Controller
 
         AreaModel::create([
             'nombre' => $validatedData['nombre'],
-            'ticketera_id' => Auth::user()->ticketera_id
+            'ticketera_id' => Auth::user()->ticketera_id,
+            'icon' => 'fa-'. $request->input('icon')
         ]);
 
         return redirect()->back()->with('success', 'Area agregada correctamente');
@@ -35,8 +36,10 @@ class AreaController extends Controller
     public function edit(Request $request){
         $id = $request->input('id');
         $nombre = $request->input('nombre');
+        $icon = $request->input('icon');
         $area = AreaModel::find($id);
         $area->nombre = $nombre;
+        $area->icon = 'fa-'.$icon;
         $area->update();
         return redirect()->back()->with('success', 'Area editado correctamente');
     }

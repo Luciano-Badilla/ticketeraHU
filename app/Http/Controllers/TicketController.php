@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ticketResponsed;
+use App\Mail\ticketClosed;
 use App\Mail\ticketCreatedAgent;
 use App\Mail\ticketCreated;
 use App\Models\AreaModel;
@@ -290,6 +291,10 @@ class TicketController extends Controller
         $ticket->estado_id = 4; //Cerrado
         $ticket->cerrado_por = Auth::user()->id;
         $ticket->save();
+        $email = ClienteModel::find($ticket->cliente_id)->email;
+
+        Mail::to($email)->send(new ticketClosed($ticket));
+
 
         return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
     }

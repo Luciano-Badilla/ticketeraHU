@@ -183,6 +183,8 @@
 
                             <x-dropdown-search placeholder="Seleccione un departamento" name="departamento_id"
                                 id="departamento-id" :data="$departamentos" :uniqueId="uniqid()" />
+                            <p class="text-gray-500 text-sm mt-1">Debe seleccionar el departamento al cual pertenece</p>
+
 
                         </div>
 

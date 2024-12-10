@@ -237,7 +237,7 @@
                                     <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
                                         <button type="submit"
                                             class="btn btn-dark rounded-xl text-nowrap w-full md:w-auto py-2">
-                                            <i class="fa-solid fa-paper-plane mr-2"></i>Enviar
+                                            <i class="fa-solid fa-paper-plane mr-2"></i>Enviar respuesta
                                         </button>
                                     </div>
                                 </div>

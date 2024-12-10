@@ -15,6 +15,7 @@ class AreaModel extends Model
 
     protected $fillable = [
         'id',
+        'icon',
         'nombre',
         'ticketera_id'
     ];

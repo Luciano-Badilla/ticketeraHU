@@ -56,7 +56,7 @@
                                                     method="POST">
                                                     @csrf
                                                     <button type="submit"
-                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700">{{ $usuario->recibe_emails ? 'Recibir emails' : 'No recibir emails' }}</button>
+                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 whitespace-nowrap">{{ $usuario->recibe_emails ? 'No recibir emails' : 'Recibir emails' }}</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -108,13 +108,6 @@
                                                     @csrf
                                                     <button type="submit"
                                                         class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 ml-3">Validar</button>
-                                                </form>
-                                                <form action="{{ route('usuario.recibe_emails', $usuario->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 ml-3">Recibir
-                                                        email</button>
                                                 </form>
                                             </div>
                                         </div>
