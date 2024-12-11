@@ -12,13 +12,15 @@ use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\CheckUserAccess;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ClienteController;
+use Illuminate\Support\Facades\Auth;
+
 
 // Rutas públicas
 Route::get('admin', function () {
     return view('auth/login');
 })->name('profile_view');
 
-Route::get('/', [TicketController::class, 'index'])->name('ticketera.dashboard');
+Route::get('/select_ticketera', [TicketController::class, 'index'])->name('ticketera.dashboard');
 
 Route::get('/new_ticket/id', [TicketController::class, 'load_create_view'])->name('ticket.create');
 Route::post('/tickets/create_ticket', [TicketController::class, 'store'])->name('ticket.store');
@@ -45,7 +47,7 @@ Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'select
 
 
 // Rutas protegidas con 'auth' y 'verified'
-Route::middleware(['auth', 'verified',CheckUserAccess::class])->group(function () {
+Route::middleware(['auth', 'verified', CheckUserAccess::class])->group(function () {
 
     // Rutas para Agente
     Route::middleware([CheckUserRole::class . ':1,2'])->group(function () {
@@ -81,6 +83,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/', function () {
+    $user = Auth::user();
+
+    if ($user) {
+        return redirect()->route('ticket_sorting.dashboard'); // Vista predeterminada si no tiene rol específico
+    }else{
+        return redirect()->route('ticketera.dashboard'); // Vista predeterminada si no tiene rol específico
+    }
+})->name('shared');
+
 
 Route::get('/unauthorized', function () {
     return view('unauthorized'); // Carga la vista 'unauthorized.blade.php'
