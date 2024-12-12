@@ -57,7 +57,7 @@ class LoginRequest extends FormRequest
             Auth::logout();
 
             throw ValidationException::withMessages([
-                'email' => __('Tu cuenta aun no a sido validada, por favor envia un ticket a TICS para solicitar la validacion con los siguientes datos: (Apellido y Nombre, Email).'),
+                'email' => __('Tu cuenta aun no a sido validada, por favor comunicate con el administrador de la ticketera de tu area para solicitar la validacion con los siguientes datos: (Apellido y Nombre, Email).'),
             ]);
         }
 

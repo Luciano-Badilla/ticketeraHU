@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
         // Verifica si el usuario fue creado sin validación
         if (!$user->validated) {
             throw ValidationException::withMessages([
-                'email' => 'Tu cuenta debe ser validada, por favor envía un ticket a TICS para solicitar la validación con los siguientes datos: (' . $user->name_and_surname . ', ' . $user->email . ').',
+                'email' => 'Tu cuenta debe ser validada, por favor comunicate con el administrador de la ticketera de tu area para solicitar la validación con los siguientes datos: (' . $user->name_and_surname . ', ' . $user->email . ').',
             ])->redirectTo(route('login', [], false));
         }
 
