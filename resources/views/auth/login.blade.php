@@ -22,6 +22,10 @@
             </div>
         @endif
 
+        <div class="alert-danger bg-transparent hidden" id="emailError">
+            <p style="padding: 0.3%; text-align: center">{{ session('error') }}</p>
+        </div>
+
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <form method="POST" id="loginForm" action="{{ route('login') }}">
@@ -56,6 +60,13 @@
                     </button>
                 </div>
             @endif
+            <div class="mt-1 text-left hidden" id="changePassword">
+                <button type="button"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    data-bs-toggle="modal" data-bs-target="#addEmailModal">
+                    Solicitar cambio de contraseña
+                </button>
+            </div>
 
             <div class="flex items-center justify-end mt-4">
                 <x-primary-button class="ms-3">
@@ -240,15 +251,10 @@
                             },
                             error: function(xhr) {
                                 // Muestra el mensaje de error devuelto por el servidor
-                                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                                    const errors = xhr.responseJSON.errors;
-                                    if (errors.email) {
-                                        $('#emailError').text(errors.email[0]).show();
-                                    }
-                                    if (errors.password) {
-                                        $('#passwordError').text(errors.password[0])
-                                            .show();
-                                    }
+                                if (xhr.status === 401) {
+                                    $('#emailError').text(xhr.responseJSON.error).show();
+                                    $('#changePassword').show();
+
                                 }
                             }
                         });

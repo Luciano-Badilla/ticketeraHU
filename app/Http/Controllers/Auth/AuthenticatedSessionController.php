@@ -22,7 +22,6 @@ class AuthenticatedSessionController extends Controller
     public function create(): View
     {
         $ticketeras = DashboardTicketModel::all();
-
         return view('auth.login', ['ticketeras' => $ticketeras]);
     }
 
@@ -46,7 +45,7 @@ class AuthenticatedSessionController extends Controller
 
                     return redirect()->intended(route('ticket_sorting.dashboard'));
                 } else {
-                    return redirect()->back()->with('error', 'Tu usuario no a sido validado por favor envia un ticket a '.DashboardTicketModel::find($selectedUser->ticketera_id)->titulo .' con tus datos para poder avanzar con el proceso de validación');
+                    return redirect()->back()->with('error', 'Tu usuario no ha sido validado, por favor envía un ticket a ' . DashboardTicketModel::find($selectedUser->ticketera_id)->titulo . ' con tus datos para poder avanzar con el proceso de validación');
                 }
             }
         } elseif ($validUsers->count() === 1) {
@@ -57,13 +56,12 @@ class AuthenticatedSessionController extends Controller
 
                 return redirect()->intended(route('ticket_sorting.dashboard'));
             } else {
-                return redirect()->back()->with('error', 'Tu usuario no a sido validado por favor envia un ticket a '.DashboardTicketModel::find($user->ticketera_id)->titulo .' con tus datos para poder avanzar con el proceso de validación');
-
+                return redirect()->back()->with('error', 'Tu usuario no ha sido validado, por favor envía un ticket a ' . DashboardTicketModel::find($user->ticketera_id)->titulo . ' con tus datos para poder avanzar con el proceso de validación');
             }
         }
 
-        // Si no se encuentra ningún usuario válido, lanza un error de validación
-        return back()->withErrors([
+        // Si no se encuentra un usuario válido, lanza un error de validación
+        return redirect()->back()->withErrors([
             'email' => 'Email o contraseña incorrectos.',
         ]);
     }
@@ -86,8 +84,7 @@ class AuthenticatedSessionController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        $users = User::where('email', $credentials['email'])
-            ->get();
+        $users = User::where('email', $credentials['email'])->get();
 
         // Verifica la contraseña para cada usuario
         $validUsers = $users->filter(function ($user) use ($credentials) {
@@ -95,7 +92,6 @@ class AuthenticatedSessionController extends Controller
         });
 
         if ($validUsers->count() === 1) {
-
             // Si solo hay un usuario válido, lo autentica
             Auth::login($validUsers->first());
             $request->session()->regenerate();
@@ -108,5 +104,8 @@ class AuthenticatedSessionController extends Controller
                 'ticketeras' => $ticketeras
             ]);
         }
+
+        // Si las credenciales son incorrectas, devuelve un error
+        return response()->json(['error' => 'Email o contraseña incorrectos.'], 401);
     }
 }
