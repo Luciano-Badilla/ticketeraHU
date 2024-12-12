@@ -3,7 +3,7 @@
         'name' => 'alerta/temprana',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'a7c01a8c4c4509928321520f24e89d72d2489089',
+        'reference' => '03fb0d91ebff9f65902786e2998d7cc1a223d2ff',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'alerta/temprana' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'a7c01a8c4c4509928321520f24e89d72d2489089',
+            'reference' => '03fb0d91ebff9f65902786e2998d7cc1a223d2ff',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
