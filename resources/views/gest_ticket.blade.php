@@ -220,7 +220,7 @@
                                 <div class="w-full px-3">
                                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                         for="archivos">
-                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos
+                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos (Para adjuntar varios archivos, debe seleecionarlos todos a la vez)
                                     </label>
                                     <div class="flex items-center w-full">
                                         <label class="block w-full">
