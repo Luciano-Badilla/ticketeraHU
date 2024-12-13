@@ -244,7 +244,7 @@ class TicketController extends Controller
 
             // Si sortArea no es 0, filtra por area_id
             if ($typeSort === 'area') {
-                $query->where('area_id', $id);
+                $query->where('area_id', $id)->where('estado_id','!=',4);
             }
 
             // Si sortEstado no es 0, filtra por estado_id
