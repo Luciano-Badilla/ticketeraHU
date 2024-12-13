@@ -121,7 +121,7 @@
                                         </thead>
                                         <tbody id="ticket-list" class="text-gray-600 text-sm font-light">
                                             @foreach ($tickets->sortByDesc('created_at') as $ticket)
-                                                <tr class="border-b border-gray-200 ticket"
+                                                <tr class="border-b border-gray-200 ticket font-bold"
                                                     data-id="{{ $ticket->id }}">
                                                     <td class="py-3 px-6 text-left text-md block sm:table-cell">
                                                         <a
