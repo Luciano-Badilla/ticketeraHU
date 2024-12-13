@@ -54,7 +54,7 @@
                                         </div>
                                         <div>
                                             <div class="text-2xl font-bold">
-                                                {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->count() }}
+                                                {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->where('ticket.area_id', '=', null)->count() }}
                                             </div>
                                             <p class="text-xs text-gray-500">{{ $estado->description }}</p>
                                         </div>
@@ -92,8 +92,8 @@
                                                 <div>
                                                     <h3 class="text-sm font-medium">{{ $area->nombre }}</h3>
                                                     <p class="text-sm text-gray-500">
-                                                        {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.area_id', $area->id)->where('ticketera_ticket.ticketera_id', Auth::User()->ticketera_id)->count() }}
-                                                        tickets totales</p>
+                                                        {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.area_id', $area->id)->where('ticketera_ticket.ticketera_id', Auth::User()->ticketera_id)->where('ticket.estado_id', '!=', 4)->count() }}
+                                                        tickets pendientes</p>
                                                 </div>
                                             </div>
                                         </a>
