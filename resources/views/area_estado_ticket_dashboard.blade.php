@@ -54,7 +54,7 @@
                                         </div>
                                         <div>
                                             <div class="text-2xl font-bold">
-                                                {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->where('ticket.area_id', '=', null)->count() }}
+                                                {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->count() }}
                                             </div>
                                             <p class="text-xs text-gray-500">{{ $estado->description }}</p>
                                         </div>
