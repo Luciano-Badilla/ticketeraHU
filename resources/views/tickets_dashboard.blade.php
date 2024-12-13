@@ -25,7 +25,7 @@
         <div class="mx-auto lg:px-8">
             <div class="w-full lg:w-3/4 mx-auto">
                 <div class="d-flex justify-content-center p-3 w-full">
-                    <div class="flex flex-col bg-white rounded-xl w-full mx-auto">
+                    <div class="flex flex-col bg-white rounded-xl mx-auto w-auto">
                         @if (session('success'))
                             <div class="alert-success rounded-t-xl p-1 sm:p-1">
                                 <p class="text-center text-md sm:text-md">{{ session('success') }}</p>
@@ -104,7 +104,7 @@
 
                         @if ($tickets->isNotEmpty())
                             <div class="flex flex-col gap-2">
-                                <div class="overflow-x-auto">
+                                <div>
                                     <table class="min-w-full">
                                         <thead>
                                             <tr class="block sm:table-row">
