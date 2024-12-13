@@ -284,6 +284,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
+
     function custom_alert(message) {
         const error_alert = document.getElementById('error_alert');
         error_alert.classList.remove('hidden');
