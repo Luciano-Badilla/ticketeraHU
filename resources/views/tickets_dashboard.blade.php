@@ -3,6 +3,7 @@
     use App\Models\EstadoModel;
     use App\Models\TipoProblemaModel;
     use App\Models\DepartamentoModel;
+    use App\Models\AreaModel;
     use App\Models\PrioridadModel;
     use App\Models\ClienteModel;
     use Carbon\Carbon;
@@ -115,6 +116,7 @@
                                                 </th>
                                                 <th class="py-3 px-6 text-left block sm:table-cell">Problema</th>
                                                 <th class="py-3 px-6 text-left block sm:table-cell">Departamento</th>
+                                                <th class="py-3 px-6 text-left block sm:table-cell">Sub área</th>
                                                 <th class="py-3 px-6 text-left block sm:table-cell">Estado</th>
                                                 <th class="py-3 px-6 text-left block sm:table-cell"></th>
                                             </tr>
@@ -146,6 +148,10 @@
                                                     <td
                                                         class="py-3 px-6 text-left text-md whitespace-nowrap block sm:table-cell">
                                                         {{ DepartamentoModel::find($ticket->departamento_id)->nombre }}
+                                                    </td>
+                                                    <td
+                                                        class="py-3 px-6 text-left text-md whitespace-nowrap block sm:table-cell">
+                                                        {{ AreaModel::find($ticket->area_id)->nombre ?? 'Sub área no asignada' }}
                                                     </td>
                                                     <td
                                                         class="py-3 px-6 text-left text-md whitespace-nowrap block sm:table-cell">
