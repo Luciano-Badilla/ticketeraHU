@@ -3,6 +3,7 @@
     use App\Models\EstadoModel;
     use App\Models\TipoProblemaModel;
     use App\Models\DepartamentoModel;
+    use App\Models\AreaModel;
     use App\Models\PrioridadModel;
     use App\Models\ClienteModel;
     use App\Models\AdjuntoModel;
@@ -135,9 +136,14 @@
                                         class="w-2/3 dato-personal">{{ ' ' . $ticket->created_at->format('d/m/y H:i') }}</span>
                                 </div>
                                 <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Departamento Asignado:</strong>
+                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Departamento:</strong>
                                     <span
                                         class="w-2/3 dato-personal">{{ ' ' . DepartamentoModel::find($ticket->departamento_id)->nombre }}</span>
+                                </div>
+                                <div class="flex flex-col lg:flex-row ml-3 w-full">
+                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Sub área:</strong>
+                                    <span
+                                        class="w-2/3 dato-personal">{{ AreaModel::find($ticket->area_id)->nombre ?? 'Sub área no asignada' }}</span>
                                 </div>
                                 <div class="flex flex-col lg:flex-row ml-3 w-full">
                                     <strong class="w-1/3 mr-2 whitespace-nowrap">Problema asociado a:</strong>
