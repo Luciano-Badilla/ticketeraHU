@@ -47,6 +47,15 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
+            <div class="block mt-4">
+                <label for="remember_me" class="inline-flex items-center">
+                    <input id="remember_me" type="checkbox"
+                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                        name="remember">
+                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                </label>
+            </div>
+
             <!-- Campo oculto para el ticketId -->
             <input type="hidden" id="ticket_id" name="ticket_id" value="">
 
@@ -117,8 +126,8 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="selectTicketeraModal" tabindex="-1" aria-labelledby="selecctTicketeraModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="selectTicketeraModal" tabindex="-1"
+            aria-labelledby="selecctTicketeraModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg">
                     <div class="modal-header bg-dark text-white">
@@ -252,7 +261,8 @@
                             error: function(xhr) {
                                 // Muestra el mensaje de error devuelto por el servidor
                                 if (xhr.status === 401) {
-                                    $('#emailError').text(xhr.responseJSON.error).show();
+                                    $('#emailError').text(xhr.responseJSON.error)
+                                .show();
                                     $('#changePassword').show();
 
                                 }
