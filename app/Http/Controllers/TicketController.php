@@ -51,13 +51,10 @@ class TicketController extends Controller
         $request->validate([
             'detalle' => 'required|string',
             'departamento_id' => 'required|exists:departamento,id',
-            'tipo_de_problema' => 'required|exists:tipo_problemas,id',
         ], [
             'detalle.required' => 'Debe proporcionar un detalle del ticket.',
             'departamento_id.required' => 'Debe seleccionar un departamento.',
             'departamento_id.exists' => 'El departamento seleccionado no es válido.',
-            'tipo_de_problema.required' => 'Debe seleccionar un tipo de problema.',
-            'tipo_de_problema.exists' => 'El tipo de problema seleccionado no es válido.',
         ]);
         $email = $request->input('email');
         $cliente = ClienteModel::where('email', $email)->first();
@@ -70,7 +67,7 @@ class TicketController extends Controller
             'asunto' => $request->input('asunto'),
             'cliente_id' => $cliente->id,
             'departamento_id' => $request->input('departamento_id'),
-            'tipo_problema_id' => $request->input('tipo_de_problema'),
+            'tipo_problema_id' => $request->input('tipo_de_problema') ? $request->input('tipo_de_problema') : 7,
             'cuerpo' => $request->input('detalle'),
             'estado_id' => 1
         ]);

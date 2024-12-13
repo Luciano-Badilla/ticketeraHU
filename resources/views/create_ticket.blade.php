@@ -220,14 +220,16 @@
                                 id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)"
                                 required>
                         </div>
-                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                for="problema">
-                                <i class="fas fa-exclamation-circle mr-2"></i>Tipo de Problema
-                            </label>
-                            <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'" class="w-full"
-                                :data="$tiposProblema" />
-                        </div>
+                        @if ($data['id'] == 4)
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for="problema">
+                                    <i class="fas fa-exclamation-circle mr-2"></i>Tipo de Problema
+                                </label>
+                                <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'" class="w-full"
+                                    :data="$tiposProblema" />
+                            </div>
+                        @endif
                     </div>
 
                     <div class="flex flex-wrap -mx-3 mb-6">
@@ -247,7 +249,8 @@
                         <div class="w-full px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 for="archivos">
-                                <i class="fas fa-paperclip mr-2"></i>Archivos adjuntos (Para adjuntar varios archivos, debe seleecionarlos todos a la vez)
+                                <i class="fas fa-paperclip mr-2"></i>Archivos adjuntos (Para adjuntar varios archivos,
+                                debe seleecionarlos todos a la vez)
                             </label>
                             <div class="flex items-center w-full">
                                 <label class="block w-full">
