@@ -261,7 +261,6 @@
                                 </label>
                             </div>
                         </div>
-                        <ul id="fileList" class="mt-4 text-gray-700 text-sm"></ul>
                     </div>
 
                     <div class="flex justify-end">
@@ -364,29 +363,4 @@
             return false;
         }
     }
-
-    const inputFile = document.getElementById("fileInput");
-    const fileList = document.getElementById("fileList");
-    let storedFiles = []; // Array para almacenar los archivos seleccionados
-
-    inputFile.addEventListener("change", (event) => {
-        const newFiles = Array.from(event.target.files); // Archivos seleccionados en esta acción
-        storedFiles = [...storedFiles, ...newFiles]; // Agregar nuevos archivos a los almacenados
-
-        // Eliminar duplicados (basado en nombres de archivos)
-        storedFiles = storedFiles.filter((file, index, self) =>
-            index === self.findIndex(f => f.name === file.name)
-        );
-
-        // Actualizar la lista de archivos en la interfaz
-        fileList.innerHTML = ""; // Limpiar la lista
-        storedFiles.forEach((file, index) => {
-            const listItem = document.createElement("li");
-            listItem.textContent = `${index + 1}. ${file.name}`;
-            fileList.appendChild(listItem);
-        });
-
-        // Limpiar el input file para permitir volver a cargar
-        inputFile.value = "";
-    });
 </script>
