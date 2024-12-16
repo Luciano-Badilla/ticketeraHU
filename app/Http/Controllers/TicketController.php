@@ -291,7 +291,9 @@ class TicketController extends Controller
 
         $ticket = TicketModel::find($id);
 
-        $this->ticket_response_store($request);
+        if($request->input('detalle') != '<p><br></p>'){
+            $this->ticket_response_store($request);
+        }
 
 
         $ticket->estado_id = 4; //Cerrado
