@@ -33,7 +33,7 @@
                     <div class="flex flex-col w-full lg:w-2/4">
 
                         <div>
-                            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+                            <div class="grid gap-4 grid-cols-1 lg:grid-cols-4 mb-8">
                                 @if ($estados->isEmpty())
                                     <!-- Verifica si no hay tickets -->
                                     <div class="p-6 rounded-lg mt-3">
@@ -54,7 +54,11 @@
                                         </div>
                                         <div>
                                             <div class="text-2xl font-bold">
-                                                {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->count() }}
+                                                @if ($estado->id == 1)
+                                                    {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->where('ticket.area_id', null)->count() }}
+                                                @else
+                                                    {{ TicketModel::join('ticketera_ticket', 'ticket.id', '=', 'ticketera_ticket.ticket_id')->where('ticket.estado_id', $estado->id)->where('ticketera_ticket.ticketera_id', Auth::user()->ticketera_id)->count() }}
+                                                @endif
                                             </div>
                                             <p class="text-xs text-gray-500">{{ $estado->description }}</p>
                                         </div>

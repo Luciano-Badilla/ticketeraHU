@@ -98,11 +98,11 @@ class TicketController extends Controller
             'type' => "ticket"
         ]);
 
-        
+
         Mail::to($email)->send(new ticketCreated($ticket));
 
-        $emailsAgents = User::where('ticketera_id', $request->input('ticketera_id'))->where('recibe_emails',1)->get()->pluck('email')->toArray();
-        foreach ($emailsAgents as $emailAgent){
+        $emailsAgents = User::where('ticketera_id', $request->input('ticketera_id'))->where('recibe_emails', 1)->get()->pluck('email')->toArray();
+        foreach ($emailsAgents as $emailAgent) {
             Mail::to($emailAgent)->send(new ticketCreatedAgent($ticket));
         }
 
@@ -143,7 +143,7 @@ class TicketController extends Controller
         $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
         $email = ClienteModel::find($cliente_id)->email;
         if (Auth::id() == null) {
-            $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
+            $cliente_id = TicketModel::where('id', $cliente_id);
             $personal_id = ClienteModel::find($cliente_id)->email;
             $ticket->estado_id = 2; //Respondido
             $ticket->save();
@@ -244,12 +244,17 @@ class TicketController extends Controller
 
             // Si sortArea no es 0, filtra por area_id
             if ($typeSort === 'area') {
-                $query->where('area_id', $id)->where('estado_id','!=',4);
+                $query->where('area_id', $id)->where('estado_id', '!=', 4);
             }
 
             // Si sortEstado no es 0, filtra por estado_id
             if ($typeSort === 'estado') {
-                $query->where('estado_id', $id);
+                if($id == 1){
+                    $query->where('estado_id', $id)->where('area_id', null);
+
+                }else{
+                    $query->where('estado_id', $id);
+                }
             }
 
             // Ejecuta la consulta y obtiene los tickets
@@ -267,7 +272,7 @@ class TicketController extends Controller
 
     public function area_estados_dashboard()
     {
-        $areas = AreaModel::where('ticketera_id',Auth::user()->ticketera_id)->get();
+        $areas = AreaModel::where('ticketera_id', Auth::user()->ticketera_id)->get();
         $estados = EstadoModel::all();
         $tickets = TicketModel::all();
 
@@ -281,10 +286,14 @@ class TicketController extends Controller
     public function close_ticket(Request $request, $id = null)
     {
         if (!$id) {
-            $id = $request->input('id');
+            $id = $request->input('ticket_id');
         }
 
         $ticket = TicketModel::find($id);
+
+        $this->ticket_response_store($request);
+
+
         $ticket->estado_id = 4; //Cerrado
         $ticket->cerrado_por = Auth::user()->id;
         $ticket->save();

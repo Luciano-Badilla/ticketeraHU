@@ -104,7 +104,9 @@
                 <x-status-alert :status="'success'"></x-status-alert>
                 @if ($ticket->estado_id == 4)
                     <div class="alert-danger rounded-t-lg">
-                        <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado por {{ User::find($ticket->cerrado_por)->name_and_surname . ' el ' . $ticket->updated_at->format('d/m/y H:i')}} y no está disponible para
+                        <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado por
+                            {{ User::find($ticket->cerrado_por)->name_and_surname . ' el ' . $ticket->updated_at->format('d/m/y H:i') }}
+                            y no está disponible para
                             más acciones.</p>
                     </div>
                 @endif
@@ -226,12 +228,13 @@
                                 <div class="w-full px-3">
                                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                         for="archivos">
-                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos (Para adjuntar varios archivos, debe seleecionarlos todos a la vez)
+                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos (Para adjuntar varios
+                                        archivos, debe seleecionarlos todos a la vez)
                                     </label>
                                     <div class="flex items-center w-full">
                                         <label class="block w-full">
                                             <span class="sr-only">Choose files</span>
-                                            <input type="file" name="files[]"
+                                            <input type="file" name="files[]" id="files"
                                                 class="block w-full border rounded-xl text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-gray-800 file:text-white hover:file:bg-gray-700"
                                                 multiple>
                                         </label>
@@ -301,12 +304,8 @@
                     <button type="button" class="btn"
                         style="border: solid gray; border-radius: 8px; border-width: 1px;"
                         data-bs-dismiss="modal">Cancelar</button>
-                    <form action="{{ route('ticket.close') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $ticket->id }}">
-                        <button type="submit" id="submit_form" class="btn btn-danger"
-                            style="border-radius: 8px !important">Cerrar ticket</button>
-                    </form>
+                    <button type="submit" id="close_btn" class="btn btn-danger" data-action="{{ route('ticket.close') }}"
+                        style="border-radius: 8px !important">Cerrar ticket</button>
                 </div>
             </div>
         </div>
@@ -406,6 +405,7 @@
         var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
         document.getElementById('detalle').value = content;
 
+
         if (!content || content === "<p><br></p>") { // Verifica si está vacío
             document.getElementById('detalle').value = null;
         }
@@ -463,5 +463,19 @@
         const content = quill.root.innerHTML;
         document.querySelector('#detalle').value = content;
         localStorage.setItem("editorContent", content);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('form-ticket-response');
+        const closeButton = document.getElementById('close_btn');
+
+        // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
+        closeButton.addEventListener('click', function() {
+            const action = this.getAttribute('data-action'); // Obtener la ruta del botón
+            if (action) {
+                form.setAttribute('action', action); // Cambiar la acción del formulario
+                form.submit(); // Enviar el formulario
+            }
+        });
     });
 </script>
