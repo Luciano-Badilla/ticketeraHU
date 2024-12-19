@@ -265,6 +265,7 @@ class TicketController extends Controller
         return view('tickets_dashboard', [
             'tickets' => $tickets,
             'estados' => $estados,
+            'id' => $id
         ]);
     }
 
@@ -295,7 +296,6 @@ class TicketController extends Controller
             $this->ticket_response_store($request);
         }
 
-
         $ticket->estado_id = 4; //Cerrado
         $ticket->cerrado_por = Auth::user()->id;
         $ticket->save();
@@ -303,8 +303,17 @@ class TicketController extends Controller
 
         Mail::to($email)->send(new ticketClosed($ticket));
 
+        if($ticket->area_id){
+            $typeSort = "area";
+            $area_id = $ticket->area_id;
 
-        return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
+            return redirect()->route('ticket.dashboard', ["typeSort" => $typeSort, "id" => $area_id])->with('success', 'Ticket #' . $id . ' cerrado con exito.');
+        }else{
+            return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
+
+        }
+
+
     }
 
     public function reassign(Request $request)
