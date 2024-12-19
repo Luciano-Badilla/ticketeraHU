@@ -293,6 +293,7 @@ class TicketController extends Controller
 
         if($request->input('detalle') != '<p><br></p>' && $request->input('detalle') != null){
             $this->ticket_response_store($request);
+        }
 
 
         $ticket->estado_id = 4; //Cerrado
