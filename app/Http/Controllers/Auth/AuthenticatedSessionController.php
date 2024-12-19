@@ -28,6 +28,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
         $ticketeraId = $request->input('ticket_id');
 
         $users = User::where('email', $credentials['email'])->get();
@@ -40,7 +41,7 @@ class AuthenticatedSessionController extends Controller
             if ($selectedUser) {
                 $user = $selectedUser;
                 if ($user->validated) {
-                    Auth::login($selectedUser);
+                    Auth::login($selectedUser,$remember);
                     $request->session()->regenerate();
 
                     return redirect()->intended(route('ticket_sorting.dashboard'));
@@ -51,7 +52,7 @@ class AuthenticatedSessionController extends Controller
         } elseif ($validUsers->count() === 1) {
             $user = $validUsers->first();
             if ($user->validated) {
-                Auth::login($user);
+                Auth::login($user,$remember);
                 $request->session()->regenerate();
 
                 return redirect()->intended(route('ticket_sorting.dashboard'));
@@ -83,6 +84,7 @@ class AuthenticatedSessionController extends Controller
     public function checkLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
         $users = User::where('email', $credentials['email'])->get();
 
@@ -93,7 +95,7 @@ class AuthenticatedSessionController extends Controller
 
         if ($validUsers->count() === 1) {
             // Si solo hay un usuario válido, lo autentica
-            Auth::login($validUsers->first());
+            Auth::login($validUsers->first(),$remember);
             $request->session()->regenerate();
             return response()->json(['logged' => true]);
         } elseif ($validUsers->count() > 1) {
