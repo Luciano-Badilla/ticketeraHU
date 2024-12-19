@@ -270,7 +270,7 @@
                                             <button type="button"
                                                 class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto"
                                                 data-bs-toggle="modal" data-bs-target="#closeModal">
-                                                <i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
+                                                <i class="fa-solid fa-clipboard-check mr-2"></i>Enviar respuesta y cerrar
                                             </button>
                                         </div>
                                     @endauth
