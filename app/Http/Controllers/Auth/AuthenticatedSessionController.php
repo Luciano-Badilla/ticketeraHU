@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
+        $remember = true;
         $ticketeraId = $request->input('ticket_id');
 
         $users = User::where('email', $credentials['email'])->get();
@@ -84,7 +84,7 @@ class AuthenticatedSessionController extends Controller
     public function checkLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
+        $remember = true;
 
         $users = User::where('email', $credentials['email'])->get();
 
