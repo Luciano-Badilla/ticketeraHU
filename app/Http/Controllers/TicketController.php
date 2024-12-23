@@ -143,7 +143,6 @@ class TicketController extends Controller
         $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
         $email = ClienteModel::find($cliente_id)->email;
         if (Auth::id() == null) {
-            $cliente_id = TicketModel::where('id', $cliente_id);
             $personal_id = ClienteModel::find($cliente_id)->email;
             $ticket->estado_id = 2; //Respondido
             $ticket->save();
