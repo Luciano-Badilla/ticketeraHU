@@ -444,27 +444,6 @@
         setInterval(checkNewMessages, 5000);
     });
 
-    document.querySelector('#form-ticket-response').addEventListener('submit', (event) => {
-        localStorage.removeItem("editorContent");
-    });
-
-
-    // Recupera el contenido guardado en localStorage cuando la página se carga
-    document.addEventListener("DOMContentLoaded", () => {
-        const savedContent = localStorage.getItem("editorContent");
-        if (savedContent) {
-            quill.root.innerHTML = savedContent;
-            document.querySelector('#detalle').value = savedContent;
-        }
-    });
-
-    // Escucha los cambios en el editor y los guarda en localStorage
-    quill.on('text-change', function() {
-        const content = quill.root.innerHTML;
-        document.querySelector('#detalle').value = content;
-        localStorage.setItem("editorContent", content);
-    });
-
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('form-ticket-response');
         const closeButton = document.getElementById('close_btn');
