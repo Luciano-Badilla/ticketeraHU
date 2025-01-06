@@ -198,16 +198,8 @@
 
 <script>
     function adjustZoomForResolution() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        document.body.style.zoom = "0.9"; // Método simple
 
-        if (width <= 1366 && height <= 768) {
-            // Aplica el zoom
-            document.body.style.zoom = "0.8"; // Método simple
-            // Alternativa con transform:
-            // document.body.style.transform = "scale(0.9)";
-            // document.body.style.transformOrigin = "top left";
-        }
     }
 
     // Ejecuta al cargar la página
