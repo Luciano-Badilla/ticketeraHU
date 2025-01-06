@@ -92,7 +92,6 @@
         },
     });
 
-   var contenidoHtml = {!! json_encode($pretext ?? '') !!};
 
     // Inserta el contenido HTML en el editor justo después de inicializarlo
     quill.clipboard.dangerouslyPasteHTML(contenidoHtml);
