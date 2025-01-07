@@ -160,12 +160,17 @@
                                 <div class="flex flex-col">
                                     @foreach ($adjuntos as $adjunto)
                                         @if ($adjunto->ticket_id == $ticket->id)
-                                            <a href="{{ asset(AdjuntoModel::find($adjunto->adjunto_id)->path) }}"
-                                                target="_blank"
+                                            @php
+                                                $adjunto = AdjuntoModel::find($adjunto->adjunto_id);
+                                                $extension = pathinfo($adjunto->path, PATHINFO_EXTENSION);
+                                            @endphp
+
+                                            <a href="{{ asset($adjunto->path) }}"
+                                                @if ($extension === 'txt') download @else target="_blank" @endif
                                                 class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
                                                 style="max-width: auto; margin-right: auto;">
                                                 <span class="whitespace-nowrap">
-                                                    {{ '• ' . AdjuntoModel::find($adjunto->adjunto_id)->nombre }}
+                                                    {{ '• ' . $adjunto->nombre }}
                                                 </span>
                                             </a>
                                         @endif
@@ -201,12 +206,17 @@
                                     <div class="text-gray-900 h-auto mt-2 rendered-content">{!! $response->cuerpo !!}
                                         @foreach ($adjuntosResponse as $adjunto)
                                             @if ($adjunto->ticket_id == $response->id)
-                                                <a href="{{ asset(AdjuntoModel::find($adjunto->adjunto_id)->path) }}"
-                                                    target="_blank"
+                                                @php
+                                                    $adjunto = AdjuntoModel::find($adjunto->adjunto_id);
+                                                    $extension = pathinfo($adjunto->path, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                <a href="{{ asset($adjunto->path) }}"
+                                                    @if ($extension === 'txt') download @else target="_blank" @endif
                                                     class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
                                                     style="max-width: auto; margin-right: auto;">
                                                     <span class="whitespace-nowrap">
-                                                        {{ '• ' . AdjuntoModel::find($adjunto->adjunto_id)->nombre }}
+                                                        {{ '• ' . $adjunto->nombre }}
                                                     </span>
                                                 </a>
                                             @endif
