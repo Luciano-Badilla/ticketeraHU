@@ -139,6 +139,7 @@ class TicketController extends Controller
     }
     public function ticket_response_store(Request $request)
     {
+
         $ticket = TicketModel::where('id', $request->input('ticket_id'))->first();
         $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
         $email = ClienteModel::find($cliente_id)->email;
@@ -293,6 +294,7 @@ class TicketController extends Controller
 
         if($request->input('detalle') != '<p><br></p>' && $request->input('detalle') != null){
             $this->ticket_response_store($request);
+
         }
 
         $ticket->estado_id = 4; //Cerrado

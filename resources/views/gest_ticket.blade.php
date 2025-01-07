@@ -304,8 +304,9 @@
                     <button type="button" class="btn"
                         style="border: solid gray; border-radius: 8px; border-width: 1px;"
                         data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" id="close_btn" class="btn btn-danger" data-action="{{ route('ticket.close') }}"
-                        style="border-radius: 8px !important">Cerrar ticket</button>
+                    <button type="submit" id="close_btn" class="btn btn-danger"
+                        data-action="{{ route('ticket.close') }}" style="border-radius: 8px !important">Cerrar
+                        ticket</button>
                 </div>
             </div>
         </div>
@@ -450,6 +451,13 @@
 
         // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
         closeButton.addEventListener('click', function() {
+            var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
+            document.getElementById('detalle').value = content;
+
+
+            if (!content || content === "<p><br></p>") { // Verifica si está vacío
+                document.getElementById('detalle').value = null;
+            }
             const action = this.getAttribute('data-action'); // Obtener la ruta del botón
             if (action) {
                 form.setAttribute('action', action); // Cambiar la acción del formulario
