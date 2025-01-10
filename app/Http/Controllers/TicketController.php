@@ -106,7 +106,7 @@ class TicketController extends Controller
             Mail::to($emailAgent)->send(new ticketCreatedAgent($ticket));
         }
 
-        return redirect()->route('ticketera.dashboard')->with('success', 'Ticket enviado correctamente.');
+        return redirect()->route('ticket.gest',['id' => $ticket->id])->with('success', 'Ticket enviado correctamente.');
     }
 
     public function show_own_tickets(Request $request)
