@@ -227,7 +227,7 @@
             var ticketFecha = ticket.find('td').eq(1).text().trim(); // Formato 'dd/mm/yy hh:mm'
             var ticketProblema = ticket.find('td').eq(4).text().toLowerCase();
             var ticketDepartamento = ticket.find('td').eq(5).text().toLowerCase();
-            var ticketEstado = ticket.find('td').eq(6).text().toLowerCase();
+            var ticketEstado = ticket.find('td').eq(7).text().toLowerCase();
 
             var matches = true;
 

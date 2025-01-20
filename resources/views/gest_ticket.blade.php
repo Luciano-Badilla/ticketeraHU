@@ -238,28 +238,24 @@
                                 <div class="w-full px-3">
                                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                         for="archivos">
-                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos (Para adjuntar varios
-                                        archivos, debe seleecionarlos todos a la vez)
+                                        <i class="fas fa-paperclip mr-2"></i>Archivos adjuntos
                                     </label>
                                     <div class="flex items-center w-full">
                                         <label class="block w-full">
                                             <span class="sr-only">Choose files</span>
-                                            <input type="file" name="files[]" id="files"
+                                            <input type="file" id="fileInput" name="files[]"
                                                 class="block w-full border rounded-xl text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-gray-800 file:text-white hover:file:bg-gray-700"
                                                 multiple>
                                         </label>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Lista de archivos seleccionados -->
+                            <ul id="fileList" class="px-3 -mt-5 w-50">
+                                <!-- Los archivos seleccionados aparecerán aquí -->
+                            </ul>
                             <div class="flex flex-col md:flex-row justify-between">
-                                <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
-                                    <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
-                                        <button type="submit"
-                                            class="btn btn-dark rounded-xl text-nowrap w-full md:w-auto py-2">
-                                            <i class="fa-solid fa-paper-plane mr-2"></i>Enviar respuesta
-                                        </button>
-                                    </div>
-                                </div>
                                 <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
                                     @auth
                                         <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
@@ -284,6 +280,14 @@
                                             </button>
                                         </div>
                                     @endauth
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
+                                    <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                        <button type="submit"
+                                            class="btn btn-dark rounded-xl text-nowrap w-full md:w-auto py-2">
+                                            <i class="fa-solid fa-paper-plane mr-2"></i>Enviar respuesta
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -405,6 +409,54 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    let selectedFiles = [];
+
+    // Función para manejar los archivos seleccionados
+    fileInput.addEventListener('change', (event) => {
+        for (const file of event.target.files) {
+            if (!selectedFiles.includes(file)) {
+                selectedFiles.push(file);
+            }
+        }
+        updateFileList();
+    });
+
+    // Función para actualizar el input con los archivos seleccionados
+    function updateFileList() {
+        fileList.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            li.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'space-x-2',
+                'hover:bg-gray-100', 'py-1', 'px-2', 'rounded-xl');
+
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            li.appendChild(fileName);
+
+            const removeButton = document.createElement('button');
+            removeButton.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            removeButton.classList.add('text-red-500', 'hover:text-red-700', 'focus:outline-none');
+            removeButton.onclick = () => removeFile(index);
+
+            li.appendChild(removeButton);
+            fileList.appendChild(li);
+        });
+
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        fileInput.files = dataTransfer.files;
+    }
+
+    // Función para eliminar un archivo de la lista
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateFileList();
+    }
+
     function custom_alert(message) {
         const error_alert = document.getElementById('error_alert');
         error_alert.classList.remove('hidden');
