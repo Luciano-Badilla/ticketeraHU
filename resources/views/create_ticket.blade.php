@@ -182,7 +182,7 @@
                             </label>
 
                             <x-dropdown-search placeholder="Seleccione un departamento" name="departamento_id"
-                                id="departamento-id" :data="$departamentos" :uniqueId="uniqid()" />
+                                id="departamento-id" :data="$departamentos" :uniqueId="uniqid()" :search=true />
                             <p class="text-gray-500 text-sm mt-1">Debe seleccionar el departamento al cual pertenece</p>
 
 
@@ -196,7 +196,8 @@
                             </label>
                             <input
                                 class="appearance-none block w-full border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-                                id="email" type="text" name="email" placeholder="nombre.apellido" required>
+                                id="email" type="text" name="email" placeholder="nombre.apellido"
+                                value="{{ old('email') }}" required>
                             <p class="text-gray-500 text-sm mt-1">Luego de su apellido se agregará automáticamente
                                 <strong>@hospital.uncu.edu.ar</strong>
                             </p>
@@ -218,7 +219,7 @@
                             <input name="asunto" maxlength="25"
                                 class="appearance-none block border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full"
                                 id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)"
-                                required>
+                                value="{{ old('asunto') }}" required>
                         </div>
                         @if ($data['id'] == 4)
                             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -226,8 +227,8 @@
                                     for="problema">
                                     <i class="fas fa-exclamation-circle mr-2"></i>Tipo de Problema
                                 </label>
-                                <x-dropdown-simple :placeholder="'Seleccione un tipo de problema'" :name="'tipo_de_problema'" :id="'tipo_problema-id'" class="w-full"
-                                    :data="$tiposProblema" />
+                                <x-dropdown-search placeholder="Seleccione un tipo de problema" name="tipo_de_problema"
+                                    id="tipo_problema-id" :data="$tiposProblema" :uniqueId="uniqid()" />
                             </div>
                         @endif
                     </div>
@@ -238,12 +239,10 @@
                                 for="detalle">
                                 <i class="fas fa-align-left mr-2"></i>Detalle
                             </label>
-                            <!-- Cambiar textarea por un div para Quill -->
-                            <x-texteditor :pretext="$data['pretext'] ?? ''"></x-texteditor>
-
-
+                            <x-texteditor :pretext="old('detalle') ?? ($data['pretext'] ?? '')"></x-texteditor>
                         </div>
                     </div>
+
 
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
@@ -284,7 +283,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
-
     function custom_alert(message) {
         const error_alert = document.getElementById('error_alert');
         error_alert.classList.remove('hidden');

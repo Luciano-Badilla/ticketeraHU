@@ -51,17 +51,17 @@ class TicketController extends Controller
         $request->validate([
             'detalle' => 'required|string',
             'departamento_id' => 'required|exists:departamento,id',
+            'email' => 'required|exists:cliente,email'
         ], [
             'detalle.required' => 'Debe proporcionar un detalle del ticket.',
             'departamento_id.required' => 'Debe seleccionar un departamento.',
             'departamento_id.exists' => 'El departamento seleccionado no es válido.',
+            'email.required' => 'Debe proporcionar un correo institucional.',
+            'email.exists' => 'El correo institucional no existe.'
         ]);
+        
         $email = $request->input('email');
         $cliente = ClienteModel::where('email', $email)->first();
-
-        if (!$cliente) {
-            return redirect()->back()->with('error', 'El correo institucional no existe');
-        }
 
         $ticket = TicketModel::create([
             'asunto' => $request->input('asunto'),
