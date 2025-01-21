@@ -6,6 +6,7 @@ use App\Mail\ticketResponsed;
 use App\Mail\ticketClosed;
 use App\Mail\ticketCreatedAgent;
 use App\Mail\ticketCreated;
+use App\Mail\ticketReopen;
 use App\Models\AreaModel;
 use App\Models\ClienteModel;
 use App\Models\DashboardTicketModel;
@@ -59,7 +60,7 @@ class TicketController extends Controller
             'email.required' => 'Debe proporcionar un correo institucional.',
             'email.exists' => 'El correo institucional no existe.'
         ]);
-        
+
         $email = $request->input('email');
         $cliente = ClienteModel::where('email', $email)->first();
 
@@ -106,7 +107,7 @@ class TicketController extends Controller
             Mail::to($emailAgent)->send(new ticketCreatedAgent($ticket));
         }
 
-        return redirect()->route('ticket.gest',['id' => $ticket->id])->with('success', 'Ticket enviado correctamente.');
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket enviado correctamente.');
     }
 
     public function show_own_tickets(Request $request)
@@ -249,10 +250,9 @@ class TicketController extends Controller
 
             // Si sortEstado no es 0, filtra por estado_id
             if ($typeSort === 'estado') {
-                if($id == 1){
+                if ($id == 1) {
                     $query->where('estado_id', $id)->where('area_id', null);
-
-                }else{
+                } else {
                     $query->where('estado_id', $id);
                 }
             }
@@ -292,29 +292,26 @@ class TicketController extends Controller
 
         $ticket = TicketModel::find($id);
 
-        if($request->input('detalle') != '<p><br></p>' && $request->input('detalle') != null){
+        if ($request->input('detalle') != '<p><br></p>' && $request->input('detalle') != null) {
             $this->ticket_response_store($request);
-
         }
 
         $ticket->estado_id = 4; //Cerrado
         $ticket->cerrado_por = Auth::user()->id;
+        $ticket->reopenMotivo = null;
         $ticket->save();
         $email = ClienteModel::find($ticket->cliente_id)->email;
 
         Mail::to($email)->send(new ticketClosed($ticket));
 
-        if($ticket->area_id){
+        if ($ticket->area_id) {
             $typeSort = "area";
             $area_id = $ticket->area_id;
 
             return redirect()->route('ticket.dashboard', ["typeSort" => $typeSort, "id" => $area_id])->with('success', 'Ticket #' . $id . ' cerrado con exito.');
-        }else{
+        } else {
             return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
-
         }
-
-
     }
 
     public function reassign(Request $request)
@@ -339,4 +336,26 @@ class TicketController extends Controller
     public function edit_index($id) {}
 
     public function edit(Request $request) {}
+
+    public function reopen_ticket(Request $request, $id = null)
+    {
+        if (!$id) {
+            $id = $request->input('ticket_id');
+        }
+
+        $ticket = TicketModel::find($id);
+
+        $ticket->estado_id = 1; //Cerrado
+        $ticket->reopenMotivo = $request->input('reopenMotivo');
+        $ticket->save();
+        $email = ClienteModel::find($ticket->cliente_id)->email;
+
+        $emailsAgents = User::where('ticketera_id', $request->input('ticketera_id'))->where('recibe_emails', 1)->get()->pluck('email')->toArray();
+        foreach ($emailsAgents as $emailAgent) {
+            Mail::to($emailAgent)->send(new ticketReopen($ticket));
+        }
+
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket #'.$ticket->id.' reabierto correctamente.');
+
+    }
 }

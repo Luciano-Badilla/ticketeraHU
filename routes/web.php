@@ -36,15 +36,12 @@ Route::post('video-upload', [VideoController::class, 'store'])->name('videoUploa
 Route::post('/tickets/gest_alert/response', [TicketController::class, 'ticket_response_store'])->name('ticket.response');
 Route::get('/ticket/{ticketId}/new-messages', [TicketController::class, 'checkNewMessages'])->name('ticket.checkNewMessages');
 Route::get('/mis_tickets', [TicketController::class, 'show_own_tickets'])->name('ticket.show');
+Route::post('/reopen', [TicketController::class, 'reopen_ticket'])->name('ticket.reopen');
 
 Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPassword'])->name('usuarios.requestPassword');
 
-
-
 Route::post('/login-check', [AuthenticatedSessionController::class, 'checkLogin'])->name('login.check');
 Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'selectTicketera'])->name('select.ticketera');
-
-
 
 // Rutas protegidas con 'auth' y 'verified'
 Route::middleware(['auth', 'verified', CheckUserAccess::class])->group(function () {

@@ -110,6 +110,11 @@
                             más acciones.</p>
                     </div>
                 @endif
+                @if ($ticket->reopenMotivo != null)
+                    <div class="alert-success rounded-t-lg">
+                        <p style="padding: 0.3%; text-align: center">Ticket reabierto. Motivo: {{$ticket->reopenMotivo}}</p>
+                    </div>
+                @endif
                 @if ($errors->any())
                     <x-error-alert :error="$errors"></x-error-alert>
                 @endif
@@ -118,6 +123,7 @@
                     id="form-ticket-response">
                     @csrf
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                    <input type="hidden" name="reopenMotivo" id="reopenMotivo">
                     <div class="bg-white w-full">
                         <div class="mb-6">
                             <h2 class="text-2xl font-bold mb-2">Información del Ticket</h2>
@@ -291,8 +297,52 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($ticket->estado_id == 4)
+                            @guest
+                                <div class="flex justify-end space-x-4 w-full md:w-auto mt-4 md:mb-0">
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#reopenModal"
+                                        class="btn btn-success rounded-xl text-nowrap w-full md:w-auto py-2">
+                                        <i class="fa-solid fa-unlock mr-1"></i>Reabrir ticket
+                                    </button>
+                                </div>
+                            @endguest
+                        @endif
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="reopenModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px !important">
+                <div class="modal-header border-transparent">
+                    <div class="flex flex-col">
+                        <h5 class="modal-title" id="exampleModalLabel">¿Reabrir Ticket?</h5>
+                        <p class="text-muted">Esta acción abrira nuevamente el ticket.</p>
+                    </div>
+                    <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-transparent">
+                    <div class="py-2 d-flex align-items-center" role="alert" style="margin-top:-5%">
+                        <div class="w-full">
+                            <label for="reopenMotivo">Motivo:
+                            </label>
+                            <input maxlength="50"
+                                class="appearance-none block border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full"
+                                id="reopenMotivo_placeholder" type="text"
+                                placeholder="Motivo (max. 50 caracteres)" value="{{ old('reopenMotivo') }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-transparent">
+                    <button type="button" class="btn"
+                        style="border: solid gray; border-radius: 8px; border-width: 1px;"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="reopen_btn" class="btn btn-success"
+                        data-action="{{ route('ticket.reopen') }}" style="border-radius: 8px !important">Reabrir
+                        ticket</button>
+                </div>
             </div>
         </div>
     </div>
@@ -397,7 +447,6 @@
             </div>
         </div>
     </div>
-    </div>
 </x-app-layout>
 <!-- Incluye el CSS de Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -413,15 +462,17 @@
     const fileList = document.getElementById('fileList');
     let selectedFiles = [];
 
-    // Función para manejar los archivos seleccionados
-    fileInput.addEventListener('change', (event) => {
-        for (const file of event.target.files) {
-            if (!selectedFiles.includes(file)) {
-                selectedFiles.push(file);
+    if (fileInput) {
+        // Función para manejar los archivos seleccionados
+        fileInput.addEventListener('change', (event) => {
+            for (const file of event.target.files) {
+                if (!selectedFiles.includes(file)) {
+                    selectedFiles.push(file);
+                }
             }
-        }
-        updateFileList();
-    });
+            updateFileList();
+        });
+    }
 
     // Función para actualizar el input con los archivos seleccionados
     function updateFileList() {
@@ -505,11 +556,12 @@
         setInterval(checkNewMessages, 5000);
     });
 
-    const form = document.getElementById('form-ticket-response');
-    const closeButton = document.getElementById('close_btn');
 
+
+    const closeButton = document.getElementById('close_btn');
     // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
     closeButton.addEventListener('click', function() {
+        const form = document.getElementById('form-ticket-response');
         var content = document.getElementById('detalle').value;
 
 
@@ -518,6 +570,23 @@
         }
         const action = this.getAttribute('data-action'); // Obtener la ruta del botón
         if (action) {
+            form.setAttribute('action', action); // Cambiar la acción del formulario
+            form.submit(); // Enviar el formulario
+        }
+    });
+
+
+
+    const reopenButton = document.getElementById('reopen_btn');
+    // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
+    reopenButton.addEventListener('click', function() {
+        const form = document.getElementById('form-ticket-response');
+        const motivo_placeholder = document.getElementById('reopenMotivo_placeholder').value;
+        const motivo_input = document.getElementById('reopenMotivo');
+
+        const action = this.getAttribute('data-action'); // Obtener la ruta del botón
+        if (action) {
+            motivo_input.value = motivo_placeholder;
             form.setAttribute('action', action); // Cambiar la acción del formulario
             form.submit(); // Enviar el formulario
         }

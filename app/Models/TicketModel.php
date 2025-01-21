@@ -22,6 +22,7 @@ class TicketModel extends Model
         'prioridad_id',
         'tipo_problema_id',
         'area_id',
-        'cerrado_por'
+        'cerrado_por',
+        'reopenMotivo'
     ];
 }
