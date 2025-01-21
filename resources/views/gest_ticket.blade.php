@@ -465,9 +465,7 @@
     }
 
     document.getElementById('form-ticket-response').onsubmit = function(e) {
-        var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
-        document.getElementById('detalle').value = content;
-
+        var content = document.getElementById('detalle').value;
 
         if (!content || content === "<p><br></p>") { // Verifica si está vacío
             document.getElementById('detalle').value = null;
@@ -507,24 +505,21 @@
         setInterval(checkNewMessages, 5000);
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('form-ticket-response');
-        const closeButton = document.getElementById('close_btn');
+    const form = document.getElementById('form-ticket-response');
+    const closeButton = document.getElementById('close_btn');
 
-        // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
-        closeButton.addEventListener('click', function() {
-            var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
-            document.getElementById('detalle').value = content;
+    // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
+    closeButton.addEventListener('click', function() {
+        var content = document.getElementById('detalle').value;
 
 
-            if (!content || content === "<p><br></p>") { // Verifica si está vacío
-                document.getElementById('detalle').value = null;
-            }
-            const action = this.getAttribute('data-action'); // Obtener la ruta del botón
-            if (action) {
-                form.setAttribute('action', action); // Cambiar la acción del formulario
-                form.submit(); // Enviar el formulario
-            }
-        });
+        if (!content || content === "<p><br></p>") { // Verifica si está vacío
+            document.getElementById('detalle').value = null;
+        }
+        const action = this.getAttribute('data-action'); // Obtener la ruta del botón
+        if (action) {
+            form.setAttribute('action', action); // Cambiar la acción del formulario
+            form.submit(); // Enviar el formulario
+        }
     });
 </script>

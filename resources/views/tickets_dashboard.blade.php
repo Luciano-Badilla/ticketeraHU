@@ -199,7 +199,6 @@
 <script>
     function adjustZoomForResolution() {
         document.body.style.zoom = "0.9"; // Método simple
-
     }
 
     // Ejecuta al cargar la página

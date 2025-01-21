@@ -16,7 +16,10 @@
 </style>
 
 <div class="ticket bg-white shadow-md rounded-xl w-full p-4 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_120px_1fr_100px] lg:gap-2 lg:items-center transition-all duration-300 ease-in-out"
-    style="text-decoration: none !important; cursor: pointer;"
+    style="text-decoration: none !important; cursor: pointer;" data-id="{{ $ticket->id }}"
+    data-email="{{ ClienteModel::find($ticket->cliente_id)->email }}" data-fecha="{{ $ticket->created_at->format('Y-m-d') }}"
+    data-problema="{{ TipoProblemaModel::find($ticket->tipo_problema_id)->nombre }}" data-departamento="{{ DepartamentoModel::find($ticket->departamento_id)->nombre }}"
+    data-estado="{{ EstadoModel::find($ticket->estado_id)->nombre }}"
     onclick="window.location.href='{{ route('ticket.gest', ['id' => $ticket->id]) }}';">
 
     <!-- Ícono del ticket -->
@@ -54,25 +57,8 @@
             <span class="text-sm lg:text-xs">{{ EstadoModel::find($ticket->estado_id)->nombre }}</span>
         </div>
     </div>
-
-    <!-- Botón para cerrar -->
-    @if ($ticket->estado_id != 4)
-        @auth
-            <div class="flex justify-center">
-                <!-- Formulario -->
-                <form id="close-ticket-form-{{ $ticket->id }}"
-                    action="{{ route('ticket.close', ['id' => $ticket->id]) }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-
-                <!-- Botón -->
-                <button type="button"
-                    onclick="event.stopPropagation(); document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
-                    class="btn btn-danger rounded-xl">
-                    <i class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
-                </button>
-            </div>
-        @endauth
-    @endif
+    <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}"
+        class="ticket-link flex flex-col rounded-lg btn btn-success" onclick="event.stopPropagation();">Ver ticket
+    </a>
 
 </div>
