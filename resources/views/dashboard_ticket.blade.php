@@ -7,6 +7,11 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-lg text-gray-800 leading-tight">
+            {{ 'Seleccione una ticketera' }}
+        </h2>
+    </x-slot>
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="sm:rounded-xl bg-white shadow-sm w-auto ">

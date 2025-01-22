@@ -142,45 +142,49 @@ class TicketController extends Controller
     {
 
         $ticket = TicketModel::where('id', $request->input('ticket_id'))->first();
-        $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
-        $email = ClienteModel::find($cliente_id)->email;
-        if (Auth::id() == null) {
-            $personal_id = ClienteModel::find($cliente_id)->email;
-            $ticket->estado_id = 2; //Respondido
-            $ticket->save();
-        } else {
-            $personal_id = Auth::id();
-            $ticket->estado_id = 3; //Pendiente
-            $ticket->save();
-            Mail::to($email)->send(new ticketResponsed($ticket));
-        }
-        $ticket_response = TicketRespuestaModel::create([
-            'ticket_id' => $request->input('ticket_id'),
-            'cuerpo' => $request->input('detalle'),
-            'personal_id' => $personal_id
-        ]);
-
-        // Manejo de archivos subidos desde el campo "files"
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('tickets_files', $filename, 'public'); // Guarda el archivo
-
-                // Guarda el archivo en la tabla 'adjunto'
-                $adjunto = AdjuntoModel::create([
-                    'nombre' => $filename,
-                    'path' => "storage/" . $path
-                ]);
-
-                // Vincula el adjunto al ticket
-                AdjuntoTicketResponseModel::create([
-                    'adjunto_id' => $adjunto->id,
-                    'ticket_id' => $ticket_response->id
-                ]);
+        if ($ticket->estado_id != 4) {
+            $cliente_id = TicketModel::where('id', $request->input('ticket_id'))->first()->cliente_id;
+            $email = ClienteModel::find($cliente_id)->email;
+            if (Auth::id() == null) {
+                $personal_id = ClienteModel::find($cliente_id)->email;
+                $ticket->estado_id = 2; //Respondido
+                $ticket->save();
+            } else {
+                $personal_id = Auth::id();
+                $ticket->estado_id = 3; //Pendiente
+                $ticket->save();
+                Mail::to($email)->send(new ticketResponsed($ticket));
             }
-        }
+            $ticket_response = TicketRespuestaModel::create([
+                'ticket_id' => $request->input('ticket_id'),
+                'cuerpo' => $request->input('detalle'),
+                'personal_id' => $personal_id
+            ]);
 
-        return redirect()->back()->with('success', 'Respuesta enviada correctamente.');
+            // Manejo de archivos subidos desde el campo "files"
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('tickets_files', $filename, 'public'); // Guarda el archivo
+
+                    // Guarda el archivo en la tabla 'adjunto'
+                    $adjunto = AdjuntoModel::create([
+                        'nombre' => $filename,
+                        'path' => "storage/" . $path
+                    ]);
+
+                    // Vincula el adjunto al ticket
+                    AdjuntoTicketResponseModel::create([
+                        'adjunto_id' => $adjunto->id,
+                        'ticket_id' => $ticket_response->id
+                    ]);
+                }
+            }
+            return redirect()->back()->with('success', 'Respuesta enviada correctamente.');
+        } else {
+            return redirect()->back();
+
+        }
     }
 
     public function checkNewMessages($ticketId)
@@ -355,7 +359,6 @@ class TicketController extends Controller
             Mail::to($emailAgent)->send(new ticketReopen($ticket));
         }
 
-        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket #'.$ticket->id.' reabierto correctamente.');
-
+        return redirect()->route('ticket.gest', ['id' => $ticket->id]);
     }
 }

@@ -106,13 +106,13 @@
                     <div class="alert-danger rounded-t-lg">
                         <p style="padding: 0.3%; text-align: center">El ticket ha sido cerrado por
                             {{ User::find($ticket->cerrado_por)->name_and_surname . ' el ' . $ticket->updated_at->format('d/m/y H:i') }}
-                            y no está disponible para
-                            más acciones.</p>
+                        </p>
                     </div>
                 @endif
                 @if ($ticket->reopenMotivo != null)
                     <div class="alert-success rounded-t-lg">
-                        <p style="padding: 0.3%; text-align: center">Ticket reabierto. Motivo: {{$ticket->reopenMotivo}}</p>
+                        <p style="padding: 0.3%; text-align: center">Ticket reabierto. Motivo:
+                            {{ $ticket->reopenMotivo }}</p>
                     </div>
                 @endif
                 @if ($errors->any())
@@ -123,7 +123,7 @@
                     id="form-ticket-response">
                     @csrf
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                    <input type="hidden" name="reopenMotivo" id="reopenMotivo">
+                    <input type="hidden" name="reopenMotivo" id="reopenMotivo" required>
                     <div class="bg-white w-full">
                         <div class="mb-6">
                             <h2 class="text-2xl font-bold mb-2">Información del Ticket</h2>
@@ -332,6 +332,9 @@
                                 class="appearance-none block border border-gray-300 text-gray-700 rounded py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full"
                                 id="reopenMotivo_placeholder" type="text"
                                 placeholder="Motivo (max. 50 caracteres)" value="{{ old('reopenMotivo') }}" required>
+                            <span id="error-message-reopen" class="text-red-500 text-xs mt-4 hidden">
+                                Debe rellenar el motivo del ticket para reabrirlo.
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -342,6 +345,7 @@
                     <button type="submit" id="reopen_btn" class="btn btn-success"
                         data-action="{{ route('ticket.reopen') }}" style="border-radius: 8px !important">Reabrir
                         ticket</button>
+
                 </div>
             </div>
         </div>
@@ -569,10 +573,8 @@
             document.getElementById('detalle').value = null;
         }
         const action = this.getAttribute('data-action'); // Obtener la ruta del botón
-        if (action) {
-            form.setAttribute('action', action); // Cambiar la acción del formulario
-            form.submit(); // Enviar el formulario
-        }
+        form.setAttribute('action', action); // Cambiar la acción del formulario
+        form.submit(); // Enviar el formulario
     });
 
 
@@ -585,10 +587,12 @@
         const motivo_input = document.getElementById('reopenMotivo');
 
         const action = this.getAttribute('data-action'); // Obtener la ruta del botón
-        if (action) {
+        if (motivo_placeholder) {
             motivo_input.value = motivo_placeholder;
             form.setAttribute('action', action); // Cambiar la acción del formulario
             form.submit(); // Enviar el formulario
+        } else {
+            $('#error-message-reopen').removeClass('hidden');
         }
     });
 </script>

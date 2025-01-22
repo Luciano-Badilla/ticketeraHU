@@ -98,7 +98,7 @@
                                         <div class="w-full sm:w-1/4">
                                             <input type="text" id="search"
                                                 class="border-gray-300 rounded-xl shadow-md w-full"
-                                                placeholder="Buscar por asunto o ID">
+                                                placeholder="Buscar por ID">
                                         </div>
 
                                         <!-- Selector de fecha -->
@@ -186,8 +186,7 @@
                 .toLowerCase();
                 const ticketEstado = ticket.getAttribute('data-estado').toLowerCase();
 
-                const matchesSearch = !search || ticketId.includes(search) || ticketEmail
-                    .includes(search);
+                const matchesSearch = !search || ticketId === search;
                 const matchesFecha = !fecha || ticketFecha === fecha;
                 const matchesProblema = !problema || ticketProblema === problema;
                 const matchesDepartamento = !departamento || ticketDepartamento ===
