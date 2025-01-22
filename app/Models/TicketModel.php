@@ -23,6 +23,7 @@ class TicketModel extends Model
         'tipo_problema_id',
         'area_id',
         'cerrado_por',
-        'reopenMotivo'
+        'reopenMotivo',
+        'device_ip'
     ];
 }

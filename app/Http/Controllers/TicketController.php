@@ -7,6 +7,7 @@ use App\Mail\ticketClosed;
 use App\Mail\ticketCreatedAgent;
 use App\Mail\ticketCreated;
 use App\Mail\ticketReopen;
+use App\Mail\ticketRestoreIp;
 use App\Models\AreaModel;
 use App\Models\ClienteModel;
 use App\Models\DashboardTicketModel;
@@ -70,7 +71,8 @@ class TicketController extends Controller
             'departamento_id' => $request->input('departamento_id'),
             'tipo_problema_id' => $request->input('tipo_de_problema') ? $request->input('tipo_de_problema') : 7,
             'cuerpo' => $request->input('detalle'),
-            'estado_id' => 1
+            'estado_id' => 1,
+            'device_ip' => $request->ip()
         ]);
 
         // Manejo de archivos subidos desde el campo "files"
@@ -129,14 +131,31 @@ class TicketController extends Controller
     public function gest_ticket($id, Request $request)
     {
         $ticket = TicketModel::find($id);
-        $ticket_response = TicketRespuestaModel::where('ticket_id', $id);
-        $estados = EstadoModel::all();
-        $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
-        $adjuntosResponse = AdjuntoTicketResponseModel::all();
-        $ticketeras = DashboardTicketModel::all();
-        $areas = AreaModel::all();
+        if ($ticket->device_ip) {
+            if (Auth::id() == null && $ticket->device_ip == $request->ip() || Auth::id()) {
+                $ticket_response = TicketRespuestaModel::where('ticket_id', $id);
+                $estados = EstadoModel::all();
+                $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
+                $adjuntosResponse = AdjuntoTicketResponseModel::all();
+                $ticketeras = DashboardTicketModel::all();
+                $areas = AreaModel::all();
 
-        return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
+                return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
+            } else {
+                $message = 'No tienes permiso para acceder a este ticket, si crees que es un error presiona "Restablecer acceso"';
+                $buttons = [['url' => route('send.restore_email_ip', ['id' => $ticket->id]), 'text' => 'Restablecer acceso']];
+                return view('unauthorized', ['message' => $message, 'buttons' => $buttons]);
+            }
+        } else {
+            $ticket_response = TicketRespuestaModel::where('ticket_id', $id);
+            $estados = EstadoModel::all();
+            $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
+            $adjuntosResponse = AdjuntoTicketResponseModel::all();
+            $ticketeras = DashboardTicketModel::all();
+            $areas = AreaModel::all();
+
+            return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
+        }
     }
     public function ticket_response_store(Request $request)
     {
@@ -183,7 +202,6 @@ class TicketController extends Controller
             return redirect()->back()->with('success', 'Respuesta enviada correctamente.');
         } else {
             return redirect()->back();
-
         }
     }
 
@@ -360,5 +378,27 @@ class TicketController extends Controller
         }
 
         return redirect()->route('ticket.gest', ['id' => $ticket->id]);
+    }
+
+    public function send_restore_email(Request $request)
+    {
+        $ticket = TicketModel::find($request->input('id'));
+        $email = ClienteModel::find($ticket->cliente_id)->email;
+
+        Mail::to($email)->send(new ticketRestoreIp($ticket));
+
+
+        return redirect()->route('ticketera.dashboard')->with('success', 'Correo de acceso enviado a '.$email.', revise su bandeja de entrada.');
+    }
+
+    public function restore_ticket_access(Request $request, $id = null)
+    {
+        $ticket = TicketModel::find($id);
+
+        $ticket->device_ip = $request->ip();
+        $ticket->save();
+
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Accesso validado correctamente.');
+        
     }
 }

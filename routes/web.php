@@ -43,6 +43,7 @@ Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPass
 Route::post('/login-check', [AuthenticatedSessionController::class, 'checkLogin'])->name('login.check');
 Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'selectTicketera'])->name('select.ticketera');
 
+
 // Rutas protegidas con 'auth' y 'verified'
 Route::middleware(['auth', 'verified', CheckUserAccess::class])->group(function () {
 
@@ -86,7 +87,7 @@ Route::get('/', function () {
 
     if ($user) {
         return redirect()->route('ticket_sorting.dashboard'); // Vista predeterminada si no tiene rol específico
-    }else{
+    } else {
         return redirect()->route('ticketera.dashboard'); // Vista predeterminada si no tiene rol específico
     }
 })->name('shared');
@@ -95,5 +96,8 @@ Route::get('/', function () {
 Route::get('/unauthorized', function () {
     return view('unauthorized'); // Carga la vista 'unauthorized.blade.php'
 })->name('unauthorized');
+
+Route::get('/send_restore_email', [TicketController::class, 'send_restore_email'])->name('send.restore_email_ip');
+Route::get('/restore_ticket_access/{id}', [TicketController::class, 'restore_ticket_access'])->name('restore.ticket_access');
 
 require __DIR__ . '/auth.php';
