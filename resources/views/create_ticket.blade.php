@@ -313,7 +313,7 @@
             li.appendChild(fileName);
 
             const removeButton = document.createElement('button');
-            removeButton.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            removeButton.innerHTML = '<i class="fa-solid fa-trash text-red-500"></i>';
             removeButton.classList.add('text-red-500', 'hover:text-red-700', 'focus:outline-none');
             removeButton.onclick = () => removeFile(index);
 

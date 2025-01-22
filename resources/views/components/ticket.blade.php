@@ -58,7 +58,7 @@
         </div>
     </div>
     <a href="{{ route('ticket.gest', ['id' => $ticket->id]) }}"
-        class="ticket-link flex flex-col rounded-lg btn btn-success" onclick="event.stopPropagation();">Ver ticket
+        class="ticket-link flex flex-col rounded-lg btn btn-dark" onclick="event.stopPropagation();">Ver ticket
     </a>
 
 </div>

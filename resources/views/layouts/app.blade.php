@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/file-icons-js@1.1.0/css/style.min.css">
 
     <!-- Custom Styles -->
     <style>
@@ -180,7 +181,7 @@
         referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/file-icons-js@1.1.0/index.min.js"></script>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

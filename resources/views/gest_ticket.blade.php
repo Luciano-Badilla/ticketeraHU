@@ -125,63 +125,77 @@
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                     <input type="hidden" name="reopenMotivo" id="reopenMotivo" required>
                     <div class="bg-white w-full">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold mb-2">Información del Ticket</h2>
-                            <div class="flex flex-col">
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Email del Cliente:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ ' ' . ClienteModel::find($ticket->cliente_id)->email }}</span>
+                        <div class="mb-6 w-full lg:w-1/2">
+                            <h2 class="text-2xl text-gray-700 font-bold mb-2">Información del Ticket</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Email del Cliente</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ ClienteModel::find($ticket->cliente_id)->email }}</p>
                                 </div>
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Estado del Ticket:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ EstadoModel::find($ticket->estado_id)->nombre }}</span>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Estado</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ EstadoModel::find($ticket->estado_id)->nombre }}</p>
                                 </div>
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Creado en:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ ' ' . $ticket->created_at->format('d/m/y H:i') }}</span>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Fecha</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ $ticket->created_at->format('d/m/y H:i') }}</p>
                                 </div>
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Departamento:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ ' ' . DepartamentoModel::find($ticket->departamento_id)->nombre }}</span>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Departamento</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ DepartamentoModel::find($ticket->departamento_id)->nombre }}</p>
                                 </div>
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Sub área:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ AreaModel::find($ticket->area_id)->nombre ?? 'Sub área no asignada' }}</span>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Sub área</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ AreaModel::find($ticket->area_id)->nombre ?? 'Sub área no asignada' }}</p>
                                 </div>
-                                <div class="flex flex-col lg:flex-row ml-3 w-full">
-                                    <strong class="w-1/3 mr-2 whitespace-nowrap">Problema asociado a:</strong>
-                                    <span
-                                        class="w-2/3 dato-personal">{{ ' ' . TipoProblemaModel::find($ticket->tipo_problema_id)->nombre }}</span>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold">Problema asociado a</label>
+                                    <p class=" bg-gray-100 p-2 rounded-md whitespace-nowrap">
+                                        {{ TipoProblemaModel::find($ticket->tipo_problema_id)->nombre }}</p>
                                 </div>
                             </div>
                         </div>
                         @if ($adjuntos->count() > 0)
                             <div class="mt-1 border-gray-300 rounded-md">
-                                <h2 class="text-2xl font-bold mb-2">Archivos adjuntos</h2>
+                                <h2 class="text-2xl text-gray-700 font-bold mb-2">Archivos adjuntos</h2>
                                 <div class="flex flex-col">
                                     @foreach ($adjuntos as $adjunto)
                                         @if ($adjunto->ticket_id == $ticket->id)
                                             @php
                                                 $adjunto = AdjuntoModel::find($adjunto->adjunto_id);
                                                 $extension = pathinfo($adjunto->path, PATHINFO_EXTENSION);
+                                                $iconMap = [
+                                                    'txt' => ['icon' => 'fa-file-alt', 'color' => 'text-blue-500'],
+                                                    'pdf' => ['icon' => 'fa-file-pdf', 'color' => 'text-red-500'],
+                                                    'jpg' => ['icon' => 'fa-file-image', 'color' => 'text-yellow-500'],
+                                                    'png' => ['icon' => 'fa-file-image', 'color' => 'text-green-500'],
+                                                    'doc' => ['icon' => 'fa-file-word', 'color' => 'text-blue-700'],
+                                                    'docx' => ['icon' => 'fa-file-word', 'color' => 'text-blue-700'],
+                                                    'xlsx' => ['icon' => 'fa-file-excel', 'color' => 'text-green-700'],
+                                                    'default' => ['icon' => 'fa-file', 'color' => 'text-gray-500'],
+                                                ];
+                                                $icon = $iconMap[$extension]['icon'] ?? $iconMap['default']['icon'];
+                                                $color = $iconMap[$extension]['color'] ?? $iconMap['default']['color'];
                                             @endphp
 
                                             <a href="{{ asset($adjunto->path) }}"
                                                 @if ($extension === 'txt') download @else target="_blank" @endif
-                                                class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
+                                                class="bg-gray-100 hover:bg-gray-200 rounded-md p-2 mt-1 inline-flex items-center text-black"
                                                 style="max-width: auto; margin-right: auto;">
+                                                <i class="fas {{ $icon }} {{ $color }} mr-2 h-6"></i>
                                                 <span class="whitespace-nowrap">
-                                                    {{ '• ' . $adjunto->nombre }}
+                                                    {{ $adjunto->nombre }}
                                                 </span>
                                             </a>
                                         @endif
                                     @endforeach
                                 </div>
+
                             </div>
                         @endif
                         <!-- Cuerpo del ticket -->
@@ -209,32 +223,60 @@
                                         @endif
                                     </span>
 
-                                    <div class="text-gray-900 h-auto mt-2 rendered-content">{!! $response->cuerpo !!}
+                                    <div class="text-gray-900 h-auto mt-2 rendered-content">
+                                        {!! $response->cuerpo !!}
                                         @foreach ($adjuntosResponse as $adjunto)
                                             @if ($adjunto->ticket_id == $response->id)
                                                 @php
                                                     $adjunto = AdjuntoModel::find($adjunto->adjunto_id);
                                                     $extension = pathinfo($adjunto->path, PATHINFO_EXTENSION);
+                                                    $iconMap = [
+                                                        'txt' => ['icon' => 'fa-file-alt', 'color' => 'text-blue-500'],
+                                                        'pdf' => ['icon' => 'fa-file-pdf', 'color' => 'text-red-500'],
+                                                        'jpg' => [
+                                                            'icon' => 'fa-file-image',
+                                                            'color' => 'text-yellow-500',
+                                                        ],
+                                                        'png' => [
+                                                            'icon' => 'fa-file-image',
+                                                            'color' => 'text-green-500',
+                                                        ],
+                                                        'doc' => ['icon' => 'fa-file-word', 'color' => 'text-blue-700'],
+                                                        'docx' => [
+                                                            'icon' => 'fa-file-word',
+                                                            'color' => 'text-blue-700',
+                                                        ],
+                                                        'xlsx' => [
+                                                            'icon' => 'fa-file-excel',
+                                                            'color' => 'text-green-700',
+                                                        ],
+                                                        'default' => ['icon' => 'fa-file', 'color' => 'text-gray-500'],
+                                                    ];
+                                                    $icon = $iconMap[$extension]['icon'] ?? $iconMap['default']['icon'];
+                                                    $color =
+                                                        $iconMap[$extension]['color'] ?? $iconMap['default']['color'];
                                                 @endphp
 
                                                 <a href="{{ asset($adjunto->path) }}"
                                                     @if ($extension === 'txt') download @else target="_blank" @endif
-                                                    class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-block text-black"
+                                                    class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-flex items-center text-black mt-1"
                                                     style="max-width: auto; margin-right: auto;">
+                                                    <i class="fas {{ $icon }} {{ $color }} mr-2 h-6"></i>
                                                     <span class="whitespace-nowrap">
-                                                        {{ '• ' . $adjunto->nombre }}
+                                                        {{ $adjunto->nombre }}
                                                     </span>
                                                 </a>
                                             @endif
                                         @endforeach
                                     </div>
+
                                 </div>
                             @endforeach
                         </div>
                         @if ($ticket->estado_id != 4)
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full px-3">
-                                    <h2 class="text-2xl font-bold mb-2 mt-4">Responder</h2>
+                                    <h2 class="text-2xl text-gray-700 font-bold mb-2 mt-4">Responder</h2>
                                     <!-- Cambiar textarea por un div para Quill -->
                                     <x-texteditor></x-texteditor> <!-- id="editor" id-input="detalle" -->
 
@@ -244,7 +286,7 @@
                                 <div class="w-full px-3">
                                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                         for="archivos">
-                                        <i class="fas fa-paperclip mr-2"></i>Archivos adjuntos
+                                        <i class="fas fa-paperclip mr-2"></i>Adjuntar archivos
                                     </label>
                                     <div class="flex items-center w-full">
                                         <label class="block w-full">
@@ -258,7 +300,7 @@
                             </div>
 
                             <!-- Lista de archivos seleccionados -->
-                            <ul id="fileList" class="px-3 -mt-5 w-50">
+                            <ul id="fileList" class="px-3 -mt-5 w-1/2">
                                 <!-- Los archivos seleccionados aparecerán aquí -->
                             </ul>
                             <div class="flex flex-col md:flex-row justify-between">
@@ -491,7 +533,7 @@
             li.appendChild(fileName);
 
             const removeButton = document.createElement('button');
-            removeButton.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            removeButton.innerHTML = '<i class="fa-solid fa-trash text-red-500"></i>';
             removeButton.classList.add('text-red-500', 'hover:text-red-700', 'focus:outline-none');
             removeButton.onclick = () => removeFile(index);
 

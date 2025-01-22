@@ -32,9 +32,8 @@
                 @endforeach
 
         @endif
-        <a href="{{ route('ticketera.dashboard') }}"
-            class="bg-black text-white px-4 py-2 rounded-lg w-full">
-            <i class="fas fa-arrow-left mr-2"></i> Volver al inicio
+        <a href="{{ url()->previous() }}" class="bg-black text-white px-4 py-2 rounded-lg w-full">
+            <i class="fas fa-arrow-left mr-2"></i> Volver
         </a>
     </div>
     </div>

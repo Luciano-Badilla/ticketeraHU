@@ -43,9 +43,9 @@ class TicketController extends Controller
     public function load_create_view(Request $request)
     {
         $data = $request->all();
-        $departamentos = DepartamentoModel::all();
-        $prioridades = PrioridadModel::all();
-        $tiposProblema = TipoProblemaModel::all();
+        $departamentos = DepartamentoModel::orderBy('nombre')->get();
+        $prioridades = PrioridadModel::orderBy('nombre')->get();
+        $tiposProblema = TipoProblemaModel::orderBy('nombre')->get();
         return view('create_ticket', ['data' => $data, 'departamentos' => $departamentos, 'prioridades' => $prioridades, 'tiposProblema' => $tiposProblema]);
     }
     public function store(Request $request)
@@ -125,7 +125,7 @@ class TicketController extends Controller
         }
         $ticketeras = DashboardTicketModel::all();
         $estados = EstadoModel::all();
-        return view('show_own_tickets', ['tickets' => $tickets, 'ticketeras' => $ticketeras, 'estados' => $estados]);
+        return view('show_own_tickets', ['tickets' => $tickets, 'ticketeras' => $ticketeras, 'estados' => $estados, 'isMobile' => request()->header('User-Agent') && preg_match('/Mobile|Android|iPhone/', request()->header('User-Agent'))]);
     }
 
     public function gest_ticket($id, Request $request)
@@ -287,7 +287,8 @@ class TicketController extends Controller
         return view('tickets_dashboard', [
             'tickets' => $tickets,
             'estados' => $estados,
-            'id' => $id
+            'id' => $id,
+            'isMobile' => request()->header('User-Agent') && preg_match('/Mobile|Android|iPhone/', request()->header('User-Agent'))
         ]);
     }
 
@@ -388,7 +389,7 @@ class TicketController extends Controller
         Mail::to($email)->send(new ticketRestoreIp($ticket));
 
 
-        return redirect()->route('ticketera.dashboard')->with('success', 'Correo de acceso enviado a '.$email.', revise su bandeja de entrada.');
+        return redirect()->route('ticketera.dashboard')->with('success', 'Correo de acceso enviado a ' . $email . ', revise su bandeja de entrada.');
     }
 
     public function restore_ticket_access(Request $request, $id = null)
@@ -399,6 +400,5 @@ class TicketController extends Controller
         $ticket->save();
 
         return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Acceso validado correctamente, solo se podra acceder a este ticket desde este dispositivo.');
-        
     }
 }
