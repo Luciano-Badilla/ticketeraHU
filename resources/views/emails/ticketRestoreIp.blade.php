@@ -18,10 +18,10 @@
     <h3>¿Porque sucedio esto?</h3>
     <p>- Por seguridad los ticket solo se pueden acceder desde el dispositivo en el que fueron creados.</p>
     <h3>¿Era este dispositivo?</h3>
-    <p>- En el caso que su dispositivo tenga IP Dinamica, es decir cambia cada vez que se inicia, el sistema detectara que es un dispositivo diferente</p>
+    <p>- En el caso que su dispositivo tenga IP Dinamica, es decir cambia cada vez que se inicia, el sistema detectara que es un dispositivo diferente.</p>
     <p>- Recomendamos que lo reporte a servicio tecnico para solucionarlo.</p>
 
-    <p>Si usted no solicito el acceso a un ticket desestime este mail</p>
+    <h3>Si usted no solicito el acceso a un ticket desestime este mail</h3>
     <p>Saludos cordiales</p>
     <p>Hospital Universitario</p>
 </body>

@@ -398,7 +398,7 @@ class TicketController extends Controller
         $ticket->device_ip = $request->ip();
         $ticket->save();
 
-        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Accesso validado correctamente.');
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Acceso validado correctamente, solo se podra acceder a este ticket desde este dispositivo.');
         
     }
 }
