@@ -18,6 +18,7 @@ class GuideModel extends Model
         'title',
         'description',
         'icon',
-        'body'
+        'body',
+        'type'
     ];
 }

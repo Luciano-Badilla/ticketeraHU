@@ -66,9 +66,17 @@
         </div>
         <div
             class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center overflow-y-auto mb-4 custom-scrollbar">
-            @foreach ($guides as $guide)
-                <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon" />
-            @endforeach
+            @if ($completeGuides)
+                @foreach ($completeGuides as $guide)
+                    <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon" :type="$guide->type" />
+                @endforeach
+            @endif
+            @if ($quickGuides)
+                @foreach ($quickGuides as $guide)
+                    <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon" :type="$guide->type" />
+                @endforeach
+            @endif
+
         </div>
     </div>
 </body>
