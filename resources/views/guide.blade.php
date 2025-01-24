@@ -15,25 +15,10 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         a {
-            color: #fff !important;
+            color: white !important;
             background-color: #007bff !important;
-            border-color: #007bff !important;
-            display: inline-block !important;
-            font-weight: 400 !important;
-            color: #212529 !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            background-color: transparent !important;
-            border: 1px solid transparent !important;
-            padding: .375rem .75rem !important;
-            font-size: 1rem !important;
-            line-height: 1.5 !important;
-            border-radius: .25rem !important;
-            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+            padding: 0.25rem !important;
+            border-radius: 0.5rem !important;
             text-decoration: none !important;
         }
 
