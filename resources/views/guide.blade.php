@@ -45,7 +45,9 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const quill = new Quill('#editor', {});
+        const quill = new Quill('#editor', {
+            readOnly: true
+        });
     })
 </script>
 
