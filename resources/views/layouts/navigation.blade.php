@@ -117,11 +117,11 @@
             @guest
                 <div class="flex flex-row">
                     <div class="hidden sm:flex sm:space-x-8 sm:-my-px sm:ms-10">
-                       <!-- <x-nav-link :href="route('guide.user_guide')" target="_blank"
+                       <x-nav-link :href="route('guide.user_guide')" target="_blank"
                             class="btn btn-primary text-white h-8 mt-4 px-2 rounded-xl">
                             <i class="fa-solid fa-book mr-2"></i>
                             {{ __('Manual de usuario') }}
-                        </x-nav-link>-->
+                        </x-nav-link>
                     </div>
                     <div class="hidden sm:flex sm:space-x-8 sm:-my-px sm:ms-10">
                         <x-nav-link :href="route('login')">
@@ -178,10 +178,10 @@
                     class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">
                     {{ __('Mis tickets') }}
                 </x-nav-link>
-                <!--<x-nav-link :href="route('guide.user_guide')" class="btn btn-primary text-white h-8 px-2 rounded-xl">
+                <x-nav-link :href="route('guide.user_guide')" class="btn btn-primary text-white h-8 px-2 rounded-xl">
                     <i class="fa-solid fa-book mr-2" target="_blank"></i>
                     {{ __('Manual de usuario') }}
-                </x-nav-link>-->
+                </x-nav-link>
                 <x-nav-link :href="route('login')" class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">
                     {{ __('Iniciar sesión') }}
                 </x-nav-link>
