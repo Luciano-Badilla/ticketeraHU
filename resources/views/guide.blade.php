@@ -15,25 +15,25 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         a {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            display: inline-block;
-            font-weight: 400;
-            color: #212529;
-            text-align: center;
-            vertical-align: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-color: transparent;
-            border: 1px solid transparent;
-            padding: .375rem .75rem;
-            font-size: 1rem;
-            line-height: 1.5;
-            border-radius: .25rem;
-            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            color: #fff !important;
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            display: inline-block !important;
+            font-weight: 400 !important;
+            color: #212529 !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            background-color: transparent !important;
+            border: 1px solid transparent !important;
+            padding: .375rem .75rem !important;
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            border-radius: .25rem !important;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
             text-decoration: none !important;
         }
 
