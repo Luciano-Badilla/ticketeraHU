@@ -12,6 +12,7 @@ use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\CheckUserAccess;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\UserGuideController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -42,6 +43,10 @@ Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPass
 
 Route::post('/login-check', [AuthenticatedSessionController::class, 'checkLogin'])->name('login.check');
 Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'selectTicketera'])->name('select.ticketera');
+
+Route::get('/user_guide', [UserGuideController::class, 'index'])->name('guide.user_guide');
+Route::get('/guide/{id}', [UserGuideController::class, 'guide'])->name('guide.view_guide');
+
 
 
 // Rutas protegidas con 'auth' y 'verified'

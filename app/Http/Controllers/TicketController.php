@@ -142,7 +142,7 @@ class TicketController extends Controller
 
                 return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
             } else {
-                $message = 'No tienes permiso para acceder a este ticket, si crees que es un error presiona "Restablecer acceso"';
+                $message = 'No tienes permiso para acceder a este ticket, si quieres ingresar desde este dispositivo o crees que es un error presiona "Restablecer acceso"';
                 $buttons = [['url' => route('send.restore_email_ip', ['id' => $ticket->id]), 'text' => 'Restablecer acceso']];
                 return view('unauthorized', ['message' => $message, 'buttons' => $buttons]);
             }
@@ -355,11 +355,6 @@ class TicketController extends Controller
         return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $request->input('id') . ' reasignado con exito.');
     }
 
-
-    public function edit_index($id) {}
-
-    public function edit(Request $request) {}
-
     public function reopen_ticket(Request $request, $id = null)
     {
         if (!$id) {
@@ -401,4 +396,5 @@ class TicketController extends Controller
 
         return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Acceso validado correctamente, solo se podra acceder a este ticket desde este dispositivo.');
     }
+
 }

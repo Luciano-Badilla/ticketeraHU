@@ -125,7 +125,7 @@
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                     <input type="hidden" name="reopenMotivo" id="reopenMotivo" required>
                     <div class="bg-white w-full">
-                        <div class="mb-6 w-full lg:w-3/4">
+                        <div class="mb-6 w-full">
                             <h2 class="text-2xl text-gray-700 font-bold mb-2">Información del Ticket</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
