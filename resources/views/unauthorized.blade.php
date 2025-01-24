@@ -15,22 +15,20 @@
         </div>
         <h1 class="text-2xl font-bold text-gray-800 mb-2">Acceso No Autorizado</h1>
         @php
-            $message = $message ?? null;
+            $buttons = $buttons ?? null;
         @endphp
-        @if ($message)
-            <p class="text-gray-600 mb-6">{{ $message }}</p>
-        @else
-            <p class="text-gray-600 mb-6">Lo sentimos, no tienes permiso para acceder a esta página. Por favor, verifica
-                tus
-                credenciales o contacta al administrador.</p>
-        @endif
         @if ($buttons)
             <div class="flex flex-col gap-6 items-center justify-center">
                 @foreach ($buttons as $button)
+                    <p class="text-gray-900">{{ $button['label'] }}</p>
                     <a href="{{ $button['url'] }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg w-auto">{{ $button['text'] }}</a>
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg w-1/4">{{ $button['text'] }}</a>
                 @endforeach
-
+            @else
+                <p class="text-gray-600 mb-6">Lo sentimos, no tienes permiso para acceder a esta página. Por favor,
+                    verifica
+                    tus
+                    credenciales o contacta al administrador.</p>
         @endif
         <a href="{{ url()->previous() }}" class="bg-black text-white px-4 py-2 rounded-lg w-full">
             <i class="fas fa-arrow-left mr-2"></i> Volver

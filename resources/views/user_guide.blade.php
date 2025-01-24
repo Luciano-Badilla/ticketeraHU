@@ -33,9 +33,21 @@
 
 <body class="flex justify-center bg-gray-100">
     <div class="bg-white rounded-xl shadow-sm m-5 flex flex-col gap-10 w-full lg:w-1/2 overflow-hidden">
-        <div class="flex flex-col lg:flex-row items-center justify-center mt-10 gap-5 lg:gap-20">
+        <div class="flex flex-col lg:flex-row items-center justify-center mt-10 gap-5 lg:gap-20 text-center">
             <img src="{{ asset('images/hu_logo.png') }}" alt="HU Logo">
-            <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">MANUAL DE USUARIO</h1>
+            @auth
+                <div class="flex flex-col gap-1">
+                    <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">MANUAL DE USUARIO</h1>
+                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">PARA ADMINISTRADORES</h1>
+                </div>
+
+            @endauth
+            @guest
+                <div class="flex flex-col gap-1">
+                    <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">MANUAL DE USUARIO</h1>
+                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">PARA CLIENTES</h1>
+                </div>
+            @endguest
         </div>
         <div class="flex items-center justify-center">
             <div class="relative lg:w-3/4 -mt-4 lg:mt-0">
