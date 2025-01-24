@@ -37,10 +37,16 @@
         </div>
         <!-- Cuerpo del ticket -->
         <div class="px-3 border border-gray-300 rounded-xl mx-1 lg:mx-4 mb-3">
-            <div class="text-sm text-gray-900 h-auto rendered-content mt-4">{!! $guide->body !!}
+            <div class="text-sm text-gray-900 h-auto rendered-content mt-4 editor" id="editor">
+                {!! $guide->body !!}
             </div>
         </div>
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quill = new Quill('#editor', {});
+    })
+</script>
 
 </html>
