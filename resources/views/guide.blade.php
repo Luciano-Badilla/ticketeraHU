@@ -36,11 +36,14 @@
             <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">{{ $guide->title }}</h1>
         </div>
         <!-- Cuerpo del ticket -->
-        <div class="px-3 border border-gray-300 rounded-xl mx-1 lg:mx-4 mb-3">
+        <div class="px-3 border border-gray-300 rounded-xl mx-1 lg:mx-4">
             <div class="text-sm text-gray-900 h-auto rendered-content mt-4 editor" id="editor">
                 {!! $guide->body !!}
             </div>
         </div>
+        <a href="{{ url()->previous() }}" class="bg-black text-white text-center px-4 py-2 rounded-lg ml-4 w-1/4 mb-3">
+            <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
     </div>
 </body>
 <script>
