@@ -15,7 +15,26 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         a {
-            text-decoration: blue;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            display: inline-block;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            text-decoration: none !important;
         }
 
         img {
@@ -31,7 +50,7 @@
 
 <body class="flex justify-center bg-gray-100">
     <div class="bg-white rounded-xl shadow-sm m-5 flex flex-col gap-5 w-full lg:w-1/2 h-fit">
-        <div class="flex flex-row items-center justify-center mt-5 gap-1">
+        <div class="flex flex-row items-center justify-center mt-5 gap-1 p-1">
             <img src="{{ asset('images/hu_icon.png') }}" class="h-12 lg:h-16" alt="HU Logo">
             <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">{{ $guide->title }}</h1>
         </div>
