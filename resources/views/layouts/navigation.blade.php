@@ -103,7 +103,7 @@
                                 {{ __('Sub áreas') }}
                             </x-nav-link>
                             <x-nav-link :href="route('cliente.dashboard')" :active="request()->routeIs('cliente.dashboard')">
-                                {{ __('Clientes') }}
+                                {{ __('Correos inst.') }}
                             </x-nav-link>
                             <x-nav-link :href="route('usuario.dashboard')" :active="request()->routeIs('usuario.dashboard')">
                                 {{ __('Usuarios') }}
@@ -207,7 +207,7 @@
                     </x-nav-link>
                     <x-nav-link :href="route('cliente.dashboard')" :active="request()->routeIs('cliente.dashboard')"
                         class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">
-                        {{ __('Clientes') }}
+                        {{ __('Correos inst.') }}
                     </x-nav-link>
                     <x-nav-link :href="route('usuario.dashboard')" :active="request()->routeIs('usuario.dashboard')"
                         class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">

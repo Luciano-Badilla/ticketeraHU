@@ -8,8 +8,8 @@
                 <div class="modal-content" style="border-radius: 8px !important">
                     <div class="modal-header border-transparent">
                         <div class="flex flex-col">
-                            <h5 class="modal-title" id="exampleModalLabel">Nuevo cliente</h5>
-                            <p class="text-muted">Esta acción agregara un cliente a la lista.</p>
+                            <h5 class="modal-title" id="exampleModalLabel">Nuevo correo institucional</h5>
+                            <p class="text-muted">Esta acción agregara un correo institucional a la lista.</p>
                         </div>
                         <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
                             aria-label="Close"></button>

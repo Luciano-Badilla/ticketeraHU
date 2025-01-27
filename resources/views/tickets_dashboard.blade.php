@@ -22,11 +22,6 @@
 @endphp
 
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-lg text-gray-800 leading-tight">
-            {{ 'Tickets' . ($id ? ' pendientes - ' . AreaModel::find($id)->nombre : '') }}
-        </h2>
-    </x-slot>
     <div class="py-2">
         <div class="mx-auto lg:px-8">
             <div class="w-full lg:w-3/4 mx-auto">
