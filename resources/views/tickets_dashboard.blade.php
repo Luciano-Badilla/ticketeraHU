@@ -125,7 +125,6 @@
                                                     </th>
                                                     <th class="py-3 px-6 text-left block sm:table-cell">Sub área</th>
                                                     <th class="py-3 px-6 text-left block sm:table-cell">Estado</th>
-                                                    <th class="py-3 px-6 text-left block sm:table-cell"></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="ticket-list" class="text-gray-600 text-sm font-light">
@@ -163,26 +162,6 @@
                                                         <td
                                                             class="py-3 px-6 text-left text-md whitespace-nowrap block sm:table-cell">
                                                             {{ EstadoModel::find($ticket->estado_id)->nombre }}
-                                                        </td>
-                                                        <td
-                                                            class="py-3 px-6 text-left text-md whitespace-nowrap block sm:table-cell">
-                                                            @if ($ticket->estado_id != 4)
-                                                                @auth
-                                                                    <div class="flex justify-center">
-                                                                        <form id="close-ticket-form-{{ $ticket->id }}"
-                                                                            action="{{ route('ticket.close', ['id' => $ticket->id]) }}"
-                                                                            method="POST" style="display: none;">
-                                                                            @csrf
-                                                                        </form>
-                                                                        <button type="button"
-                                                                            onclick="document.getElementById('close-ticket-form-{{ $ticket->id }}').submit();"
-                                                                            class="btn btn-danger rounded-xl text-sm sm:text-base">
-                                                                            <i
-                                                                                class="fa-solid fa-clipboard-check mr-2"></i>Cerrar
-                                                                        </button>
-                                                                    </div>
-                                                                @endauth
-                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
