@@ -102,20 +102,20 @@
                                         <!-- Buscador general -->
                                         <div class="w-full sm:w-1/4">
                                             <input type="text" id="search"
-                                                class="border-gray-300 rounded-xl shadow-md w-full"
+                                                class="border-gray-300 rounded-xl shadow-md w-full border"
                                                 placeholder="Buscar por ID">
                                         </div>
 
                                         <!-- Selector de fecha -->
                                         <div class="w-full sm:w-1/4">
                                             <input type="date" id="fecha"
-                                                class="border-gray-300 rounded-xl shadow-md w-full">
+                                                class="border-gray-300 rounded-xl shadow-md w-full border">
                                         </div>
 
                                         <!-- Problema (select) -->
                                         <div class="w-full sm:w-1/4">
                                             <select id="problema"
-                                                class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                                class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                                 <option value="">Seleccione un problema</option>
                                                 @foreach (TipoProblemaModel::all() as $tipoProblema)
                                                     <option value="{{ $tipoProblema->nombre }}">
@@ -128,7 +128,7 @@
                                         <!-- Departamento (select) -->
                                         <div class="w-full sm:w-1/4">
                                             <select id="departamento"
-                                                class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                                class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                                 <option value="">Seleccione un departamento</option>
                                                 @foreach (DepartamentoModel::all() as $departamento)
                                                     <option value="{{ $departamento->nombre }}">
@@ -141,7 +141,7 @@
                                         <!-- Estado (select) -->
                                         <div class="w-full sm:w-1/4">
                                             <select id="estado"
-                                                class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                                class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                                 <option value="">Seleccione un estado</option>
                                                 @foreach (EstadoModel::all() as $estado)
                                                     <option value="{{ $estado->nombre }}">{{ $estado->nombre }}</option>

@@ -66,17 +66,49 @@
         </div>
         <div
             class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center overflow-y-auto mb-4 custom-scrollbar">
-            @if ($completeGuides)
-                @foreach ($completeGuides as $guide)
-                    <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon" :type="$guide->type" />
-                @endforeach
-            @endif
-            @if ($quickGuides)
-                @foreach ($quickGuides as $guide)
-                    <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon" :type="$guide->type" />
-                @endforeach
-            @endif
+            @guest
+                @if ($completeGuides)
+                    @foreach ($completeGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+                @if ($quickGuides)
+                    @foreach ($quickGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+            @endguest
+            @auth
+                
+                @if ($completeGuidesAdmin)
+                    @foreach ($completeGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+                @if ($quickGuidesAdmin)
+                    @foreach ($quickGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+                <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">Para usuarios:</h1>
 
+                @if ($completeGuides)
+                    @foreach ($completeGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+                @if ($quickGuides)
+                    @foreach ($quickGuides as $guide)
+                        <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
+                            :type="$guide->type" />
+                    @endforeach
+                @endif
+            @endauth
         </div>
     </div>
 </body>

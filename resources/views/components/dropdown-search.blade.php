@@ -28,7 +28,7 @@
         <!-- Search input -->
         @if ($search)
             <input id="search-input-{{ $uniqueId }}" type="text"
-                class="block w-full text-gray-800 border-b mx-2 border-gray-300 focus:outline-none sticky top-0 bg-white rounded-lg"
+                class="block w-full text-gray-800 mx-2 focus:outline-none sticky top-0 bg-white rounded-lg p-2 border border-gray-300"
                 placeholder="Buscar..." autocomplete="off" style="overflow-x: hidden; max-width: 97%;">
         @endif
 

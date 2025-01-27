@@ -45,26 +45,26 @@
                                 <!-- Buscador general -->
                                 <div class="w-full sm:w-1/4">
                                     <input type="text" id="search"
-                                        class="border-gray-300 rounded-xl shadow-md w-full"
+                                        class="border-gray-300 rounded-xl shadow-md w-full border"
                                         placeholder="Buscar por asunto o ID">
                                 </div>
 
                                 <!-- Email del cliente -->
                                 <div class="w-full sm:w-1/4">
                                     <input type="email" id="email"
-                                        class="border-gray-300 rounded-xl shadow-md w-full"
+                                        class="border-gray-300 rounded-xl shadow-md w-full border"
                                         placeholder="Buscar por email">
                                 </div>
 
                                 <!-- Selector de fecha -->
                                 <div class="w-full sm:w-1/4">
                                     <input type="date" id="fecha"
-                                        class="border-gray-300 rounded-xl shadow-md w-full">
+                                        class="border-gray-300 rounded-xl shadow-md w-full border">
                                 </div>
 
                                 <!-- Problema (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="problema" class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                    <select id="problema" class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                         <option value="">Seleccione un problema</option>
                                         @foreach (TipoProblemaModel::orderBy('nombre')->get() as $tipoProblema)
                                             <option value="{{ $tipoProblema->nombre }}">{{ $tipoProblema->nombre }}
@@ -75,7 +75,7 @@
 
                                 <!-- Departamento (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="departamento" class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                    <select id="departamento" class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                         <option value="">Seleccione un departamento</option>
                                         @foreach (DepartamentoModel::orderBy('nombre')->get() as $departamento)
                                             <option value="{{ $departamento->nombre }}">{{ $departamento->nombre }}
@@ -86,7 +86,7 @@
 
                                 <!-- Estado (select) -->
                                 <div class="w-full sm:w-1/4">
-                                    <select id="estado" class="border-gray-300 rounded-xl shadow-md w-full p-2">
+                                    <select id="estado" class="border-gray-300 rounded-xl shadow-md w-full p-2 border">
                                         <option value="">Seleccione un estado</option>
                                         @foreach (EstadoModel::orderBy('nombre')->get() as $estado)
                                             <option value="{{ $estado->nombre }}">{{ $estado->nombre }}</option>
