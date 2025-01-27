@@ -142,7 +142,7 @@ class TicketController extends Controller
 
                 return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
             } else {
-                $buttons = [['url' => route('send.restore_email_ip', ['id' => $ticket->id]), 'text' => 'Restablecer acceso', 'label' => 'No tienes permiso para acceder a este ticket, si quieres ingresar desde este dispositivo o crees que es un error presiona "Restablecer acceso"'], ['url' => route('login'), 'text' => 'Iniciar Sesión', 'label' => 'Si eres parte del staff, debes iniciar sesión']];
+                $buttons = [['url' => route('send.restore_email_ip', ['id' => $ticket->id]), 'text' => 'Restablecer acceso', 'label' => 'No tienes permiso para acceder a este ticket, si crees que es un error presiona "Restablecer acceso"'], ['url' => route('login'), 'text' => 'Iniciar Sesión', 'label' => 'Si eres parte del staff, debes iniciar sesión']];
                 return view('unauthorized', ['buttons' => $buttons]);
             }
         } else {

@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+    <div class="bg-gray-100 p-8 rounded-lg text-center w-1/4">
         <div class="mb-4">
             <i class="fas fa-exclamation-circle text-red-500 text-6xl"></i>
         </div>
@@ -18,11 +18,11 @@
             $buttons = $buttons ?? null;
         @endphp
         @if ($buttons)
-            <div class="flex flex-col gap-6 items-center justify-center">
+            <div class="flex flex-col gap-4 items-center justify-center">
                 @foreach ($buttons as $button)
                     <p class="text-gray-900">{{ $button['label'] }}</p>
                     <a href="{{ $button['url'] }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg w-1/4">{{ $button['text'] }}</a>
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full">{{ $button['text'] }}</a>
                 @endforeach
             @else
                 <p class="text-gray-600 mb-6">Lo sentimos, no tienes permiso para acceder a esta página. Por favor,
