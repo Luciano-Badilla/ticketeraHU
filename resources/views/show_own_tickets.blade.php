@@ -60,7 +60,7 @@
                     </div>
                 @endif
                 <div class="d-flex justify-content-center rounded">
-                    <div class="flex flex-col bg-white shadow-sm rounded-xl px-4">
+                    <div class="flex flex-col bg-white shadow-sm rounded-xl px-4  w-3/4">
                         <div class="justify-between search_and_filters_div mb-2">
                             <form action="{{ route('ticket.show') }}" method="GET">
                                 @csrf
