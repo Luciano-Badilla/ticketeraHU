@@ -8,7 +8,7 @@
         {!! $icon !!}
     </div>
     <h1 class="tutorial-card-title font-bold text-xl">{{ $title }}</h1>
-    <p class="text-sm text-zinc-500 leading-6">
+    <p class="tutorial-card-description text-sm text-zinc-500 leading-6">
         {{ $description }}
     </p>
 </a>

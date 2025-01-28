@@ -83,8 +83,7 @@
             @auth
                 <div class="flex flex-col">
                     <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold mb-5 mx-10">Para administradores:</h1>
-                    <div
-                        class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center mb-4">
+                    <div class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center mb-4">
                         @if ($completeGuidesAdmin)
                             @foreach ($completeGuidesAdmin as $guide)
                                 <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
@@ -99,8 +98,7 @@
                         @endif
                     </div>
                     <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold mb-5 mx-10">Para usuarios:</h1>
-                    <div
-                        class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center mb-4">
+                    <div class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center mb-4">
                         @if ($completeGuides)
                             @foreach ($completeGuides as $guide)
                                 <x-tutorial-card :id="$guide->id" :title="$guide->title" :description="$guide->description" :icon="$guide->icon"
@@ -125,9 +123,12 @@
         $('#search').on('input', function() {
             const searchValue = $(this).val().toLowerCase(); // Obtener el valor del campo de búsqueda
             $('.tutorial-card').each(function() {
-                const guideText = $(this).find('.tutorial-card-title').text().toLowerCase();
+                const guideTitle = $(this).find('.tutorial-card-title').text().toLowerCase();
+                const guideDescription = $(this).find('.tutorial-card-description').text()
+                    .toLowerCase(); // Buscar también en la descripción
 
-                if (guideText.includes(searchValue)) {
+                if (guideTitle.includes(searchValue) || guideDescription.includes(
+                    searchValue)) {
                     $(this).show(); // Mostrar la tarjeta si coincide
                 } else {
                     $(this).hide(); // Ocultar la tarjeta si no coincide
