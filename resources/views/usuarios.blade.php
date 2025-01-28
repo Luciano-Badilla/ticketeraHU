@@ -56,7 +56,7 @@
                                                     method="POST">
                                                     @csrf
                                                     <button type="submit"
-                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 whitespace-nowrap">{{ $usuario->recibe_emails ? 'No recibir emails' : 'Recibir emails' }}</button>
+                                                        class="bg-green-600 text-white py-1 px-3 rounded-full text-xs hover:bg-green-700 whitespace-nowrap">{{ $usuario->recibe_emails ? 'Desactivar mails' : 'Activar mails' }}</button>
                                                 </form>
                                             </div>
                                         </div>
