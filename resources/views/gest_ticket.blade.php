@@ -261,7 +261,8 @@
                                                     @if ($extension === 'txt') download @else target="_blank" @endif
                                                     class="bg-gray-200 hover:bg-gray-300 rounded-md p-2 inline-flex items-center text-black mt-1"
                                                     style="max-width: auto; margin-right: auto;">
-                                                    <i class="fas {{ $icon }} {{ $color }} mr-2 h-6"></i>
+                                                    <i
+                                                        class="fas {{ $icon }} {{ $color }} mr-2 h-6"></i>
                                                     <span class="whitespace-nowrap">
                                                         {{ $adjunto->nombre }}
                                                     </span>
@@ -340,14 +341,12 @@
                             </div>
                         @endif
                         @if ($ticket->estado_id == 4)
-                            @guest
-                                <div class="flex justify-end space-x-4 w-full md:w-auto mt-4 md:mb-0">
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#reopenModal"
-                                        class="btn btn-success rounded-xl text-nowrap w-full md:w-auto py-2">
-                                        <i class="fa-solid fa-unlock mr-1"></i>Reabrir ticket
-                                    </button>
-                                </div>
-                            @endguest
+                            <div class="flex justify-end space-x-4 w-full md:w-auto mt-4 md:mb-0">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#reopenModal"
+                                    class="btn btn-success rounded-xl text-nowrap w-full md:w-auto py-2">
+                                    <i class="fa-solid fa-unlock mr-1"></i>Reabrir ticket
+                                </button>
+                            </div>
                         @endif
                     </div>
                 </form>
