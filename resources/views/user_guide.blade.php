@@ -45,7 +45,6 @@
             @guest
                 <div class="flex flex-col gap-1">
                     <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">MANUAL DE USUARIO</h1>
-                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">PARA CLIENTES</h1>
                 </div>
             @endguest
         </div>

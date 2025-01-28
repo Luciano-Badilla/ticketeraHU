@@ -117,7 +117,7 @@
             @guest
                 <div class="flex flex-row">
                     <div class="hidden sm:flex sm:space-x-8 sm:-my-px sm:ms-10">
-                       <x-nav-link :href="route('guide.user_guide')" target="_blank"
+                        <x-nav-link :href="route('guide.user_guide')" target="_blank"
                             class="btn btn-primary text-white h-8 mt-4 px-2 rounded-xl">
                             <i class="fa-solid fa-book mr-2"></i>
                             {{ __('Manual de usuario') }}
@@ -133,15 +133,16 @@
             @auth
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <x-nav-link :href="route('guide.user_guide')" target="_blank" class="btn btn-primary text-white h-8 px-2 rounded-xl">
+                        <i class="fa-solid fa-book"></i>
+                    </x-nav-link>
                     <div class="dropdown" style="position: relative;">
                         <button
                             class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dropdown-toggle"
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <div>
                                 {{ (DashboardTicketModel::find(Auth::user()->ticketera_id)->titulo ?? '') .
-                                    ' (' .
-                                    (RolModel::find(Auth::user()->rol_id)->nombre ?? '') .
-                                    ') - ' .
+                                    ' - ' .
                                     (Auth::user()->name_and_surname ?? '') }}
                             </div>
                         </button>
@@ -212,6 +213,9 @@
                     <x-nav-link :href="route('usuario.dashboard')" :active="request()->routeIs('usuario.dashboard')"
                         class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">
                         {{ __('Usuarios') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('guide.user_guide')" class="btn btn-primary text-white h-8 px-2 rounded-xl">
+                        <i class="fa-solid fa-book" target="_blank"></i>
                     </x-nav-link>
                 @endif
             @endauth
