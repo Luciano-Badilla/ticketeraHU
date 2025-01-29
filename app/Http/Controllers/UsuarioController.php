@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ticketRestorePassword;
 use App\Models\EspecialidadModel;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
@@ -18,7 +20,7 @@ class UsuarioController extends Controller
     public function index()
     {
         $ticketera_id = Auth::user()->ticketera_id;
-        $usuarios = User::where('ticketera_id',$ticketera_id)->get();
+        $usuarios = User::where('ticketera_id', $ticketera_id)->get();
         $roles = RolModel::all();
         return view('usuarios', [
             'usuarios' => $usuarios,
@@ -77,28 +79,43 @@ class UsuarioController extends Controller
             // Actualizamos el campo requestsPassword a 1
             $usuario->requestsPassword = 1;
             $usuario->save(); // Guardamos los cambios
+            Mail::to($email)->send(new ticketRestorePassword($email));
         }
-        return redirect()->route('login')->with('success', 'Solicitud enviada correctamente, por favor envie un ticket para agilizar el proceso.');
+        return redirect()->route('login')->with('error', 'Si el correo corresponde a una cuenta, se enviara un mail.');
+    }
+
+    public function requestPasswordView(Request $request)
+    {
+        $email = $request->query('email');
+
+        $usuario = User::where('email', $email)->first();
+
+        if ($usuario->requestsPassword) {
+            return view('changepassword', ['email' => $email]);
+        } else {
+            return redirect()->route('login');
+        }
     }
 
     public function passwordUser(Request $request)
     {
 
         // Obtener el ID del usuario
-        $id = $request->input('id'); // Asegúrate de que el ID se pase desde el modal
-
+        $email = $request->input('email'); // Asegúrate de que el ID se pase desde el modal
+        $password = $request->input(key: 'password');
 
         // Buscar al usuario
-        $usuario = User::find($id);
+        $usuario = User::where('email', $email)->first();
+
         if ($usuario) {
             // Cambiar la contraseña
-            $usuario->password = Hash::make($request->input('addPassword'));
+            $usuario->password = Hash::make($password);
             $usuario->requestsPassword = 0;
             $usuario->save();
 
-            return redirect()->route('usuario.dashboard')->with('success', 'Contraseña cambiada correctamente.');
+            return redirect()->route('login')->with('error', 'Contraseña cambiada correctamente.');
+        } else {
+            return redirect()->route('login')->with('error', 'Usuario no encontrado.');
         }
-
-        return redirect()->route('usuario.dashboard')->with('error', 'Usuario no encontrado.');
     }
 }

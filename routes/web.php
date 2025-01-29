@@ -39,13 +39,11 @@ Route::get('/ticket/{ticketId}/new-messages', [TicketController::class, 'checkNe
 Route::get('/mis_tickets', [TicketController::class, 'show_own_tickets'])->name('ticket.show');
 Route::post('/reopen', [TicketController::class, 'reopen_ticket'])->name('ticket.reopen');
 
-Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPassword'])->name('usuarios.requestPassword');
-
 Route::post('/login-check', [AuthenticatedSessionController::class, 'checkLogin'])->name('login.check');
 Route::post('/select-ticketera', [AuthenticatedSessionController::class, 'selectTicketera'])->name('select.ticketera');
 
 Route::get('/user_guide', [UserGuideController::class, 'index'])->name('guide.user_guide');
-Route::get('/guide/{id}', [UserGuideController::class, 'guide'])->name('guide.view_guide');
+Route::get('/user_guide/{id}', [UserGuideController::class, 'guide'])->name('guide.view_guide');
 
 
 
@@ -76,9 +74,13 @@ Route::middleware(['auth', 'verified', CheckUserAccess::class])->group(function 
         Route::post('admin/usuarios/update/{id}', [UsuarioController::class, 'updateUser'])->name('usuario.update');
         Route::post('admin/usuarios/validate/{id}', [UsuarioController::class, 'validateUser'])->name('usuario.validate');
         Route::post('admin/usuarios/recibe_emails/{id}', [UsuarioController::class, 'recibeEmails'])->name('usuario.recibe_emails');
-        Route::post('admin/usuarios/password/{id}', [UsuarioController::class, 'passwordUser'])->name('usuario.password');
     });
 });
+
+Route::post('/usuarios/requestpassword', [UsuarioController::class, 'requestPassword'])->name('usuarios.requestPassword');
+Route::get('usuarios/viewchangepassword', [UsuarioController::class, 'requestPasswordView'])->name('view.changepassword');
+Route::post('usuarios/password', [UsuarioController::class, 'passwordUser'])->name('usuario.password');
+
 
 // Rutas protegidas para el perfil de usuario
 Route::middleware('auth')->group(function () {

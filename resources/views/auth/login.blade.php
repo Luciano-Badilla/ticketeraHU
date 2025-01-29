@@ -76,13 +76,25 @@
                     Solicitar cambio de contraseña
                 </button>
             </div>
+            <div class="flex justify-end">
+                <div class="flex items-center justify-end">
+                    <x-nav-link :href="route('guide.user_guide')" target="_blank"
+                        class="btn btn-primary text-white h-8 mt-4 px-2 rounded flex items-center">
+                        <i class="fa-solid fa-book mr-2"></i>
+                        <p class="mt-1">MANUAL DE USUARIO</p>
+                    </x-nav-link>
+                </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button class="ms-3">
-                    {{ __('Iniciar sesión') }}
-                </x-primary-button>
+                <div class="flex items-center justify-end mt-4">
+                    <x-primary-button class="ms-3">
+                        {{ __('Iniciar sesión') }}
+                    </x-primary-button>
+                </div>
             </div>
+
+
         </form>
+
 
 
         <!-- Modal -->
