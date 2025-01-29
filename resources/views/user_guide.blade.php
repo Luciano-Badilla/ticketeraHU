@@ -38,7 +38,7 @@
             @auth
                 <div class="flex flex-col gap-1">
                     <h1 class="text-2xl lg:text-3xl text-gray-700 font-bold">MANUAL DE USUARIO</h1>
-                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">PARA ADMINISTRADORES</h1>
+                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold">PARA EL STAFF</h1>
                 </div>
 
             @endauth
@@ -82,7 +82,7 @@
             @endguest
             @auth
                 <div class="flex flex-col">
-                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold mb-5 mx-10">Orientado para administradores:</h1>
+                    <h1 class="text-2xl lg:text-2xl text-gray-700 font-bold mb-5 mx-10">Orientado para staff:</h1>
                     <div class="tutorials-container mx-auto px-4 flex gap-5 flex-wrap justify-center mb-4">
                         @if ($completeGuidesAdmin)
                             @foreach ($completeGuidesAdmin as $guide)
