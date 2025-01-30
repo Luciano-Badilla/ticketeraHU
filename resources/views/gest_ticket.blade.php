@@ -204,7 +204,10 @@
                                 style="max-width: auto !important;">
                                 {{ ClienteModel::find($ticket->cliente_id)->email . ' ' . $ticket->created_at->format('d/m/y H:i') }}
                             </span>
-                            <div class="text-sm text-gray-900 h-auto rendered-content mt-4">{!! $ticket->cuerpo !!}
+                            <div class="text-sm text-gray-900 h-auto mt-4">
+                                <div class="text-sm text-gray-900 h-auto mt-4 response-container">
+                                    {!! $ticket->cuerpo !!}
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -224,7 +227,10 @@
                                     </span>
 
                                     <div class="text-gray-900 h-auto mt-2 rendered-content">
-                                        {!! $response->cuerpo !!}
+                                        <div
+                                            class="text-sm text-gray-900 h-auto rendered-content mt-4 response-container">
+                                            {!! $response->cuerpo !!}
+                                        </div>
                                         @foreach ($adjuntosResponse as $adjunto)
                                             @if ($adjunto->ticket_id == $response->id)
                                                 @php
@@ -599,9 +605,27 @@
 
         // Configura el polling cada 5 segundos
         setInterval(checkNewMessages, 5000);
+
+        document.querySelectorAll('.response-container').forEach(response => {
+            let quill = new Quill(response, {
+                readOnly: true
+            });
+
+            // Esperar a que Quill cargue completamente
+
+            let editor = response.querySelector('.ql-editor');
+
+            // Eliminar alturas predefinidas y ajustar automáticamente
+            response.style.height = 'auto';
+            response.style.minHeight = 'auto';
+            editor.style.height = 'auto';
+            editor.style.minHeight = 'auto';
+
+            // Ajustar altura al contenido
+            response.style.height = editor.scrollHeight + 'px';
+            // Pequeño retraso para asegurar que se renderiza correctamente
+        });
     });
-
-
 
     const closeButton = document.getElementById('close_btn');
     // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
