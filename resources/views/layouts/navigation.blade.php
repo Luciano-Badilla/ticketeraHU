@@ -106,7 +106,7 @@
                                 {{ __('Correos inst.') }}
                             </x-nav-link>
                             <x-nav-link :href="route('usuario.dashboard')" :active="request()->routeIs('usuario.dashboard')">
-                                {{ __('Usuarios') }}
+                                {{ __('Staff') }}
                             </x-nav-link>
                         @endif
                     </div>
@@ -212,7 +212,7 @@
                     </x-nav-link>
                     <x-nav-link :href="route('usuario.dashboard')" :active="request()->routeIs('usuario.dashboard')"
                         class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-100">
-                        {{ __('Usuarios') }}
+                        {{ __('Staff') }}
                     </x-nav-link>
                     <x-nav-link :href="route('guide.user_guide')" class="btn btn-primary text-white h-8 px-2 rounded-xl">
                         <i class="fa-solid fa-book" target="_blank"></i>
