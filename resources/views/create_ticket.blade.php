@@ -269,7 +269,7 @@
                     <div class="flex justify-end">
                         <button
                             class="btn-dark text-white font-bold py-2 px-3 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-                            type="submit"><i class="fa-solid fa-paper-plane mr-2"></i>
+                            type="submit" id="send_ticket_button"><i class="fa-solid fa-paper-plane mr-2"></i>
                             Enviar Ticket
                         </button>
                     </div>
@@ -306,7 +306,8 @@
         fileList.innerHTML = '';
         selectedFiles.forEach((file, index) => {
             const li = document.createElement('li');
-            li.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'space-x-2', 'hover:bg-gray-100', 'py-1', 'px-2',  'rounded-xl');
+            li.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'space-x-2',
+                'hover:bg-gray-100', 'py-1', 'px-2', 'rounded-xl');
 
             const fileName = document.createElement('span');
             fileName.textContent = file.name;
@@ -365,10 +366,13 @@
     });
 
     document.getElementById('ticket_form').onsubmit = function(e) {
+        $('#send_ticket_button').attr('disabled', 'disabled');
+
         if (!validateEmail()) {
             e.preventDefault();
             custom_alert("El email debe tener el formato nombre.apellido@hospital.uncu.edu.ar");
             scrollToError();
+            $('#send_ticket_button').removeAttr('disabled');
             return;
         }
         var content = quill.root.innerHTML.trim(); // Remueve espacios en blanco al inicio y final
@@ -377,6 +381,7 @@
         if (!content || content === "<p><br></p>") { // Verifica si está vacío
             document.getElementById('detalle').value = null;
         }
+
     };
 
     function validateEmail() {

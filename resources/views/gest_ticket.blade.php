@@ -119,8 +119,11 @@
                     <x-error-alert :error="$errors"></x-error-alert>
                 @endif
 
-                <form action="{{ route('ticket.response') }}" class="p-8" method="post" enctype="multipart/form-data"
-                    id="form-ticket-response">
+                <div class="alert-danger hidden rounded-t-xl" id="error_alert">
+                    <p style="padding: 0.3%; text-align: center" id="error_message"></p>
+                </div>
+                <form action="{{ route('ticket.response') }}" class="p-8" method="post"
+                    enctype="multipart/form-data" id="form-ticket-response">
                     @csrf
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                     <input type="hidden" name="reopenMotivo" id="reopenMotivo" required>
@@ -330,7 +333,8 @@
                                         <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
                                             <button type="button"
                                                 class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto"
-                                                data-bs-toggle="modal" data-bs-target="#closeModal">
+                                                id="send_answer_close" data-bs-toggle="modal"
+                                                data-bs-target="#closeModal">
                                                 <i class="fa-solid fa-clipboard-check mr-2"></i>Enviar respuesta y cerrar
                                             </button>
                                         </div>
@@ -338,7 +342,7 @@
                                 </div>
                                 <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
                                     <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
-                                        <button type="submit"
+                                        <button type="submit" id="send_answer"
                                             class="btn btn-dark rounded-xl text-nowrap w-full md:w-auto py-2">
                                             <i class="fa-solid fa-paper-plane mr-2"></i>Enviar respuesta
                                         </button>
@@ -567,12 +571,30 @@
     }
 
     document.getElementById('form-ticket-response').onsubmit = function(e) {
-        var content = document.getElementById('detalle').value;
+        $('#send_answer_close').attr('disabled', 'disabled');
+        $('#send_answer').attr('disabled', 'disabled');
 
-        if (!content || content === "<p><br></p>") { // Verifica si está vacío
-            document.getElementById('detalle').value = null;
+        var content = document.getElementById('detalle').value.trim(); // Elimina espacios en blanco
+
+        if (content === "") { // Verifica si está vacío
+            e.preventDefault(); // Evita el envío del formulario
+
+            custom_alert("La respuesta no puede estar vacía"); // Muestra el mensaje de alerta
+
+            // Habilita nuevamente los botones
+            $('#send_answer_close').removeAttr('disabled');
+            $('#send_answer').removeAttr('disabled');
+
+            // Hace scroll hacia arriba
+            $("html, body").animate({
+                scrollTop: 0
+            }, "slow");
+
+            return false; // Refuerza la prevención del envío
         }
     };
+
+
 
     document.addEventListener('DOMContentLoaded', function() {
         let ticketId = {{ $ticket->id }};
@@ -631,12 +653,7 @@
     // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
     closeButton.addEventListener('click', function() {
         const form = document.getElementById('form-ticket-response');
-        var content = document.getElementById('detalle').value;
 
-
-        if (!content || content === "<p><br></p>") { // Verifica si está vacío
-            document.getElementById('detalle').value = null;
-        }
         const action = this.getAttribute('data-action'); // Obtener la ruta del botón
         form.setAttribute('action', action); // Cambiar la acción del formulario
         form.submit(); // Enviar el formulario
