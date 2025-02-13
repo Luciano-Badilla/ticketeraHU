@@ -90,7 +90,16 @@
             editor.style.height = scrollHeight + 'px';
         }
 
+        // Función para ajustar la altura del editor
+        function FirstAdjustEditorHeight() {
+            const editor = document.querySelector('#editor');
+            const scrollHeight = editor.querySelector('.ql-editor').scrollHeight;
+            editor.style.minHeight = scrollHeight + 'px';
+            editor.style.height = scrollHeight + 'px';
+        }
+
         // Ajustar la altura inicial
+        FirstAdjustEditorHeight();
         adjustEditorHeight();
 
         // Ajustar la altura cada vez que el contenido cambie
