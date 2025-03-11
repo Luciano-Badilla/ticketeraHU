@@ -101,8 +101,13 @@ class TicketController extends Controller
             'type' => "ticket"
         ]);
 
+        if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') {
+            Mail::to('direccionadministrativa@hospital.uncu.edu.ar')->send(new ticketCreated($ticket));
+        } else {
+            Mail::to($email)->send(new ticketCreated($ticket));
+        }
 
-        Mail::to($email)->send(new ticketCreated($ticket));
+
 
         $emailsAgents = User::where('ticketera_id', $request->input('ticketera_id'))->where('recibe_emails', 1)->get()->pluck('email')->toArray();
         foreach ($emailsAgents as $emailAgent) {
@@ -171,7 +176,11 @@ class TicketController extends Controller
                 $personal_id = Auth::id();
                 $ticket->estado_id = 3; //Pendiente
                 $ticket->save();
-                Mail::to($email)->send(new ticketResponsed($ticket));
+                if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') {
+                    Mail::to('direccionadministrativa@hospital.uncu.edu.ar')->send(new ticketResponsed($ticket));
+                } else {
+                    Mail::to($email)->send(new ticketResponsed($ticket));
+                }
             }
             $ticket_response = TicketRespuestaModel::create([
                 'ticket_id' => $request->input('ticket_id'),
@@ -324,7 +333,11 @@ class TicketController extends Controller
         $ticket->save();
         $email = ClienteModel::find($ticket->cliente_id)->email;
 
-        Mail::to($email)->send(new ticketClosed($ticket));
+        if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') {
+            Mail::to('direccionadministrativa@hospital.uncu.edu.ar')->send(new ticketClosed($ticket));
+        } else {
+            Mail::to($email)->send(new ticketClosed($ticket));
+        }
 
         if ($ticket->area_id) {
             $typeSort = "area";
@@ -380,7 +393,11 @@ class TicketController extends Controller
         $ticket = TicketModel::find($request->input('id'));
         $email = ClienteModel::find($ticket->cliente_id)->email;
 
-        Mail::to($email)->send(new ticketRestoreIp($ticket));
+        if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') {
+            Mail::to('direccionadministrativa@hospital.uncu.edu.ar')->send(new ticketRestoreIp($ticket));
+        } else {
+            Mail::to($email)->send(new ticketRestoreIp($ticket));
+        }
 
 
         return redirect()->route('ticketera.dashboard')->with('success', 'Correo de acceso enviado a ' . $email . ', revise su bandeja de entrada.');
@@ -395,5 +412,4 @@ class TicketController extends Controller
 
         return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Acceso validado correctamente, solo se podra acceder a este ticket desde este dispositivo.');
     }
-
 }

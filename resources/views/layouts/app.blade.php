@@ -86,7 +86,7 @@
             }
         }
 
-        // Center
+        Center
         body {
             min-height: 100vh;
             display: flex;
