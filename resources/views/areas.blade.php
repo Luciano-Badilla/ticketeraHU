@@ -8,8 +8,8 @@
                 <div class="modal-content" style="border-radius: 8px !important">
                     <div class="modal-header border-transparent">
                         <div class="flex flex-col">
-                            <h5 class="modal-title" id="exampleModalLabel">Nueva area</h5>
-                            <p class="text-muted">Esta acción agregara una area a la lista.</p>
+                            <h5 class="modal-title" id="exampleModalLabel">Nueva subárea</h5>
+                            <p class="text-muted">Esta acción agregara una subárea a la lista.</p>
                         </div>
                         <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
                             aria-label="Close"></button>
@@ -21,7 +21,7 @@
                             </span>
                             <input type="text"
                                 class="flex-1 px-3 py-2 focus:outline-none focus:ring-0 border-gray-300 rounded-r-md"
-                                id="addNombre" name="nombre" required placeholder="Nombre de la area">
+                                id="addNombre" name="nombre" required placeholder="Nombre del subárea">
                         </div>
                         <div class="w-full flex flex-row mt-2">
                             <input type="text"
@@ -52,8 +52,8 @@
                 <div class="modal-content" style="border-radius: 8px !important">
                     <div class="modal-header border-transparent">
                         <div class="flex flex-col">
-                            <h5 class="modal-title" id="exampleModalLabel">Editar area</h5>
-                            <p class="text-muted">Esta acción editara una area de la lista.</p>
+                            <h5 class="modal-title" id="exampleModalLabel">Editar subárea</h5>
+                            <p class="text-muted">Esta acción editara una subárea de la lista.</p>
                         </div>
                         <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
                             aria-label="Close"></button>

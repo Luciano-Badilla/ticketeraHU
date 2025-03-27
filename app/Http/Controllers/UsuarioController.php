@@ -81,7 +81,7 @@ class UsuarioController extends Controller
             $usuario->save(); // Guardamos los cambios
             Mail::to($email)->send(new ticketRestorePassword($email));
         }
-        return redirect()->route('login')->with('error', 'Si el correo corresponde a una cuenta, se enviara un mail.');
+        return redirect()->route('login')->with('error', 'Si el correo corresponde a una cuenta, se enviará un mail de recuperación.');
     }
 
     public function requestPasswordView(Request $request)

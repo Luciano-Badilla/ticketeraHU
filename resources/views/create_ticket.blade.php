@@ -216,9 +216,9 @@
                                 for="asunto">
                                 <i class="fas fa-heading mr-2"></i>Asunto
                             </label>
-                            <input name="asunto" maxlength="25"
+                            <input name="asunto" maxlength="75"
                                 class="appearance-none block border border-gray-300 text-gray-700 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full"
-                                id="asunto" type="text" placeholder="Asunto del ticket (max. 25 caracteres)"
+                                id="asunto" type="text" placeholder="Asunto del ticket (max. 75 caracteres)"
                                 value="{{ old('asunto') }}" required>
                         </div>
                         @if ($data['id'] == 4)

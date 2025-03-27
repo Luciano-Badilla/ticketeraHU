@@ -60,7 +60,6 @@
             <input type="hidden" id="ticket_id" name="ticket_id" value="">
 
             <!-- Botón para solicitar cambio de contraseña -->
-            @if ($errors->any())
                 <div class="mt-1 text-left">
                     <button type="button"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -68,7 +67,6 @@
                         Solicitar cambio de contraseña
                     </button>
                 </div>
-            @endif
             <div class="mt-1 text-left hidden" id="changePassword">
                 <button type="button"
                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

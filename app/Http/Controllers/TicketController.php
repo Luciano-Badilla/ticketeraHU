@@ -136,6 +136,7 @@ class TicketController extends Controller
     public function gest_ticket($id, Request $request)
     {
         $ticket = TicketModel::find($id);
+        $ticketera_id = Auth::user()->ticketera_id ?? null; 
         if ($ticket->device_ip) {
             if (Auth::id() == null && $ticket->device_ip == $request->ip() || Auth::id()) {
                 $ticket_response = TicketRespuestaModel::where('ticket_id', $id);
@@ -143,7 +144,7 @@ class TicketController extends Controller
                 $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
                 $adjuntosResponse = AdjuntoTicketResponseModel::all();
                 $ticketeras = DashboardTicketModel::all();
-                $areas = AreaModel::all();
+                $areas = AreaModel::where('ticketera_id',$ticketera_id)->get();
 
                 return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
             } else {
@@ -156,7 +157,7 @@ class TicketController extends Controller
             $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
             $adjuntosResponse = AdjuntoTicketResponseModel::all();
             $ticketeras = DashboardTicketModel::all();
-            $areas = AreaModel::all();
+            $areas = AreaModel::where('ticketera_id',$ticketera_id)->get();
 
             return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
         }
