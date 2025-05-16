@@ -346,7 +346,7 @@ class TicketController extends Controller
 
             return redirect()->route('ticket.dashboard', ["typeSort" => $typeSort, "id" => $area_id])->with('success', 'Ticket #' . $id . ' cerrado con exito.');
         } else {
-            return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
+            return redirect()->route('ticket_sorting.dashboard')->with('success', 'Ticket #' . $id . ' cerrado con exito.');
         }
     }
 
