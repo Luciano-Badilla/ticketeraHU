@@ -365,7 +365,7 @@ class TicketController extends Controller
             $ticket->save();
         }
         $ticketeraTicket->save();
-        return redirect()->route('ticket.dashboard')->with('success', 'Ticket #' . $request->input('id') . ' reasignado con exito.');
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket #' . $request->input('id') . ' reasignado con exito.');
     }
 
     public function reopen_ticket(Request $request, $id = null)
