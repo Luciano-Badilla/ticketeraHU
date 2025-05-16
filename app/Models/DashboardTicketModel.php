@@ -17,7 +17,6 @@ class DashboardTicketModel extends Model
         'titulo',
         'descripcion',
         'icono',
-        'detalle',
-        ''
+        'detalle'
     ];
 }
