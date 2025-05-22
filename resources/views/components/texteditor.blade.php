@@ -77,6 +77,8 @@
             }
         });
 
+        window.quill = quill;
+
         // Prellenar el contenido en el editor si existe
         const initialContent = {!! json_encode($pretext ?? '') !!};
         if (initialContent) {

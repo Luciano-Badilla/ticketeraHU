@@ -332,10 +332,10 @@
                                         </div>
                                         <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
                                             <button type="button"
-                                                class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto"
+                                                class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto flex flex-row"
                                                 id="send_answer_close" data-bs-toggle="modal"
                                                 data-bs-target="#closeModal">
-                                                <i class="fa-solid fa-clipboard-check mr-2"></i>Enviar respuesta y cerrar
+                                                <i class="fa-solid fa-clipboard-check mr-2 mt-1"></i><p id="close-btn-text">Cerrar</p>
                                             </button>
                                         </div>
                                     @endauth
@@ -676,5 +676,28 @@
         } else {
             $('#error-message-reopen').removeClass('hidden');
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Esperar un poco para asegurarse de que Quill ya esté inicializado
+        setTimeout(() => {
+            if (typeof quill !== 'undefined') {
+                const closeBtnText = document.getElementById('close-btn-text');
+                if (closeBtnText) {
+                    function updateCloseButtonText() {
+                        const plainText = quill.getText().trim();
+                        closeBtnText.textContent = plainText.length > 0
+                            ? 'Enviar respuesta y cerrar'
+                            : 'Cerrar';
+                    }
+
+                    // Llamar inicialmente por si ya hay texto
+                    updateCloseButtonText();
+
+                    // Escuchar cambios en el texto
+                    quill.on('text-change', updateCloseButtonText);
+                }
+            }
+        }, 100); // Le da un momento al DOM para asegurar que todo esté montado
     });
 </script>
