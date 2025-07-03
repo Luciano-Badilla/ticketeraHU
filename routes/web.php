@@ -57,6 +57,8 @@ Route::middleware(['auth', 'verified', CheckUserAccess::class])->group(function 
         Route::post('admin/ticket/close/{id?}', [TicketController::class, 'close_ticket'])->name('ticket.close');
         Route::post('admin/ticket/reassing', [TicketController::class, 'reassign'])->name('ticket.reassign');
         Route::get('admin/tickets_area_estado', [TicketController::class, 'area_estados_dashboard'])->name('ticket_sorting.dashboard');
+        Route::post('admin/stop', [TicketController::class, 'stop_ticket'])->name('ticket.stop');
+        Route::post('admin/unstop', [TicketController::class, 'unstop_ticket'])->name('ticket.unstop');
     });
 
     // Rutas para Administrador

@@ -316,6 +316,7 @@
                             <div class="flex flex-col md:flex-row justify-between">
                                 <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
                                     @auth
+                                    @if ($ticket->ticketera()->first()->id == Auth::user()->ticketera_id)
                                         <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
                                             <button type="button"
                                                 class="btn btn-primary rounded-xl text-nowrap w-full md:w-auto"
@@ -330,14 +331,33 @@
                                                 <i class="fa-solid fa-arrow-right mr-2"></i>Asignar sub-area
                                             </button>
                                         </div>
-                                        <div class="flex justify-end space-x-4 w-full md:w-auto mb-2 md:mb-0">
+                                        <div class="flex justify-end space-x-3 w-full md:w-auto mb-2 md:mb-0">
+                                           
+                                            @if ($ticket->estado_id == 5)
+                                                
+                                                <button type="button"
+                                                    class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto flex flex-row"
+                                                    id="send_answer_close" data-bs-toggle="modal"
+                                                    data-bs-target="#unstopModal">
+                                                    <i class="fa-solid fa-circle-stop mr-2 mt-1"></i>Reanudar ticket
+                                                </button>
+                                            @else
+                                                <button type="button"
+                                                    class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto flex flex-row"
+                                                    id="send_answer_close" data-bs-toggle="modal"
+                                                    data-bs-target="#stopModal">
+                                                    <i class="fa-solid fa-circle-stop mr-2 mt-1"></i>Detener ticket
+                                                </button>
+                                            @endif
+                                            
                                             <button type="button"
                                                 class="btn btn-danger rounded-xl text-nowrap w-full md:w-auto flex flex-row"
                                                 id="send_answer_close" data-bs-toggle="modal"
                                                 data-bs-target="#closeModal">
                                                 <i class="fa-solid fa-clipboard-check mr-2 mt-1"></i><p id="close-btn-text">Cerrar</p>
                                             </button>
-                                        </div>
+                                            
+                                        </div>@endif
                                     @endauth
                                 </div>
                                 <div class="flex flex-col md:flex-row gap-2 justify-end w-full md:w-auto">
@@ -425,6 +445,64 @@
                         data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" id="close_btn" class="btn btn-danger"
                         data-action="{{ route('ticket.close') }}" style="border-radius: 8px !important">Cerrar
+                        ticket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="stopModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px !important">
+                <div class="modal-header border-transparent">
+                    <div class="flex flex-col">
+                        <h5 class="modal-title" id="exampleModalLabel">Detener Ticket?</h5>
+                        <p class="text-muted">Esta acción detendra el ticket.</p>
+                    </div>
+                    <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-transparent">
+                    <div class="py-2 px-3 text-red-600 d-flex align-items-center" role="alert"
+                        style="border: solid #EF4444; border-radius: 8px; border-width: 1px; margin-top:-5%">
+                        <i class="fa-solid fa-triangle-exclamation mr-2" style="color:#EF4444"></i>
+                        <div>¿Estas seguro?</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-transparent">
+                    <button type="button" class="btn"
+                        style="border: solid gray; border-radius: 8px; border-width: 1px;"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="stop_btn" class="btn btn-danger"
+                        data-action="{{ route('ticket.stop') }}" style="border-radius: 8px !important">Detener
+                        ticket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="unstopModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px !important">
+                <div class="modal-header border-transparent">
+                    <div class="flex flex-col">
+                        <h5 class="modal-title" id="exampleModalLabel">Reanudar Ticket?</h5>
+                        <p class="text-muted">Esta acción enviara el ticket a pendientes.</p>
+                    </div>
+                    <button type="button" class="btn-close text-sm" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-transparent">
+                    <div class="py-2 px-3 text-red-600 d-flex align-items-center" role="alert"
+                        style="border: solid #EF4444; border-radius: 8px; border-width: 1px; margin-top:-5%">
+                        <i class="fa-solid fa-triangle-exclamation mr-2" style="color:#EF4444"></i>
+                        <div>¿Estas seguro?</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-transparent">
+                    <button type="button" class="btn"
+                        style="border: solid gray; border-radius: 8px; border-width: 1px;"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="unstop_btn" class="btn btn-danger"
+                        data-action="{{ route('ticket.unstop') }}" style="border-radius: 8px !important">Reanudar
                         ticket</button>
                 </div>
             </div>
@@ -676,6 +754,26 @@
         } else {
             $('#error-message-reopen').removeClass('hidden');
         }
+    });
+
+    const stopButton = document.getElementById('stop_btn');
+    // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
+    stopButton.addEventListener('click', function() {
+        const form = document.getElementById('form-ticket-response');
+
+        const action = this.getAttribute('data-action'); // Obtener la ruta del botón
+        form.setAttribute('action', action); // Cambiar la acción del formulario
+        form.submit(); // Enviar el formulario
+    });
+
+    const unstopButton = document.getElementById('unstop_btn');
+    // Cambiar acción y enviar el formulario al hacer clic en "Cerrar ticket"
+    unstopButton.addEventListener('click', function() {
+        const form = document.getElementById('form-ticket-response');
+
+        const action = this.getAttribute('data-action'); // Obtener la ruta del botón
+        form.setAttribute('action', action); // Cambiar la acción del formulario
+        form.submit(); // Enviar el formulario
     });
 
     document.addEventListener('DOMContentLoaded', function () {

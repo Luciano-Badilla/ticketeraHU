@@ -30,10 +30,10 @@
                     </div>
                 @endif
                 <div class="d-flex justify-content-center p-3 w-full">
-                    <div class="flex flex-col w-full lg:w-2/4">
+                    <div class="flex flex-col w-full lg:w-3/4">
 
                         <div>
-                            <div class="grid gap-4 grid-cols-1 lg:grid-cols-4 mb-8">
+                            <div class="grid gap-4 grid-cols-1 lg:grid-cols-5 mb-8">
                                 @if ($estados->isEmpty())
                                     <!-- Verifica si no hay tickets -->
                                     <div class="p-6 rounded-lg mt-3">

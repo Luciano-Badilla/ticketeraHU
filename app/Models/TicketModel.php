@@ -26,4 +26,16 @@ class TicketModel extends Model
         'reopenMotivo',
         'device_ip'
     ];
+
+    public function ticketera()
+    {
+        return $this->hasOneThrough(
+            DashboardTicketModel::class,
+            TicketeraTicketModel::class,
+            'ticket_id',       // FK en ticketera_ticket hacia ticket
+            'id',              // PK en ticketera (tabla final)
+            'id',              // PK en ticket (modelo actual)
+            'ticketera_id'     // FK en ticketera_ticket hacia ticketera
+        );
+    }
 }

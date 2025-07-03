@@ -67,13 +67,7 @@
                         Solicitar cambio de contraseña
                     </button>
                 </div>
-            <div class="mt-1 text-left hidden" id="changePassword">
-                <button type="button"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    data-bs-toggle="modal" data-bs-target="#addEmailModal">
-                    Solicitar cambio de contraseña
-                </button>
-            </div>
+            
             <div class="flex justify-end">
                 <div class="flex items-center justify-end">
                     <x-nav-link :href="route('guide.user_guide')" target="_blank"

@@ -136,7 +136,8 @@ class TicketController extends Controller
     public function gest_ticket($id, Request $request)
     {
         $ticket = TicketModel::find($id);
-        $ticketera_id = Auth::user()->ticketera_id ?? null; 
+        $ticketera_id = $ticket->ticketera()->first()->id;
+
         if ($ticket->device_ip) {
             if (Auth::id() == null && $ticket->device_ip == $request->ip() || Auth::id()) {
                 $ticket_response = TicketRespuestaModel::where('ticket_id', $id);
@@ -144,7 +145,7 @@ class TicketController extends Controller
                 $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
                 $adjuntosResponse = AdjuntoTicketResponseModel::all();
                 $ticketeras = DashboardTicketModel::all();
-                $areas = AreaModel::where('ticketera_id',$ticketera_id)->get();
+                $areas = AreaModel::where('ticketera_id', $ticketera_id)->get();
 
                 return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
             } else {
@@ -157,9 +158,9 @@ class TicketController extends Controller
             $adjuntos = AdjuntoTicketModel::where('ticket_id', $id)->get();
             $adjuntosResponse = AdjuntoTicketResponseModel::all();
             $ticketeras = DashboardTicketModel::all();
-            $areas = AreaModel::where('ticketera_id',$ticketera_id)->get();
+            $areas = AreaModel::where('ticketera_id', $ticketera_id)->get();
 
-            return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas]);
+            return view('gest_ticket', ['ticket' => $ticket, 'estados' => $estados, 'ticket_response' => $ticket_response, 'adjuntos' => $adjuntos, 'adjuntosResponse' => $adjuntosResponse, 'ticketeras' => $ticketeras, 'areas' => $areas, 'ticketera_id' => $ticketera_id]);
         }
     }
     public function ticket_response_store(Request $request)
@@ -358,10 +359,12 @@ class TicketController extends Controller
             $ticketeraTicket->ticketera_id = $request->input('ticketera_id'); //Cerrado
             $ticket = TicketModel::find($ticketeraTicket->ticket_id);
             $ticket->area_id = null;
+            $ticket->estado_id = 1;
             $ticket->save();
         } else if ($request->input('area_id')) {
             $ticket = TicketModel::find($request->input('id'));
             $ticket->area_id = $request->input('area_id'); //Cerrado
+            $ticket->estado_id = 1;
             $ticket->save();
         }
         $ticketeraTicket->save();
@@ -412,5 +415,34 @@ class TicketController extends Controller
         $ticket->save();
 
         return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Acceso validado correctamente, solo se podra acceder a este ticket desde este dispositivo.');
+    }
+
+    public function stop_ticket(Request $request, $id = null)
+    {
+        if (!$id) {
+            $id = $request->input('ticket_id');
+        }
+
+        $ticket = TicketModel::find($id);
+
+        $ticket->estado_id = 5; //Cerrado
+        $ticket->reopenMotivo = null;
+        $ticket->save();
+
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket detenido exitosamente.');
+    }
+
+    public function unstop_ticket(Request $request, $id = null)
+    {
+        if (!$id) {
+            $id = $request->input('ticket_id');
+        }
+
+        $ticket = TicketModel::find($id);
+
+        $ticket->estado_id = 1; //Cerrado
+        $ticket->save();
+
+        return redirect()->route('ticket.gest', ['id' => $ticket->id])->with('success', 'Ticket enviado a pendientes exitosamente.');
     }
 }
