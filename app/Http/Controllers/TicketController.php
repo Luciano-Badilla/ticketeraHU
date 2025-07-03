@@ -172,13 +172,19 @@ class TicketController extends Controller
             $email = ClienteModel::find($cliente_id)->email;
             if (Auth::id() == null) {
                 $personal_id = ClienteModel::find($cliente_id)->email;
-                $ticket->estado_id = 2; //Respondido
+                $ticket->estado_id = 2; //Respondido por cliente
                 $ticket->save();
             } else {
-                $personal_id = Auth::id();
-                $ticket->estado_id = 3; //Pendiente
+                if ($ticket->device_ip == $request->ip()) {
+                    $personal_id = ClienteModel::find($cliente_id)->email;
+                    $ticket->estado_id = 2; //Respondido por cliente
+                } else {
+                    $personal_id = Auth::id();
+                    $ticket->estado_id = 3; //Respondido por staff
+
+                }
                 $ticket->save();
-                if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') {
+                if ($email == 'direccion.administrativa@hospital.uncu.edu.ar') { //se redireccionan los tickets provenientes de direccion.administrativa@hospital.uncu.edu.ar 
                     Mail::to('direccionadministrativa@hospital.uncu.edu.ar')->send(new ticketResponsed($ticket));
                 } else {
                     Mail::to($email)->send(new ticketResponsed($ticket));
